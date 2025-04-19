@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
 // Backend URL (we'll set it up later)
-const socket = io('http://localhost:5000');
+const socket = io('https://canvas-version3.onrender.com');
 
 export default socket;
