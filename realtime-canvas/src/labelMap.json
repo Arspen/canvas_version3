@@ -1,0 +1,19 @@
+{
+    "dog": {
+      "synonyms": ["dog", "german shepherd", "puppy"],
+      "emoji": "🐶"
+    },
+    "cat": {
+      "synonyms": ["cat", "kitten"],
+      "emoji": "🐱"
+    },
+    "tree": {
+      "synonyms": ["tree", "oak", "pine"],
+      "emoji": "🌳"
+    },
+    "hand": {
+      "synonyms": ["hand", "middlefinger", "palm"],
+      "emoji": "🖐️"
+    }
+  }
+  
