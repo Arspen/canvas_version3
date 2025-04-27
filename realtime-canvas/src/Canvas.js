@@ -1,141 +1,167 @@
-import React, { useEffect, useRef, useState } from "react";
-import io from "socket.io-client";
-import labelMap from "./labelMap.json";
+import React, { useRef, useEffect, useState } from 'react';
+import socket from './socket';
+import { getEmojiForWord } from './labelMapper'; // Mapping words to emoji filenames
+import labelMap from './labelMap.json'; // Full labelMap with icons
 
-const backendURL = "https://canvas-version3.onrender.com"; // CHANGE THIS to your actual backend URL!
-const socket = io(backendURL);
-
-const Canvas = () => {
+const Canvas = ({ userId }) => {
   const canvasRef = useRef(null);
+  const [currentWord, setCurrentWord] = useState("");
+  const [pendingWord, setPendingWord] = useState(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [placements, setPlacements] = useState([]);
-  const [word, setWord] = useState("");
-  const [userId, setUserId] = useState("");
-  const [hoveringIcon, setHoveringIcon] = useState(null);
-  const [hoverPos, setHoverPos] = useState({ x: 0, y: 0 });
-  const imageCache = useRef({});
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const imageCache = useRef({}); 
+  const animationFrameId = useRef(null);
 
   useEffect(() => {
-    const id = prompt("Enter your user ID:") || `user-${Date.now()}`;
-    setUserId(id);
+    const preloadImages = () => {
+      const allEmojis = Object.values(labelMap).map(data => data.emoji);
+      let loadedCount = 0;
 
-    socket.on("initialPlacements", (initialPlacements) => {
-      setPlacements(initialPlacements);
-    });
+      allEmojis.forEach((emoji) => {
+        if (!emoji) return;
 
-    socket.on("placeEmoji", (placement) => {
-      setPlacements((prev) => [...prev, placement]);
-    });
+        const img = new Image();
+        img.src = `/icons/${emoji}`;
 
-    return () => {
-      socket.disconnect();
+        img.onload = () => {
+          imageCache.current[emoji] = img;
+          loadedCount++;
+          if (loadedCount === allEmojis.length) {
+            setImagesLoaded(true);
+          }
+        };
+
+        img.onerror = () => {
+          console.error("Failed to load image:", emoji);
+          loadedCount++;
+          if (loadedCount === allEmojis.length) {
+            setImagesLoaded(true);
+          }
+        };
+      });
     };
+
+    preloadImages();
   }, []);
 
   useEffect(() => {
+    if (!imagesLoaded) return;
+
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
+    const context = canvas.getContext('2d');
+    canvas.width = 2000;
+    canvas.height = 1500;
 
-    const render = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const draw = () => {
+      context.clearRect(0, 0, canvas.width, canvas.height);
 
-      placements.forEach((placement) => {
-        const { x, y, emoji } = placement;
-        if (emoji.endsWith(".png")) {
-          const img = imageCache.current[emoji];
-          if (img) {
-            ctx.drawImage(img, x - 16, y - 16, 32, 32);
-          }
+      placements.forEach(({ word, emoji, x, y }) => {
+        if (emoji && imageCache.current[emoji]) {
+          context.drawImage(imageCache.current[emoji], x, y, 40, 40);
+        } else {
+          context.font = "32px Arial";
+          context.fillText(word, x, y);
         }
       });
 
-      if (hoveringIcon) {
-        const img = imageCache.current[hoveringIcon];
-        if (img) {
-          ctx.globalAlpha = 0.5;
-          ctx.drawImage(img, hoverPos.x - 16, hoverPos.y - 16, 32, 32);
-          ctx.globalAlpha = 1.0;
+      if (pendingWord) {
+        const pendingEmoji = getEmojiForWord(pendingWord);
+        if (pendingEmoji && imageCache.current[pendingEmoji]) {
+          context.globalAlpha = 0.5;
+          context.drawImage(imageCache.current[pendingEmoji], mousePos.x, mousePos.y, 40, 40);
+          context.globalAlpha = 1;
+        } else {
+          context.font = "32px Arial";
+          context.globalAlpha = 0.5;
+          context.fillText(pendingWord, mousePos.x, mousePos.y);
+          context.globalAlpha = 1;
         }
       }
 
-      requestAnimationFrame(render);
+      animationFrameId.current = requestAnimationFrame(draw);
     };
 
-    render();
-  }, [placements, hoveringIcon, hoverPos]);
+    animationFrameId.current = requestAnimationFrame(draw);
 
-  const handleMouseMove = (e) => {
-    if (!hoveringIcon) return;
-    const rect = canvasRef.current.getBoundingClientRect();
-    setHoverPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-  };
-
-  const handleCanvasClick = (e) => {
-    if (!hoveringIcon) return;
-    const rect = canvasRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    const placement = {
-      word,
-      emoji: hoveringIcon,
-      x,
-      y,
-      userId,
+    return () => {
+      cancelAnimationFrame(animationFrameId.current);
     };
+  }, [imagesLoaded, placements, pendingWord, mousePos]);
 
-    socket.emit("placeEmoji", placement);
-    setPlacements((prev) => [...prev, placement]);
-    setHoveringIcon(null);
-    setWord("");
+  useEffect(() => {
+    socket.on('initialPlacements', (data) => {
+      setPlacements(data);
+    });
+
+    socket.on('placeEmoji', (data) => {
+      setPlacements((prev) => [...prev, data]);
+    });
+
+    socket.emit('requestInitialPlacements');
+
+    return () => {
+      socket.off('initialPlacements');
+      socket.off('placeEmoji');
+    };
+  }, []);
+
+  const handleMouseMove = (event) => {
+    const rect = canvasRef.current.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    setMousePos({ x, y });
   };
 
-  const handleConfirm = () => {
-    if (!word.trim()) return;
+  const handleClick = () => {
+    if (pendingWord) {
+      const emoji = getEmojiForWord(pendingWord);
+      const { x, y } = mousePos;
 
-    let found = null;
-    for (const label in labelMap) {
-      if (labelMap[label].synonyms.map((s) => s.toLowerCase()).includes(word.toLowerCase())) {
-        found = labelMap[label].emoji;
-        break;
-      }
+      const newPlacement = {
+        word: pendingWord,
+        emoji: emoji || null,
+        x,
+        y,
+        userId,
+      };
+
+      socket.emit('placeEmoji', newPlacement);
+      setPendingWord(null);
     }
+  };
 
-    if (found) {
-      setHoveringIcon(found);
-
-      if (!imageCache.current[found]) {
-        const img = new Image();
-        img.src = `/icons/${found}`;
-        img.onload = () => {
-          imageCache.current[found] = img;
-        };
-        img.onerror = () => {
-          console.error(`Failed to load image: ${found}`);
-        };
-      }
-    } else {
-      alert("No matching icon found. Try another word.");
+  const handleWordSubmit = (e) => {
+    e.preventDefault();
+    if (currentWord.trim()) {
+      setPendingWord(currentWord.trim());
+      setCurrentWord("");
     }
   };
 
   return (
     <div>
-      <h1>Welcome, {userId}</h1>
-      <input
-        type="text"
-        placeholder="Enter a word"
-        value={word}
-        onChange={(e) => setWord(e.target.value)}
-      />
-      <button onClick={handleConfirm}>Confirm</button>
-      <canvas
-        ref={canvasRef}
-        width={window.innerWidth}
-        height={window.innerHeight}
-        onMouseMove={handleMouseMove}
-        onClick={handleCanvasClick}
-        style={{ border: "1px solid black", marginTop: "10px" }}
-      />
+      <form onSubmit={handleWordSubmit} style={{ marginBottom: "10px" }}>
+        <input
+          type="text"
+          value={currentWord}
+          onChange={(e) => setCurrentWord(e.target.value)}
+          placeholder="Type a word..."
+          style={{ padding: "8px", fontSize: "16px" }}
+        />
+        <button type="submit" style={{ marginLeft: "10px", padding: "8px" }}>
+          Confirm
+        </button>
+      </form>
+
+      <div style={{ overflow: 'scroll', border: '1px solid black', height: '80vh', width: '80vw' }}>
+        <canvas
+          ref={canvasRef}
+          onMouseMove={handleMouseMove}
+          onClick={handleClick}
+          style={{ background: '#fff' }}
+        />
+      </div>
     </div>
   );
 };
