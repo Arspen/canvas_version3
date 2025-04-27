@@ -128,7 +128,7 @@
 },
 
 "chicken": {
-  "synonyms": [ "chicken", "Chickens", "hen", "hens", "animal", "bid", "rooster", "rooster", "chick",
+  "synonyms": [ "chicken", "Chickens", "hen", "hens", "animal", "bird", "rooster", "rooster", "chick",
     "poultry", "fowl", "farm bird", "clucker", "egg layer" ],
   "emoji": "Chicken.png",
   "category": "Animals"
