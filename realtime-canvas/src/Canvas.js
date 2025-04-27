@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import socket from './socket';
-import { getEmojiForWord } from './labelMapper';
+import { getEmojiForWord } from './labelMapper'; // Still using emoji because that's where filename is!
 
 const Canvas = ({ userId }) => {
   const canvasRef = useRef(null);
@@ -17,24 +17,43 @@ const Canvas = ({ userId }) => {
 
     const drawAll = () => {
       context.clearRect(0, 0, canvas.width, canvas.height);
-      placements.forEach(({ emoji, word, x, y }) => {
-        const content = emoji || word;
-        context.font = "32px Arial";
-        context.globalAlpha = 1;
-        context.fillText(content, x, y);
+
+      // Draw all already placed items
+      placements.forEach(({ word, emoji, x, y }) => {
+        if (emoji) {
+          const img = new Image();
+          img.src = `/icons/${emoji}`;
+          img.onload = () => {
+            context.drawImage(img, x, y, 40, 40); // 40x40 pixels size, adjust if you want
+          };
+        } else {
+          context.font = "32px Arial";
+          context.globalAlpha = 1;
+          context.fillText(word, x, y);
+        }
       });
 
+      // Draw the pending item hovering over mouse
       if (pendingWord) {
-        const hoverEmoji = getEmojiForWord(pendingWord);
-        const display = hoverEmoji || pendingWord;
-        context.font = "32px Arial";
-        context.globalAlpha = 0.5;
-        context.fillText(display, mousePos.x, mousePos.y);
-        context.globalAlpha = 1;
+        const pendingEmoji = getEmojiForWord(pendingWord);
+        if (pendingEmoji) {
+          const img = new Image();
+          img.src = `/icons/${pendingEmoji}`;
+          img.onload = () => {
+            context.globalAlpha = 0.5;
+            context.drawImage(img, mousePos.x, mousePos.y, 40, 40);
+            context.globalAlpha = 1;
+          };
+        } else {
+          context.font = "32px Arial";
+          context.globalAlpha = 0.5;
+          context.fillText(pendingWord, mousePos.x, mousePos.y);
+          context.globalAlpha = 1;
+        }
       }
     };
 
-    drawAll();
+    const interval = setInterval(drawAll, 30); // Redraw every 30ms
 
     socket.on('initialPlacements', (data) => {
       setPlacements(data);
@@ -73,7 +92,6 @@ const Canvas = ({ userId }) => {
     canvas.addEventListener('click', handleClick);
     socket.emit('requestInitialPlacements');
 
-    const interval = setInterval(drawAll, 30);
     return () => {
       canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('click', handleClick);

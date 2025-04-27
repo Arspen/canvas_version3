@@ -5,9 +5,9 @@ export function getEmojiForWord(inputWord) {
 
   for (const [label, data] of Object.entries(labelMap)) {
     if (data.synonyms.includes(word)) {
-      return data.emoji;
+      return data.emoji || null;
     }
   }
 
-  return null; // no emoji found, fallback to raw text
+  return null; // fallback if no match
 }

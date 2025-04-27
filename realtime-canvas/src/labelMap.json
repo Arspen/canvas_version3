@@ -1,19 +1,2147 @@
 {
-    "dog": {
-      "synonyms": ["dog", "german shepherd", "puppy"],
-      "emoji": "🐶"
+  "ant": {
+      "synonyms": ["ant", "ants", "insect", "tiny insect", "bug", "builder", "Insect colony", "six-legged", "colony"],
+    "emoji": "Ant.png",
+    "category": "Animal"
     },
-    "cat": {
-      "synonyms": ["cat", "kitten"],
-      "emoji": "🐱"
-    },
-    "tree": {
-      "synonyms": ["tree", "oak", "pine"],
-      "emoji": "🌳"
-    },
-    "hand": {
-      "synonyms": ["hand", "middlefinger", "palm"],
-      "emoji": "🖐️"
-    }
+
+  "badger": {
+    "synonyms": ["badger", "badgers", "mammal", "animal", "nocturnal animal", "mammal",
+    "striped face", "forest animal", "land mammal", "omnivore", "weasel family"],
+    "emoji": "Badger.png",
+    "category": "Animals"
+},
+
+  "bat": {
+    "synonyms": ["bat", "bats", "mammal", "animal", "flying animal", "flying mammal", "nocturnal flier",  "nocturnal animal", "winged animal",
+    "echolocation", "cave animal", "night creature", "insect eater", "vampire bat", "vampire"],
+    "emoji": "Bat.png",
+    "category": "Animals"
+},
+
+  "beaver": {
+    "synonyms": ["beaver", "beavers", "mammal", "animal","dam builder", "rodent", "flat tail", "log cutter",
+    "river animal", "aquatic mammal", "builder animal" ],
+    "emoji": "Beaver.png",
+    "category": "Animals"
+},
+
+  "bee": {
+    "synonyms": ["bee", "bees", "insect", "honey maker", "pollinator", "buzzing insect",
+    "hive", "worker bee", "queen bee", "stinger", "bumblebee", "flying insect"],
+    "emoji": "Bee.png",
+    "category": "Animals"
+},
+
+  "beluga": {
+    "synonyms": ["beluga", "belugas", "mammal", "animal", "aquatic animal", "beluga whale", "white whale", "arctic whale",
+    "marine mammal", "toothed whale", "ocean animal", "sea creature"],
+    "emoji": "Beluga.png",
+    "category": "Animals"
+},
+
+"bird": {
+  "synonyms": ["bird", "birds", "animal", "winged animal", "flying animal", "feathered animal",
+    "songbird", "avian", "flier", "tree animal", "sky animal"],
+  "emoji": "Bird.png",
+  "category": "Animals"
+},
+
+"bison": {
+  "synonyms": ["bison", "bisons", "animal", "mammal", "american animal", "plains", "horned animal",
+    "herd animal", "hoofed mammal", "large grazer", "shaggy beast"],
+  "emoji": "Bison.png",
+  "category": "Animals"
+},
+
+"black_cat": {
+  "synonyms": [ "black cat", "cat", "black_cats", "cats", "mammal", "animal", "pet", "nocturnal animal", "feline", "house cat", "superstition cat",
+    "dark fur", "pet cat", "sleek feline", "nocturnal cat" ],
+  "emoji": "Black_Cat.png",
+  "category": "Animals"
+},
+
+"boar": {
+  "synonyms": [
+    "boar", "boars", "animal", "mammal", "wild pig", "feral hog", "tusker", "forest animal",
+    "forest pig", "wild swine", "grunter", "hairy pig"
+  ],
+  "emoji": "Boar.png",
+  "category": "Animals"
+},
+
+"buffalo": {
+  "synonyms": [
+    "buffalo", "buffalos", "water buffalo", "animal", "mammal","horned animal", "hoofed mammal",
+    "large grazer", "herd animal", "swamp grazer" ],
+  "emoji": "Buffalo.png",
+  "category": "Animals"
+},
+
+"bull": {
+  "synonyms": [ "bull", "bulls", "animal", "mammal", "male cow", "horned animal", "strong bovine",
+    "charging animal", "farm animal", "livestock", "beef"],
+  "emoji": "Bull.png",
+  "category": "Animals"
+},
+
+"bunny": {
+  "synonyms": [
+    "bunny", "bunnies", "rabbit", "rabbits", "hare", "hares", "animal", "mammal", "small mammal", "pet", "forest animal",
+    "long ears", "hoppy animal", "pet rabbit"],
+  "emoji": "Bunny.png",
+  "category": "Animals"
+},
+
+"butterfly": {
+  "synonyms": [
+    "butterfly", "butterflies", "insect", "fluttering insect", "colorful wings", "flying insect", "bug",
+    "pollinator", "garden insect", "winged bug", "metamorphosis"
+  ],
+  "emoji": "Butterfly.png",
+  "category": "Animals"
+},
+
+"camel": {
+  "synonyms": [
+    "camel", "camels", "animal", "mammal", "desert animal", "humpback", "dromedary",
+    "bactrian camel", "pack animal", "sand traveler", "long-necked mammal"],
+  "emoji": "Camel.png",
+  "category": "Animals"
+},
+
+"cat": {
+  "synonyms": [
+    "cat", "cats", "animal", "mammal", "pet", "feline", "house cat", "kitten",
+    "pet cat", "domestic cat", "mouser", "purring animal", "lap cat"
+  ],
+  "emoji": "Cat.png",
+  "category": "Animals"
+},
+
+"caterpillar": {
+  "synonyms": [
+    "caterpillar", "caterpillars", "larva", "larvas", "bug", "insect", "crawler", "leaf eater", 
+    "fuzzy worm", "butterfly stage", "creeping bug"],
+  "emoji": "Caterpillar.png",
+  "category": "Animals"
+},
+
+"chicken": {
+  "synonyms": [ "chicken", "Chickens", "hen", "hens", "animal", "bid", "rooster", "rooster", "chick",
+    "poultry", "fowl", "farm bird", "clucker", "egg layer" ],
+  "emoji": "Chicken.png",
+  "category": "Animals"
+},
+
+"cow": {
+  "synonyms": [ "cow", "cows", "animal", "mammal", "bovine", "heifer", "calf", 
+  "farm animal", "milk producer", "livestock", "dairy cow" ],
+  "emoji": "Cow.png",
+  "category": "Animals"
+},
+
+"crab": {
+  "synonyms": [ "crab", "crabs", "animal", "sea creature", "sea animal", "crustacean", "pincher", "clawed animal",
+    "shore creature", "ocean crawler", "beach dweller", "side-walker"
+  ],
+  "emoji": "Crab.png",
+  "category": "Animals"
+},
+
+"cricket": {
+  "synonyms": [
+    "cricket", "crickets", "insect", "bug", "chirping bug", "hopper",
+    "grass insect", "nocturnal insect", "field bug", "winged jumper"],
+  "emoji": "Cricket.png",
+  "category": "Animals"
+},
+
+"crocodile": {
+  "synonyms": [
+    "crocodile", "crocodiles", "reptile", "animal", "alligator", "alligators", "river predator",
+    "scaly animal", "water reptile", "toothy jaw", "swamp dweller"
+  ],
+  "emoji": "Crocodile.png",
+  "category": "Animals"
+},
+
+"crow": {
+  "synonyms": [
+    "crow", "crows", "bird", "animal", "flying animal", "raven", "ravens", "black bird", "corvid", "scavenger",
+    "noisy bird", "winged animal", "tree dweller", "smart bird"
+  ],
+  "emoji": "Crow.png",
+  "category": "Animals"
+},
+
+"deer": {
+  "synonyms": ["deer", "deers", "doe", "does", "buck", "bucks", "fawn", "fawns", "animal", "mammal", "bambi",
+    "antlered animal", "forest animal", "hoofed mammal", "grazer"
+  ],
+  "emoji": "Deer.png",
+  "category": "Animals"
+},
+
+"dodo": {
+  "synonyms": [
+    "dodo", "dodos", "bird", "extinct bird", "flightless bird", "mauritian bird",
+    "large bird", "clumsy bird", "island bird"
+  ],
+  "emoji": "Dodo.png",
+  "category": "Animals"
+},
+
+"dog": {
+  "synonyms": [
+    "dog", "dogs", "puppy", "puppies", "animal", "mammal", "pet", "canine", "pup",
+    "mutt", "doggo", "man's best friend", "pet dog", "tail wagger"
+  ],
+  "emoji": "Dog.png",
+  "category": "Animals"
+},
+
+"dolphin": {
+  "synonyms": [
+    "dolphin", "dolphins", "animal", "mammal", "marine mammal", "bottlenose", "ocean swimmer", "ocean animal", "sea animal",
+    "intelligent animal", "sea creature", "porpoise", "aquatic animal"
+  ],
+  "emoji": "Dolphin.png",
+  "category": "Animals"
+},
+
+"donkey": {
+  "synonyms": [
+    "donkey", "donkeys", "mule", "mules", "pet", "animal", "mammal", "beast of burden",
+    "farm animal", "pack animal", "braying animal", "hoofed mammal"
+  ],
+  "emoji": "Donkey.png",
+  "category": "Animals"
+},
+
+"dragon": {
+  "synonyms": [
+    "dragon", "dragons", "beast", "beastes", "mythical beast", "fire breather", "winged creature",
+    "legendary animal", "reptilian monster", "fantasy creature"
+  ],
+  "emoji": "Dragon.png",
+  "category": "Animals"
+},
+
+"duck": {
+  "synonyms": [
+    "duck", "ducks", "mallard", "mallards", "waterfowl", "waterfowls", "drake", "drakes", "bird", "animal",
+    "duckling", "ducklings", "flying animal", "pond bird", "quacker", "swimming bird"
+  ],
+  "emoji": "Duck.png",
+  "category": "Animals"
+},
+
+"eagle": {
+  "synonyms": [
+    "eagle", "eagles", "bird", "forest animal", "mountain bird", "american animal", "raptor", "bird of prey", "soaring bird",
+    "bald eagle", "hunter bird", "majestic bird", "talon bird"
+  ],
+  "emoji": "Eagle.png",
+  "category": "Animals"
+},
+
+"elephant": {
+  "synonyms": [
+    "elephant", "elephants",  "pachyderm", "tusker", "giant mammal", "animal", "mammal",
+    "trunk animal", "safari animal", "herd animal", "african elephant", "asian elephant"
+  ],
+  "emoji": "Elephant.png",
+  "category": "Animals"
+},
+
+"fish": {
+  "synonyms": [
+    "fish", "fishes", "animal", "aquatic animal", "swimmer", "gills", "sea animal",
+    "finned animal", "sea creature", "river animal", "ocean animal"
+  ],
+  "emoji": "Fish.png",
+  "category": "Animals"
+},
+
+"flamingo": {
+  "synonyms": [
+    "flamingo", "flamingos", "pink bird", "bid", "flying animal", "wading bird", "long legs",
+    "water bird", "tropical bird", "flock bird", "curved beak"
+  ],
+  "emoji": "Flamingo.png",
+  "category": "Animals"
+},
+
+"fly": {
+  "synonyms": [
+    "fly", "flies", "insect", "bug", "flying insect", "winged bug", "housefly",
+    "pest", "buzzing insect", "small flyer", "common fly"
+  ],
+  "emoji": "Fly.png",
+  "category": "Animals"
+},
+
+"giraffe": {
+  "synonyms": [
+    "giraffe", "giraffes", "animal", "mammal", "tall animal", "long neck", "spotted mammal", "african animal",
+    "savanna animal", "leaf eater", "hooved animal", "browsing animal"
+  ],
+  "emoji": "Giraffe.png",
+  "category": "Animals"
+},
+
+"goat": {
+  "synonyms": [
+    "goat", "goats", "animal", "mammal", "mountain animal", "grass animal",
+    "horned animal", "mountain climber", "farm animal", "bearded grazer"
+  ],
+  "emoji": "Goat.png",
+  "category": "Animals"
+},
+
+"gorilla": {
+  "synonyms": [
+    "gorilla", "gorillas", "ape", "apes", "monkey", "monkeys", "great ape", "silverback", "animal", "mammal",
+    "primate", "jungle animal", "ground dweller", "strong ape"
+  ],
+  "emoji": "Gorilla.png",
+  "category": "Animals"
+},
+
+"hedgehog": {
+  "synonyms": [
+    "hedgehog", "hedgehogs", "forest animal", "animal", "mammal", "rodent", "spiny animal", "small mammal", "insect eater",
+    "nocturnal creature", "quilled animal", "garden animal", "curling animal"
+  ],
+  "emoji": "Hedgehog.png",
+  "category": "Animals"
+},
+
+"help_dog": {
+  "synonyms": [
+    "help dog", "service dog", "guide dog", "assistance dog",
+    "therapy dog", "support animal", "working dog"
+  ],
+  "emoji": "Help_Dog.png",
+  "category": "Animals"
+},
+
+"hippopotamus": {
+  "synonyms": [
+    "hippopotamus", "hippopotamuses", "hippo", "hippos", "river horse", "river horses", "large mammal", "animal", "mammal",
+    "water animal", "swamp animal", "herbivore", "aquatic giant", "aquatic animal"
+  ],
+  "emoji": "Hippopotamus.png",
+  "category": "Animals"
+},
+
+"horse": {
+  "synonyms": [
+    "horse", "horses", "stallion", "stallions", "mare", "mares", "foal", "farm animal", "pet",
+    "colt", "pony", "ponies", "steed", "steeds", "riding animal", "hoofed animal", "animal", "mammal"
+  ],
+  "emoji": "Horse.png",
+  "category": "Animals"
+},
+
+"kangaroo": {
+  "synonyms": [
+    "kangaroo", "kangaroos", "marsupial", "australian animal", "animal", "mammal",
+    "hopper", "australian animal", "pouched animal", "jumper"
+  ],
+  "emoji": "Kangaroo.png",
+  "category": "Animals"
+},
+
+"koala": {
+  "synonyms": [
+    "koala", "koalas", "animal", "mammal", "marsupial", "tree dweller", "eucalyptus eater",
+    "australian animal", "pouched animal", "cuddly mammal", "climber"
+  ],
+  "emoji": "Koala.png",
+  "category": "Animals"
+},
+
+"lady_bug": {
+  "synonyms": [
+    "lady bug", "lady bugs", "insect", "flying insect", "beetle", "red bug",
+    "spotted insect", "garden bug", "tiny beetle", "winged insect"
+  ],
+  "emoji": "Lady_Bug.png",
+  "category": "Animals"
+},
+
+"leopard": {
+  "synonyms": [
+    "leopard", "leopards", "feline", "animal", "mammal", "predator", "big cat", "spotted feline", "predator",
+    "wild cat", "tree climber", "stealthy animal", "panthera"
+  ],
+  "emoji": "Leopard.png",
+  "category": "Animals"
+},
+
+"lizard": {
+  "synonyms": [
+    "lizard", "lizards", "reptile", "animal", "desert animal", "scaly animal", "cold-blooded",
+    "gecko", "geckos", "iguana", "iguanas", "climber", "sun bather"
+  ],
+  "emoji": "Lizard.png",
+  "category": "Animals"
+},
+
+
+"llama": {
+  "synonyms": [
+    "llama", "llamas", "animal", "mammal", "pack animal", "woolly mammal", "andes animal", "mountain animal",
+    "spitting animal", "hoofed animal", "domesticated camelid"
+  ],
+  "emoji": "Llama.png",
+  "category": "Animals"
+},
+
+"lobster": {
+  "synonyms": [
+    "lobster", "lobsters", "animal", "ocean animal", "sea animal", "crustacean", "clawed animal", "red shell",
+    "sea creature", "marine animal", "ocean dweller", "pincer"
+  ],
+  "emoji": "Lobster.png",
+  "category": "Animals"
+},
+
+"macaque": {
+  "synonyms": [
+    "macaque", "macaques", "monkeys", "monkey", "primate", "primates", "rhesus",
+    "snow monkey", "temple monkey", "old world monkey", "animal", "mammal"
+  ],
+  "emoji": "Macaque.png",
+  "category": "Animals"
+},
+
+"mammoth": {
+  "synonyms": [
+    "mammoth", "mammoths", "animal", "mammal", "woolly mammoth", "extinct elephant", "giant animal",
+    "prehistoric beast", "tusker", "ice age animal"
+  ],
+  "emoji": "Mammoth.png",
+  "category": "Animals"
+},
+
+"mosquito": {
+  "synonyms": [
+    "mosquito", "mosquitos", "insect", "bug", "bloodsucker", "flying bug",
+    "pest", "biter", "winged insect", "noisy bug"
+  ],
+  "emoji": "Mosquito.png",
+  "category": "Animals"
+},
+
+"mouse": {
+  "synonyms": [
+    "mouse", "mouses", "rodent", "rodents", "pet", "field mouse", "house mouse",
+    "small mammal", "cheese eater", "tiny animal", "scamperer", "animal", "mammal"
+  ],
+  "emoji": "Mouse.png",
+  "category": "Animals"
+},
+
+"narwhal": {
+  "synonyms": [
+    "narwhal", "narwhals", "animal", "mammal", "sea animal", "ocean creature", "unicorn whale", "arctic whale", "tusked whale",
+    "marine mammal", "sea creature", "ocean animal"
+  ],
+  "emoji": "Narwhal.png",
+  "category": "Animals"
+},
+
+"octopus": {
+  "synonyms": [
+    "octopus", "octopuses", "animal", "cephalopod", "tentacled animal", "ink shooter", "sea animal",
+    "sea creature", "ocean dweller", "marine animal", "eight legs", "ocean animal"
+  ],
+  "emoji": "Octopus.png",
+  "category": "Animals"
+},
+
+"orangutan": {
+  "synonyms": [
+    "orangutan", "orangutans", "ape", "apes", "primate", "great ape", "great apes", "animal", "mammal",
+    "tree dweller", "forest animal", "red ape", "long arms"
+  ],
+  "emoji": "Orangutan.png",
+  "category": "Animals"
+},
+
+"orca": {
+  "synonyms": [
+    "orca", "orcas", "killer whale", "killer whales", "marine mammal", "black and white whale", "animal", "mammal",
+    "predator", "sea creature", "ocean hunter", "toothed whale", "sea animal", "ocean animal"
+  ],
+  "emoji": "Orca.png",
+  "category": "Animals"
+},
+
+"otter": {
+  "synonyms": [
+    "otter", "otters", "animal", "mammal", "river mammal", "playful swimmer", "furry animal",
+    "aquatic mammal", "fish eater", "water dweller", "slick fur", "sea animal"
+  ],
+  "emoji": "Otter.png",
+  "category": "Animals"
+},
+
+"owl": {
+  "synonyms": [
+    "owl", "owls", "bird", "animal", "nocturnal bird", "wise bird", "hunter bird", "forest animal", "pet",
+    "bird of prey", "silent flyer", "tree dweller", "hoo bird"
+  ],
+  "emoji": "Owl.png",
+  "category": "Animals"
+},
+
+"parrot": {
+  "synonyms": [
+    "parrot", "parrots", "bird", "talking bird", "colorful bird", "macaw", "pirate bird", "animal",
+    "cockatoo", "pet bird", "tropical bird", "winged pet"
+  ],
+  "emoji": "Parrot.png",
+  "category": "Animals"
+},
+
+"peacock": {
+  "synonyms": [
+    "peacock", "peacocks", "bird", "animal", "male peafowl", "colorful bird", "display bird", 
+    "plumage", "strutting bird", "ornamental bird", "fan tail"
+  ],
+  "emoji": "Peacock.png",
+  "category": "Animals"
+},
+
+"penguin": {
+  "synonyms": [
+    "penguin", "penguins", "bird", "flightless bird", "antarctic bird", "waddler", "animal", "sea animal", "ocean animal",
+    "emperor penguin", "tuxedo bird", "cold weather bird", "diving bird"
+  ],
+  "emoji": "Penguin.png",
+  "category": "Animals"
+},
+
+"pig": {
+  "synonyms": [
+    "pig", "pigs", "swine", "swines", "hog", "hogs", "boar", "boares", "boars", "animal", "mammal",
+    "sow", "piglet", "farm animal", "snouter"
+  ],
+  "emoji": "Pig.png",
+  "category": "Animals"
+},
+
+"pigeon": {
+  "synonyms": [
+    "pigeon", "pigeons", "dove", "doves", "city bird", "city birds", "winged animal", "bird", "city bird", "animal",
+    "urban bird", "gray bird", "cooing bird", "flier"
+  ],
+  "emoji": "Pigeon.png",
+  "category": "Animals"
+},
+
+"polar_bear": {
+  "synonyms": [
+    "polar bear", "polar bears", "arctic bear", "arctic bears", "white bear", "white bears", "ice bear", "ice bears", "bear", "bears", "animal", "mammal",
+    "cold climate animal", "marine mammal", "snow bear", "carnivore"
+  ],
+  "emoji": "Polar_Bear.png",
+  "category": "Animals"
+},
+
+"poodle": {
+  "synonyms": [
+    "poodle", "poodles", "dog", "curly fur", "pet dog", "pet", "animal", "mammal",
+    "show dog", "companion dog", "small breed", "groomed dog"
+  ],
+  "emoji": "Poodle.png",
+  "category": "Animals"
+},
+
+"racoon": {
+  "synonyms": [
+    "racoon", "racoons", "trash panda", "masked animal", "nocturnal mammal", "animal", "mammal",
+    "ringed tail", "urban scavenger", "forest animal", "small mammal"
+  ],
+  "emoji": "Racoon.png",
+  "category": "Animals"
+},
+
+"ram": {
+  "synonyms": [
+    "ram", "rams", "male sheep", "male sheeps", "horned animal", "mountain grazer", "farm animal", "animal", "mammal",
+    "woolly mammal", "hoofed animal", "headbutter"
+  ],
+  "emoji": "Ram.png",
+  "category": "Animals"
+},
+
+"rat": {
+  "synonyms": [
+    "rat", "rats", "rodent", "sewer rat", "lab rat", "animal", "mammal", "pet", "city animal",
+    "pest", "house rodent", "gnawer", "scavenger"
+  ],
+  "emoji": "Rat.png",
+  "category": "Animals"
+},
+
+"reindeer": {
+  "synonyms": [
+    "reindeer", "reindeers", "caribou", "caribous", "antlered animal", "arctic grazer", "animal", "mammal",
+    "santa's helper", "hooved mammal", "herd animal", "cold climate animal"
+  ],
+  "emoji": "Reindeer.png",
+  "category": "Animals"
+},
+
+"rescue_dog": {
+  "synonyms": [
+    "rescue dog", "rescue dogs", "search dog", "search dogs", "emergency dog", "emergency dogs", "working dog", "working dogs", "dog", "animal", "mammal",
+    "trained dog", "lifesaver dog", "service dog", "help dog", "help dogs", "pet"
+  ],
+  "emoji": "Rescue_Dog.png",
+  "category": "Animals"
+},
+
+"rhinoceros": {
+  "synonyms": [
+    "rhinoceros", "rhinoceroses", "rhino", "rhinos", "horned mammal", "large grazer", "animal", "mammal",
+    "thick-skinned", "savanna animal", "heavy animal", "hoofed animal"
+  ],
+  "emoji": "Rhinoceros.png",
+  "category": "Animals"
+},
+
+"scorpion": {
+  "synonyms": [
+    "scorpion", "scorpions", "arachnid", "stinger", "clawed insect", "insect", "animal",
+    "desert creature", "pincer", "venomous bug", "eight legs"
+  ],
+  "emoji": "Scorpion.png",
+  "category": "Animals"
+},
+
+"seal": {
+  "synonyms": [
+    "seal", "seals", "marine mammal", "flippered animal", "ocean dweller", "animal", "mammal", "ocean animal", "sea animal",
+    "beach animal", "sea creature", "barking swimmer", "blubbered animal"
+  ],
+  "emoji": "Seal.png",
+  "category": "Animals"
+},
+
+"shark": {
+  "synonyms": [
+    "shark", "sharks",  "predator", "marine animal", "sea hunter", "animal", "ocean animal", "sea animal", 
+    "great white", "hammerhead", "ocean swimmer", "toothed fish"
+  ],
+  "emoji": "Shark.png",
+  "category": "Animals"
+},
+
+"sheep": {
+  "synonyms": [
+    "sheep", "sheeps", "ewe", "lamb", "lambs", "ram", "rams", "animal", "mammal", "farm animal",
+    "woolly animal", "farm animal", "grazer", "herd animal"
+  ],
+  "emoji": "Sheep.png",
+  "category": "Animals"
+},
+
+"shrimp": {
+  "synonyms": [
+    "shrimp", "shrimps", "crustacean", "small shellfish", "seafood", "animal", "ocean animal", "sea animal", "ocean creature",
+    "ocean crawler", "marine animal", "swimmer", "tiny sea creature"
+  ],
+  "emoji": "Shrimp.png",
+  "category": "Animals"
+},
+
+"skunk": {
+  "synonyms": [
+    "skunk", "skunks", "striped animal", "smelly mammal", "scent sprayer", "animal", "mammal", "forest animal",
+    "black and white", "nocturnal animal", "forest dweller", "stinker"
+  ],
+  "emoji": "Skunk.png",
+  "category": "Animals"
+},
+
+"sloth": {
+  "synonyms": [
+    "sloth", "sloths", "tree dweller", "slow animal", "three-toed sloth", "forest animal", "animal", "mammal",
+    "two-toed sloth", "hanging animal", "lazy mammal", "jungle creature"
+  ],
+  "emoji": "Sloth.png",
+  "category": "Animals"
+},
+
+"snail": {
+  "synonyms": [
+    "snail", "snails", "slow mover", "shell animal", "slime trail", "insect", "animal",
+    "garden crawler", "mollusk", "spiral shell", "creeping animal"
+  ],
+  "emoji": "Snail.png",
+  "category": "Animals"
+},
+
+"snake": {
+  "synonyms": [
+    "snake", "snakes", "serpent", "serpents", "slitherer", "reptile", "animal", "forest animal", "desert animal",
+    "venomous animal", "constrictor", "fangs", "scaly creature"
+  ],
+  "emoji": "Snake.png",
+  "category": "Animals"
+},
+
+"squid": {
+  "synonyms": [
+    "squid", "squids", "cephalopod", "tentacled animal", "ink shooter", "ocean animal", "sea animal", "ocean creature", "sea animal", "animal",
+    "marine creature", "ocean dweller", "sea animal", "deep sea swimmer"
+  ],
+  "emoji": "Squid.png",
+  "category": "Animals"
+},
+
+"squirrel": {
+  "synonyms": [
+    "squirrel", "squirrels", "tree climber", "bushy tail", "nut collector", "animal", "mammal", "forest animal",
+    "rodent", "park animal", "acorn lover", "small mammal"
+  ],
+  "emoji": "Squirrel.png",
+  "category": "Animals"
+},
+
+"swan": {
+  "synonyms": [
+    "swan", "swans", "bird", "graceful bird", "white bird", "waterfowl", "animal", "duck",
+    "pond bird", "long neck", "elegant bird", "mute swan"
+  ],
+  "emoji": "Swan.png",
+  "category": "Animals"
+},
+
+"tiger": {
+  "synonyms": [
+    "tiger", "tigers", "big cat", "striped predator", "panthera", "feline", "animal", "mammal",
+    "bengal tiger", "siberian tiger", "wild cat", "jungle cat"
+  ],
+  "emoji": "Tiger.png",
+  "category": "Animals"
+},
+
+"t-rex": {
+  "synonyms": [
+    "t-rex", "t-rexs", "tyrannosaurus", "dinosaur", "carnivore",
+    "prehistoric animal", "rex", "giant predator", "fossil creature"
+  ],
+  "emoji": "T-Rex.png",
+  "category": "Animals"
+},
+
+"turkey": {
+  "synonyms": [
+    "turkey", "turkeys", "gobbler", "farm bird", "thanksgiving bird", "birds", "animal",
+    "wild turkey", "fowl", "wattled bird", "feathered animal"
+  ],
+  "emoji": "Turkey.png",
+  "category": "Animals"
+},
+
+"turtle": {
+  "synonyms": [
+    "turtle", "turtles", "shell animal", "slow mover", "reptile", "animal", 
+    "aquatic reptile", "flippered animal", "hard shell", "sea turtle"
+  ],
+  "emoji": "Turtle.png",
+  "category": "Animals"
+},
+
+"unicorn": {
+  "synonyms": [
+    "unicorn", "unicorns", "mythical horse", "horned creature", "fantasy animal",
+    "magic beast", "legendary animal", "fairy tale horse"
+  ],
+  "emoji": "Unicorn.png",
+  "category": "Animals"
+},
+
+"whale": {
+  "synonyms": [
+    "whale", "marine mammal", "ocean giant", "sea creature", "animal", "mammal", "ocean animal", "sea animal", "ocean creature",
+    "humpback", "blue whale", "sperm whale", "cetacean"
+  ],
+  "emoji": "Whale.png",
+  "category": "Animals"
+},
+
+"worm": {
+  "synonyms": [
+    "worm", "worms", "earthworm", "earthworms", "soil crawler", "garden dweller", "insect", "soil animal", "forest animal",
+    "slimy creature", "invertebrate", "composter", "segmented animal"
+  ],
+  "emoji": "Worm.png",
+  "category": "Animals"
+},
+
+"zebra": {
+  "synonyms": [
+    "zebra", "striped animal", "savanna grazer", "black and white", "animal", "mammal", 
+    "wild equine", "hoofed animal", "herd animal", "plains dweller"
+  ],
+  "emoji": "Zebra.png",
+  "category": "Animals"
+},
+
+"deep_water": {
+  "synonyms": [
+    "deep water", "ocean", "sea", "underwater", 
+    "open water", "marine depth", "deep sea", "submerged"
+  ],
+  "emoji": "Deep_Water.png",
+  "category": "Ground"
+},
+
+"grass": {
+  "synonyms": [
+    "grass", "lawn", "green ground", "field",
+    "meadow", "turf", "pasture", "grassy area"
+  ],
+  "emoji": "Grass.png",
+  "category": "Ground"
+},
+
+"rock": {
+  "synonyms": [
+    "rock", "stone", "boulder", "pebble",
+    "cliff", "crag", "bedrock", "hard ground"
+  ],
+  "emoji": "Rock.png",
+  "category": "Ground"
+},
+
+"sand": {
+  "synonyms": [
+    "sand", "grains", "beach ground", "desert floor",
+    "sandy surface", "dunes", "gritty soil", "soft ground"
+  ],
+  "emoji": "Sand.png",
+  "category": "Ground"
+},
+
+"soil": {
+  "synonyms": [
+    "soil", "earth", "dirt", "ground",
+    "topsoil", "mud", "compost", "planting bed"
+  ],
+  "emoji": "Soil.png",
+  "category": "Ground"
+},
+
+"water": {
+  "synonyms": [
+    "water", "aqua", "H2O",
+    "freshwater", "clear water", "flowing water", "wet surface", "river", "pond"
+  ],
+  "emoji": "Water.png",
+  "category": "Ground"
+},
+
+"human_horseriding": {
+  "synonyms": [
+    "horse riding", "equestrian", "rider", "mounted human", "man on horse", "woman on horse",
+    "on horseback", "horseback rider", "saddle rider"
+  ],
+  "emoji": "Human_HorseRiding.png",
+  "category": "Humanoid"
+},
+
+"human_surfing": {
+  "synonyms": [
+    "surfing", "wave rider", "surfer", "board rider",
+    "ocean sport", "beach activity", "wave sport"
+  ],
+  "emoji": "Human_Surfing.png",
+  "category": "Humanoid"
+},
+
+"human_tricks": {
+  "synonyms": [
+    "tricks", "stunts", "acrobat", "performer", "human", "humans", "man", "men", "woman", "women",
+    "human acrobatics", "gymnast", "trickster", "body movement"
+  ],
+  "emoji": "Human_Tricks.png",
+  "category": "Humanoid"
+},
+
+"relationship": {
+  "synonyms": [
+    "relationship", "couple", "love", "romance", 
+    "partners", "bond", "affection", "connection"
+  ],
+  "emoji": "Relationship.png",
+  "category": "Humanoid"
+},
+
+"woman_dance": {
+  "synonyms": [
+    "woman dance", "female dancer", "lady dancing", "dancing woman", "human", "humans", "man", "men", "woman", "women",
+    "ballerina", "performer", "female performer", "dance move"
+  ],
+  "emoji": "Woman_Dance.png",
+  "category": "Humanoid"
+},
+
+"human_dance": {
+  "synonyms": [
+    "dance", "dancing", "performer", "movement", "human dancing", "human",
+    "choreography", "human dancing", "groove", "body motion"
+  ],
+  "emoji": "Human_Dance.png",
+  "category": "Humanoid"
+},
+
+"human_cycling": {
+  "synonyms": [
+    "cycling", "biking", "bike rider", "pedaling", "human cycling",
+    "cyclist", "riding bike", "bicycle sport", "human on bike"
+  ],
+  "emoji": "Human_Cycling.png",
+  "category": "Humanoid"
+},
+
+"human_play": {
+  "synonyms": [
+    "play", "playing", "recreation", "fun activity", "sport", "human playing",
+    "leisure", "game", "human activity", "active fun"
+  ],
+  "emoji": "Human-Play.png",
+  "category": "Humanoid"
+},
+
+"human_golf": {
+  "synonyms": [
+    "golf", "golfer", "swing", "tee off", "human golfing",
+    "club sport", "putting", "golf player", "golf game"
+  ],
+  "emoji": "Human_Golf.png",
+  "category": "Humanoid"
+},
+
+"human_snowboard": {
+  "synonyms": [
+    "snowboard", "snowboarding", "board sport", "winter sport", "human snowboarding", 
+    "snow rider", "human on board", "snow slope", "extreme sport"
+  ],
+  "emoji": "Human_Snowboard.png",
+  "category": "Humanoid"
+},
+
+"family": {
+  "synonyms": [
+    "family", "parents", "siblings", "relatives", 
+    "household", "kin", "loved ones", "family members"
+  ],
+  "emoji": "Family.png",
+  "category": "Humanoid"
+},
+
+"woman": {
+  "synonyms": [
+    "woman", "female", "lady", "adult female", "human", "humans", "man", "men", "woman", "women",
+    "female human", "girl", "feminine", "woman figure"
+  ],
+  "emoji": "Woman.png",
+  "category": "Humanoid"
+},
+
+"man": {
+  "synonyms": [
+    "man", "male", "gentleman", "adult male", "human", "humans", "man", "men", "woman", "women",
+    "male human", "guy", "masculine", "man figure"
+  ],
+  "emoji": "Man.png",
+  "category": "Humanoid"
+},
+
+"human_acrobatics": {
+  "synonyms": [
+    "acrobatics", "stunts", "gymnastics", "performer", "human", "humans", "man", "men", "woman", "women",
+    "body movement", "flips", "balance act", "human tricks"
+  ],
+  "emoji": "Human_Acrobatics.png",
+  "category": "Humanoid"
+},
+
+"baby": {
+  "synonyms": [
+    "baby", "infant", "newborn", "toddler",
+    "young child", "little one", "small human", "bundle of joy"
+  ],
+  "emoji": "Baby.png",
+  "category": "Humanoid"
+},
+
+"human_kanoe": {
+  "synonyms": [
+    "canoe", "paddling", "kayaking", "boat ride",
+    "rower", "water sport", "human in boat", "canoeing"
+  ],
+  "emoji": "Human_Kanoe.png",
+  "category": "Humanoid"
+},
+
+"human_left": {
+  "synonyms": [
+    "left side", "turned left", "facing left", "profile left", "human", "humans", "man", "men", "woman", "women",
+    "side view", "left-facing human"
+  ],
+  "emoji": "Human_Left.png",
+  "category": "Humanoid"
+},
+
+"human_running": {
+  "synonyms": [
+    "running", "jogging", "sprinting", "runner", "human", "man", "woman", "human running",
+    "human in motion", "exercise", "fast movement", "track activity"
+  ],
+  "emoji": "Human_Running.png",
+  "category": "Humanoid"
+},
+
+"human_swimming": {
+  "synonyms": [
+    "swimming", "swimmer", "in water", "freestyle", "human swimming",
+    "pool activity", "underwater", "human in water", "water sport"
+  ],
+  "emoji": "Human_Swimming.png",
+  "category": "Humanoid"
+},
+
+"human_workout": {
+  "synonyms": [
+    "workout", "exercise", "fitness", "training", "human workingout", "sport",
+    "gym session", "human lifting", "physical activity", "strength training"
+  ],
+  "emoji": "Human_Workout.png",
+  "category": "Humanoid"
+},
+
+"human_right": {
+  "synonyms": [
+    "right side", "turned right", "facing right", "profile right", "human", "man", "woman",
+    "side view", "right-facing human"
+  ],
+  "emoji": "Human_Right.png",
+  "category": "Humanoid"
+},
+
+"human_ski": {
+  "synonyms": [
+    "ski", "skiing", "winter sport", "skier", "human skiing",
+    "snow sport", "human on skis", "slopes", "snow activity"
+  ],
+  "emoji": "Human-Ski.png",
+  "category": "Humanoid"
+},
+
+"human_sit_left": {
+  "synonyms": [
+    "sitting left", "side view", "seated human", "left-facing", "human", "man", "woman",
+    "profile view", "human seated"
+  ],
+  "emoji": "Human_Sit_Left.png",
+  "category": "Humanoid"
+},
+
+"human_sit_right": {
+  "synonyms": [
+    "sitting right", "side view", "seated human", "right-facing", "human", "man", "woman",
+    "profile view", "human seated"
+  ],
+  "emoji": "Human_Sit_Right.png",
+  "category": "Humanoid"
+},
+
+"human_meditation": {
+  "synonyms": [
+    "meditation", "mindfulness", "yoga pose", "cross-legged", "human meditating",
+    "relaxation", "zen", "calm human", "peaceful state"
+  ],
+  "emoji": "Human_Meditation.png",
+  "category": "Humanoid"
+},
+
+"human_windsurf": {
+  "synonyms": [
+    "windsurf", "windsurfing", "sailing sport", "board sailing", "human windsurfing",
+    "ocean sport", "surf sail", "human on sailboard", "water sport"
+  ],
+  "emoji": "Human-Windsurf.png",
+  "category": "Humanoid"
+},
+
+"beach": {
+  "synonyms": [
+    "beach", "seashore", "coastline", "sandy shore", "shore",
+    "oceanfront", "sea beach", "coastal area", "sunny shore"
+  ],
+  "emoji": "Beach.png",
+  "category": "Nature"
+},
+
+"cactus": {
+  "synonyms": [
+    "cactus", "cactuses", "desert plant", "succulent", "spiky plant", "plant",
+    "arid plant", "thorny plant", "prickly", "dryland flora"
+  ],
+  "emoji": "Cactus.png",
+  "category": "Nature"
+},
+
+"coral": {
+  "synonyms": [
+    "coral", "corals", "reef", "marine life", "ocean plant", "plant",
+    "sea coral", "underwater structure", "reef builder", "tropical reef"
+  ],
+  "emoji": "Coral.png",
+  "category": "Nature"
+},
+
+"flower_pink": {
+  "synonyms": [
+    "pink flower", "pink flowers", "bloom", "blossom", "garden flower", "plant", "flower", "flowers",
+    "petals", "floral", "spring flower", "delicate bloom"
+  ],
+  "emoji": "Flower-Pink.png",
+  "category": "Nature"
+},
+
+"flower_yellow": {
+  "synonyms": [
+    "yellow flower", "yellow flowers", "bloom", "sunny blossom", "garden flower", "plant", "flower", "flowers",
+    "petals", "bright floral", "spring bloom", "cheerful flower"
+  ],
+  "emoji": "Flower-Yellow.png",
+  "category": "Nature"
+},
+
+"island": {
+  "synonyms": [
+    "island", "islands", "tropical island", "tropical islands", "land in water", "secluded land", 
+    "beach island", "ocean land", "paradise", "coastal island"
+  ],
+  "emoji": "Island.png",
+  "category": "Nature"
+},
+
+"mountain": {
+  "synonyms": [
+    "mountain", "peak", "summit", "hill",
+    "highland", "cliff", "ridge", "elevation"
+  ],
+  "emoji": "Mountain.png",
+  "category": "Nature"
+},
+
+"mushroom": {
+  "synonyms": [
+    "mushroom", "mushrooms", "fungus", "toadstool", "forest growth", "forest plant", "plant",
+    "cap and stem", "edible fungus", "wild mushroom", "spore plant"
+  ],
+  "emoji": "Mushroom.png",
+  "category": "Nature"
+},
+
+"palm": {
+  "synonyms": [
+    "palm", "palms", "palm tree", "palm trees", "tropical tree", "beach tree", "tree", "plant",
+    "coconut tree", "frond tree", "island tree", "shade tree"
+  ],
+  "emoji": "Palm.png",
+  "category": "Nature"
+},
+
+"pine": {
+  "synonyms": [
+    "pine", "pines", "pine tree", "pine trees", "evergreen", "conifer", "tree", "plant",
+    "needle tree", "forest tree", "woodland tree", "winter tree"
+  ],
+  "emoji": "Pine.png",
+  "category": "Nature"
+},
+
+"plant": {
+  "synonyms": [
+    "plant", "plants", "greenery", "vegetation", "foliage",
+    "flora", "leafy growth", "garden plant", "potted plant"
+  ],
+  "emoji": "Plant.png",
+  "category": "Nature"
+},
+
+"rose": {
+  "synonyms": [
+    "rose", "roses", "red flower", "red flowers", "romantic bloom", "garden rose", "flowers",
+    "thorny stem", "petaled flower", "valentine flower", "classic bloom"
+  ],
+  "emoji": "Rose.png",
+  "category": "Nature"
+},
+
+"tree": {
+  "synonyms": [
+    "tree", "trees", "wooded plant", "tall flora", "leafy growth", "plant",
+    "forest tree", "shade giver", "trunk and branches", "natural canopy"
+  ],
+  "emoji": "Tree.png",
+  "category": "Nature"
+},
+
+"volcano": {
+  "synonyms": [
+    "volcano", "lava mountain", "eruption", "crater", "mountain",
+    "magma source", "active mountain", "ash cloud", "geological feature"
+  ],
+  "emoji": "Volcano.png",
+  "category": "Nature"
+},
+
+"water_lily": {
+  "synonyms": [
+    "water lily", "water lilies", "pond flower", "floating plant", "aquatic bloom", "flower", "flowers",
+    "lily pad", "wetland plant", "tranquil flower", "calm water flora"
+  ],
+  "emoji": "Water_Lily.png",
+  "category": "Nature"
+},
+
+"beer": {
+  "synonyms": [
+    "beer", "beers", "brew", "lager", "ale",
+    "cold drink", "pint", "draft", "alcoholic beverage"
+  ],
+  "emoji": "Beer.png",
+  "category": "Objects"
+},
+
+"bike": {
+  "synonyms": [
+    "bike", "bikes", "bicycle", "bicycles", "cycle", "cycles", "pedal vehicle",
+    "two-wheeler", "rider", "road bike", "mountain bike"
+  ],
+  "emoji": "Bike.png",
+  "category": "Objects"
+},
+
+"boat": {
+  "synonyms": [
+    "boat", "boats", "vessel", "vessels", "watercraft", "sailboat",
+    "rowboat", "fishing boat", "motorboat", "sea vehicle"
+  ],
+  "emoji": "Boat.png",
+  "category": "Objects"
+},
+
+"books": {
+  "synonyms": [
+    "books", "book", "literature", "reading", "novels",
+    "pages", "library", "texts", "volumes"
+  ],
+  "emoji": "Books.png",
+  "category": "Objects"
+},
+
+"box": {
+  "synonyms": [
+    "box", "boxes", "container", "containeres", "package", "packages", "crate",
+    "carton", "storage", "square case", "parcel"
+  ],
+  "emoji": "Box.png",
+  "category": "Objects"
+},
+
+"brush": {
+  "synonyms": [
+    "brush", "brushes", "paintbrush", "paintbrushes", "bristle tool", "cleaning tool",
+    "art brush", "grooming tool", "hairbrush", "scrubber"
+  ],
+  "emoji": "Brush.png",
+  "category": "Objects"
+},
+
+"bus": {
+  "synonyms": [
+    "bus", "buses", "school bus", "school buses", "transit", "public transport", "transports",
+    "vehicle", "shuttle", "coach", "passenger bus"
+  ],
+  "emoji": "Bus.png",
+  "category": "Objects"
+},
+
+"cake": {
+  "synonyms": [
+    "cake", "cakes", "dessert", "birthday cake", "sweet treat", "food",
+    "pastry", "baked good", "frosted cake", "slice of cake"
+  ],
+  "emoji": "Cake.png",
+  "category": "Objects"
+},
+
+"camera": {
+  "synonyms": [
+    "camera", "cameras", "photograph", "lens", "snapshot",
+    "photo device", "dslr", "point and shoot", "camera gear"
+  ],
+  "emoji": "Camera.png",
+  "category": "Objects"
+},
+
+"candle": {
+  "synonyms": [
+    "candle", "candles", "wax light", "flame", "wick",
+    "light source", "scented candle", "candlelight", "pillar candle"
+  ],
+  "emoji": "Candle.png",
+  "category": "Objects"
+},
+
+"car": {
+  "synonyms": [
+    "car", "cars", "vehicle", "vehicles", "automobile", "sedan",
+    "coupe", "hatchback", "motorcar", "transport"
+  ],
+  "emoji": "Car.png",
+  "category": "Objects"
+},
+
+"chair": {
+  "synonyms": [
+    "chair", "seat", "stool", "armchair",
+    "bench", "sitting place", "furniture", "wooden chair"
+  ],
+  "emoji": "Chair.png",
+  "category": "Objects"
+},
+
+"coffee": {
+  "synonyms": [
+    "coffee", "espresso", "latte", "brew",
+    "cappuccino", "morning drink", "caffeine", "coffee cup"
+  ],
+  "emoji": "Coffee.png",
+  "category": "Objects"
+},
+
+"coffee_machine": {
+  "synonyms": [
+    "coffee machine", "coffee maker", "espresso machine", "brew station",
+    "drip machine", "kitchen appliance", "caffeine maker", "coffee appliance"
+  ],
+  "emoji": "Coffee_Machine.png",
+  "category": "Objects"
+},
+
+"computer": {
+  "synonyms": [
+    "computer", "pc", "laptop", "desktop",
+    "machine", "workstation", "device", "computer system"
+  ],
+  "emoji": "Computer.png",
+  "category": "Objects"
+},
+
+"cup": {
+  "synonyms": [
+    "cup", "mug", "teacup", "drinking vessel",
+    "coffee cup", "ceramic cup", "beverage holder", "glass"
+  ],
+  "emoji": "Cup.png",
+  "category": "Objects"
+},
+
+"direction_board": {
+  "synonyms": [
+    "direction board", "signpost", "guide sign", "arrow board",
+    "road sign", "navigation board", "wayfinder", "street sign"
+  ],
+  "emoji": "Direction_Board.png",
+  "category": "Objects"
+},
+
+"drink": {
+  "synonyms": [
+    "drink", "beverage", "refreshment", "cold drink",
+    "juice", "soda", "thirst quencher", "liquid"
+  ],
+  "emoji": "Drink.png",
+  "category": "Objects"
+},
+
+"film_camera": {
+  "synonyms": [
+    "film camera", "analog camera", "vintage camera", "movie recorder",
+    "cinema camera", "old camera", "motion picture camera", "reel camera"
+  ],
+  "emoji": "Film_Camera.png",
+  "category": "Objects"
+},
+
+"flan": {
+  "synonyms": [
+    "flan", "custard", "dessert", "caramel flan",
+    "sweet dish", "baked custard", "creamy dessert", "pudding"
+  ],
+  "emoji": "Flan.png",
+  "category": "Objects"
+},
+
+"game": {
+  "synonyms": [
+    "game", "play", "board game", "video game",
+    "fun activity", "interactive play", "gaming", "competition"
+  ],
+  "emoji": "Game.png",
+  "category": "Objects"
+},
+
+"guitar": {
+  "synonyms": [
+    "guitar", "string instrument", "acoustic", "electric guitar",
+    "musical instrument", "guitarist", "six strings", "instrument"
+  ],
+  "emoji": "Guitar.png",
+  "category": "Objects"
+},
+
+"headphones": {
+  "synonyms": [
+    "headphones", "earphones", "audio gear", "headset",
+    "music accessory", "sound device", "over-ear", "wireless headphones"
+  ],
+  "emoji": "Headphones.png",
+  "category": "Objects"
+},
+
+"helicopter": {
+  "synonyms": [
+    "helicopter", "chopper", "aircraft", "rotorcraft", "transport",
+    "flying vehicle", "air transport", "copilot", "aerial vehicle"
+  ],
+  "emoji": "Helicopter.png",
+  "category": "Objects"
+},
+
+"jeep": {
+  "synonyms": [
+    "jeep", "offroader", "4x4", "SUV", "transport",
+    "utility vehicle", "trail vehicle", "rugged car", "all-terrain"
+  ],
+  "emoji": "Jeep.png",
+  "category": "Objects"
+},
+
+"kanoe": {
+  "synonyms": [
+    "kanoe", "canoe", "small boat", "paddle boat",
+    "river boat", "kayak", "manual boat", "watercraft"
+  ],
+  "emoji": "Kanoe.png",
+  "category": "Objects"
+},
+
+"ladder": {
+  "synonyms": [
+    "ladder", "ladders", "step ladder", "climbing tool", "rungs",
+    "extension ladder", "folding ladder", "vertical steps", "elevated access"
+  ],
+  "emoji": "Ladder.png",
+  "category": "Objects"
+},
+
+"latte": {
+  "synonyms": [
+    "latte", "coffee", "milk coffee", "espresso drink",
+    "hot beverage", "coffee cup", "creamy coffee", "barista drink"
+  ],
+  "emoji": "Latte.png",
+  "category": "Objects"
+},
+
+"mail_box": {
+  "synonyms": [
+    "mail box", "mailbox", "letter box", "post box",
+    "postal drop", "mail holder", "envelope slot", "mail container"
+  ],
+  "emoji": "Mail_Box.png",
+  "category": "Objects"
+},
+
+"map": {
+  "synonyms": [
+    "map", "roadmap", "atlas", "navigation chart",
+    "location guide", "geographic guide", "travel map", "directions"
+  ],
+  "emoji": "Map.png",
+  "category": "Objects"
+},
+
+"microscope": {
+  "synonyms": [
+    "microscope", "lab equipment", "magnifier", "scientific tool",
+    "lens device", "biology tool", "zoom lens", "research device"
+  ],
+  "emoji": "Microscope.png",
+  "category": "Objects"
+},
+
+"money": {
+  "synonyms": [
+    "money", "cash", "currency", "bills",
+    "coins", "payment", "funds", "wealth"
+  ],
+  "emoji": "Money.png",
+  "category": "Objects"
+},
+
+"motorbike": {
+  "synonyms": [
+    "motorbike", "motorcycle", "bike", "two-wheeler",
+    "scooter", "rider", "road bike", "motor vehicle"
+  ],
+  "emoji": "Motorbike.png",
+  "category": "Objects"
+},
+
+"paint": {
+  "synonyms": [
+    "paint", "color", "art supply", "pigment",
+    "coating", "brushwork", "painting material", "liquid color"
+  ],
+  "emoji": "Paint.png",
+  "category": "Objects"
+},
+
+"painting": {
+  "synonyms": [
+    "painting", "artwork", "canvas", "oil painting",
+    "framed art", "picture", "wall art", "visual art"
+  ],
+  "emoji": "Painting.png",
+  "category": "Objects"
+},
+
+"parasol": {
+  "synonyms": [
+    "parasol", "sunshade", "beach umbrella", "shade umbrella",
+    "sun blocker", "patio umbrella", "canopy", "outdoor shade"
+  ],
+  "emoji": "Parasol.png",
+  "category": "Objects"
+},
+
+"piñata": {
+  "synonyms": [
+    "piñata", "party decoration", "candy container", "fiesta item",
+    "paper figure", "birthday fun", "hanging decoration", "breakable toy"
+  ],
+  "emoji": "Pinata.png",
+  "category": "Objects"
+},
+
+"plane": {
+  "synonyms": [
+    "plane", "airplane", "jet", "aircraft",
+    "airliner", "flying vehicle", "aviation", "flight"
+  ],
+  "emoji": "Plane.png",
+  "category": "Objects"
+},
+
+"present": {
+  "synonyms": [
+    "present", "gift", "wrapped box", "surprise",
+    "package", "birthday gift", "holiday gift", "offering"
+  ],
+  "emoji": "Present.png",
+  "category": "Objects"
+},
+
+"puzzle": {
+  "synonyms": [
+    "puzzle", "jigsaw", "brain teaser", "pieces",
+    "game", "logic challenge", "picture puzzle", "mental exercise"
+  ],
+  "emoji": "Puzzle.png",
+  "category": "Objects"
+},
+
+"rocket": {
+  "synonyms": [
+    "rocket", "spacecraft", "missile", "launch vehicle",
+    "spaceship", "aerospace", "space shuttle", "flying machine"
+  ],
+  "emoji": "Rocket.png",
+  "category": "Objects"
+},
+
+"sail_boat": {
+  "synonyms": [
+    "sail boat", "sailboat", "yacht", "sailing vessel",
+    "wind boat", "marine craft", "ocean boat", "watercraft"
+  ],
+  "emoji": "Sail_Boat.png",
+  "category": "Objects"
+},
+
+"skateboard": {
+  "synonyms": [
+    "skateboard", "board", "skating", "deck",
+    "wheeled board", "trick board", "street sport", "ride board"
+  ],
+  "emoji": "Skateboard.png",
+  "category": "Objects"
+},
+
+"slide": {
+  "synonyms": [
+    "slide", "playground slide", "slippery slope", "kids play",
+    "fun slide", "plastic slide", "park equipment", "play area"
+  ],
+  "emoji": "Slide.png",
+  "category": "Objects"
+},
+
+"space_ship": {
+  "synonyms": [
+    "space ship", "spaceship", "spacecraft", "interstellar vehicle",
+    "rocket ship", "starship", "space travel", "flying saucer"
+  ],
+  "emoji": "Space_Ship.png",
+  "category": "Objects"
+},
+
+"step": {
+  "synonyms": [
+    "step", "stair", "tread", "stairway",
+    "footstep", "riser", "platform", "ladder step"
+  ],
+  "emoji": "Step.png",
+  "category": "Objects"
+},
+
+"suitcase": {
+  "synonyms": [
+    "suitcase", "luggage", "travel bag", "carry-on",
+    "baggage", "valise", "roller bag", "travel case"
+  ],
+  "emoji": "Suitcase.png",
+  "category": "Objects"
+},
+
+"table_chair": {
+  "synonyms": [
+    "table chair", "dining set", "furniture", "seating",
+    "table and chair", "chair set", "kitchen set", "dining furniture"
+  ],
+  "emoji": "Table_Chair.png",
+  "category": "Objects"
+},
+
+"tent": {
+  "synonyms": [
+    "tent", "camp shelter", "canopy", "camping gear",
+    "outdoor shelter", "portable shelter", "canvas tent", "temporary home"
+  ],
+  "emoji": "Tent.png",
+  "category": "Objects"
+},
+
+"tea": {
+  "synonyms": [
+    "tea", "hot drink", "herbal brew", "tea cup",
+    "green tea", "black tea", "chai", "morning beverage"
+  ],
+  "emoji": "Tea.png",
+  "category": "Objects"
+},
+
+"tractor": {
+  "synonyms": [
+    "tractor", "farm vehicle", "plow machine", "agriculture vehicle",
+    "field tractor", "tractor engine", "farm equipment", "heavy machine"
+  ],
+  "emoji": "Tractor.png",
+  "category": "Objects"
+},
+
+"train": {
+  "synonyms": [
+    "train", "railway", "locomotive", "rail transport",
+    "subway", "freight train", "commuter train", "train car"
+  ],
+  "emoji": "Train.png",
+  "category": "Objects"
+},
+
+"tram": {
+  "synonyms": [
+    "tram", "streetcar", "trolley", "light rail",
+    "urban train", "city rail", "tramcar", "public transport"
+  ],
+  "emoji": "Tram.png",
+  "category": "Objects"
+},
+
+"trompet": {
+  "synonyms": [
+    "trompet", "trumpet", "brass instrument", "horn",
+    "music instrument", "wind instrument", "bugle", "band horn"
+  ],
+  "emoji": "Trompet.png",
+  "category": "Objects"
+},
+
+"truck": {
+  "synonyms": [
+    "truck", "lorry", "pickup", "freight vehicle",
+    "delivery truck", "cargo hauler", "transport vehicle", "utility vehicle"
+  ],
+  "emoji": "Truck.png",
+  "category": "Objects"
+},
+
+"vase": {
+  "synonyms": [
+    "vase", "flower holder", "ceramic vase", "glass vase",
+    "decorative piece", "table decor", "floral container", "home decor"
+  ],
+  "emoji": "Vase.png",
+  "category": "Objects"
+},
+
+"violin": {
+  "synonyms": [
+    "violin", "fiddle", "string instrument", "bowed instrument",
+    "orchestra instrument", "classical instrument", "musical instrument", "violin music"
+  ],
+  "emoji": "Violin.png",
+  "category": "Objects"
+},
+
+"building": {
+  "synonyms": [
+    "building", "structure", "construction", "architecture",
+    "tower", "office building", "skyscraper", "edifice"
+  ],
+  "emoji": "Building.png",
+  "category": "Structures"
+},
+
+"castle": {
+  "synonyms": [
+    "castle", "fortress", "stronghold", "palace",
+    "citadel", "medieval building", "royal residence", "stone castle"
+  ],
+  "emoji": "Castle.png",
+  "category": "Structures"
+},
+
+"church": {
+  "synonyms": [
+    "church", "chapel", "cathedral", "place of worship",
+    "steeple", "religious building", "sanctuary", "house of God"
+  ],
+  "emoji": "Church.png",
+  "category": "Structures"
+},
+
+"circus": {
+  "synonyms": [
+    "circus", "big top", "tent show", "performance arena",
+    "acrobats", "clown show", "traveling show", "entertainment tent"
+  ],
+  "emoji": "Circus.png",
+  "category": "Structures"
+},
+
+"city": {
+  "synonyms": [
+    "city", "urban area", "metropolis", "downtown",
+    "municipality", "cityscape", "town", "urban center"
+  ],
+  "emoji": "City.png",
+  "category": "Structures"
+},
+
+"construction": {
+  "synonyms": [
+    "construction", "building site", "work zone", "site",
+    "structure work", "development area", "in progress", "build zone"
+  ],
+  "emoji": "Construction.png",
+  "category": "Structures"
+},
+
+"coffee_shop": {
+  "synonyms": [
+    "coffee shop", "café", "coffeehouse", "espresso bar",
+    "coffee spot", "java place", "latte shop", "brew café"
+  ],
+  "emoji": "Coffee_Shop.png",
+  "category": "Structures"
+},
+
+"factory": {
+  "synonyms": [
+    "factory", "plant", "industrial building", "manufacturing center",
+    "production site", "assembly plant", "workshop", "mill"
+  ],
+  "emoji": "Factory.png",
+  "category": "Structures"
+},
+
+"ferris_wheel": {
+  "synonyms": [
+    "ferris wheel", "amusement ride", "giant wheel", "fairground ride",
+    "observation wheel", "carnival attraction", "round ride", "theme park ride"
+  ],
+  "emoji": "Ferris_Wheel.png",
+  "category": "Structures"
+},
+
+"hospital": {
+  "synonyms": [
+    "hospital", "medical center", "clinic", "healthcare facility",
+    "emergency room", "treatment center", "infirmary", "care unit"
+  ],
+  "emoji": "Hospital.png",
+  "category": "Structures"
+},
+
+"hotel": {
+  "synonyms": [
+    "hotel", "inn", "lodge", "resort",
+    "motel", "guesthouse", "accommodation", "stay place"
+  ],
+  "emoji": "Hotel.png",
+  "category": "Structures"
+},
+
+"house": {
+  "synonyms": [
+    "house", "home", "residence", "dwelling",
+    "living space", "abode", "housing", "shelter"
+  ],
+  "emoji": "House.png",
+  "category": "Structures"
+},
+
+"hut": {
+  "synonyms": [
+    "hut", "cabin", "shack", "shelter",
+    "small house", "wooden hut", "primitive shelter", "thatched hut"
+  ],
+  "emoji": "Hut.png",
+  "category": "Structures"
+},
+
+"industry": {
+  "synonyms": [
+    "industry", "manufacturing", "industrial area", "production",
+    "factory zone", "economic sector", "workshop", "industrial site"
+  ],
+  "emoji": "Industry.png",
+  "category": "Structures"
+},
+
+"monument": {
+  "synonyms": [
+    "monument", "memorial", "statue", "historic structure",
+    "landmark", "tribute", "heritage site", "commemorative structure"
+  ],
+  "emoji": "Monument.png",
+  "category": "Structures"
+},
+
+"mosque": {
+  "synonyms": [
+    "mosque", "masjid", "islamic place", "worship house",
+    "religious building", "prayer hall", "dome structure", "muslim temple"
+  ],
+  "emoji": "Mosque.png",
+  "category": "Structures"
+},
+
+"nuclear_power": {
+  "synonyms": [
+    "nuclear power", "power plant", "energy station", "reactor",
+    "cooling tower", "electric plant", "atomic energy", "nuclear station"
+  ],
+  "emoji": "Nuclear_Power.png",
+  "category": "Structures"
+},
+
+"phone_booth": {
+  "synonyms": [
+    "phone booth", "telephone booth", "public phone", "call box",
+    "phone station", "street phone", "old phone booth", "payphone"
+  ],
+  "emoji": "Phone_Booth.png",
+  "category": "Structures"
+},
+
+"pyramid": {
+  "synonyms": [
+    "pyramid", "ancient structure", "egyptian tomb", "stone monument",
+    "historic building", "desert landmark", "pharaoh tomb", "triangular structure"
+  ],
+  "emoji": "Pyramid.png",
+  "category": "Structures"
+},
+
+"school": {
+  "synonyms": [
+    "school", "educational building", "learning center", "academy",
+    "classroom", "institution", "schoolhouse", "study place"
+  ],
+  "emoji": "School.png",
+  "category": "Structures"
+},
+
+"sculpture": {
+  "synonyms": [
+    "sculpture", "statue", "artwork", "carving",
+    "figure", "monument", "stone art", "art installation"
+  ],
+  "emoji": "Sculpture.png",
+  "category": "Structures"
+},
+
+"solar_panel": {
+  "synonyms": [
+    "solar panel", "solar energy", "sun collector", "solar array",
+    "green energy", "renewable power", "photovoltaic panel", "energy panel"
+  ],
+  "emoji": "Solar_Panel.png",
+  "category": "Structures"
+},
+
+"station": {
+  "synonyms": [
+    "station", "train station", "bus terminal", "transport hub",
+    "depot", "stop", "terminal", "commute center"
+  ],
+  "emoji": "Station.png",
+  "category": "Structures"
+},
+
+"synagogue": {
+  "synonyms": [
+    "synagogue", "jewish temple", "place of worship", "shul",
+    "religious building", "house of prayer", "torah center", "jewish center"
+  ],
+  "emoji": "Synagogue.png",
+  "category": "Structures"
+},
+
+"temple": {
+  "synonyms": [
+    "temple", "shrine", "sacred place", "religious building",
+    "place of worship", "holy site", "spiritual site", "worship house"
+  ],
+  "emoji": "Temple.png",
+  "category": "Structures"
+},
+
+"tower": {
+  "synonyms": [
+    "tower", "tall building", "watchtower", "observation deck",
+    "high structure", "broadcast tower", "lookout", "vertical structure"
+  ],
+  "emoji": "Tower.png",
+  "category": "Structures"
+},
+
+"windmill": {
+  "synonyms": [
+    "windmill", "wind turbine", "energy generator", "rotating blades",
+    "renewable energy", "wind power", "mechanical mill", "green energy"
+  ],
+  "emoji": "Windmill.png",
+  "category": "Structures"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   }
   
