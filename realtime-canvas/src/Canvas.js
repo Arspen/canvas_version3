@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import socket from './socket';
-import { getEmojiForWord } from './labelMapper'; // Still using emoji because that's where filename is!
+import { getEmojiForWord } from './labelMapper'; // Using the existing labelMap
 
 const Canvas = ({ userId }) => {
   const canvasRef = useRef(null);
@@ -8,6 +8,8 @@ const Canvas = ({ userId }) => {
   const [pendingWord, setPendingWord] = useState(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [placements, setPlacements] = useState([]);
+
+  const imageCache = {}; // 🔥 Cache for preloaded images
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -18,14 +20,19 @@ const Canvas = ({ userId }) => {
     const drawAll = () => {
       context.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Draw all already placed items
+      // Draw all already placed icons
       placements.forEach(({ word, emoji, x, y }) => {
         if (emoji) {
-          const img = new Image();
-          img.src = `/icons/${emoji}`;
-          img.onload = () => {
-            context.drawImage(img, x, y, 40, 40); // 40x40 pixels size, adjust if you want
-          };
+          if (imageCache[emoji]) {
+            context.drawImage(imageCache[emoji], x, y, 40, 40);
+          } else {
+            const img = new Image();
+            img.src = `/icons/${emoji}`;
+            img.onload = () => {
+              imageCache[emoji] = img;
+              context.drawImage(img, x, y, 40, 40);
+            };
+          }
         } else {
           context.font = "32px Arial";
           context.globalAlpha = 1;
@@ -33,17 +40,24 @@ const Canvas = ({ userId }) => {
         }
       });
 
-      // Draw the pending item hovering over mouse
+      // Draw pending word hovering
       if (pendingWord) {
         const pendingEmoji = getEmojiForWord(pendingWord);
         if (pendingEmoji) {
-          const img = new Image();
-          img.src = `/icons/${pendingEmoji}`;
-          img.onload = () => {
+          if (imageCache[pendingEmoji]) {
             context.globalAlpha = 0.5;
-            context.drawImage(img, mousePos.x, mousePos.y, 40, 40);
+            context.drawImage(imageCache[pendingEmoji], mousePos.x, mousePos.y, 40, 40);
             context.globalAlpha = 1;
-          };
+          } else {
+            const img = new Image();
+            img.src = `/icons/${pendingEmoji}`;
+            img.onload = () => {
+              imageCache[pendingEmoji] = img;
+              context.globalAlpha = 0.5;
+              context.drawImage(img, mousePos.x, mousePos.y, 40, 40);
+              context.globalAlpha = 1;
+            };
+          }
         } else {
           context.font = "32px Arial";
           context.globalAlpha = 0.5;
@@ -53,7 +67,7 @@ const Canvas = ({ userId }) => {
       }
     };
 
-    const interval = setInterval(drawAll, 30); // Redraw every 30ms
+    const interval = setInterval(drawAll, 30); // Redraw canvas every 30ms
 
     socket.on('initialPlacements', (data) => {
       setPlacements(data);
