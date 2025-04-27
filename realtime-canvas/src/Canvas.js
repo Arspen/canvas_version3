@@ -26,6 +26,7 @@ const Canvas = ({ userId }) => {
     canvas.width = 2000;
     canvas.height = 1500;
 
+    // Preload images
     const allEmojis = Object.values(labelMap).map(data => data.emoji);
     let loadedCount = 0;
 
@@ -38,11 +39,10 @@ const Canvas = ({ userId }) => {
         loadedCount++;
         if (loadedCount === allEmojis.length) {
           setImagesLoaded(true);
-          drawAll(); // initial draw after loading
+          drawAll(); // Initial draw once ready
         }
       };
       img.onerror = () => {
-        console.error("Failed to load image:", emoji);
         loadedCount++;
         if (loadedCount === allEmojis.length) {
           setImagesLoaded(true);
@@ -52,6 +52,7 @@ const Canvas = ({ userId }) => {
     });
 
     const drawAll = () => {
+      if (!context) return;
       context.clearRect(0, 0, canvas.width, canvas.height);
 
       placements.forEach(({ word, emoji, x, y }) => {
@@ -59,7 +60,6 @@ const Canvas = ({ userId }) => {
           context.drawImage(imageCache[emoji], x, y, 40, 40);
         } else {
           context.font = "32px Arial";
-          context.globalAlpha = 1;
           context.fillText(word, x, y);
         }
       });
@@ -79,88 +79,88 @@ const Canvas = ({ userId }) => {
       }
     };
 
-    const updateMousePosition = (event) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = event.clientX - rect.left + containerRef.current.scrollLeft;
-      const y = event.clientY - rect.top + containerRef.current.scrollTop;
-      setMousePos({ x, y });
-    };
+    socket.on('initialPlacements', (data) => {
+      setPlacements(data);
+    });
 
-    const updateTouchPosition = (event) => {
-      const rect = canvas.getBoundingClientRect();
-      const touch = event.touches[0];
-      const x = touch.clientX - rect.left + containerRef.current.scrollLeft;
-      const y = touch.clientY - rect.top + containerRef.current.scrollTop;
-      setMousePos({ x, y });
-    };
-
-    const placeEmojiAt = (x, y) => {
-      const emoji = getEmojiForWord(pendingWord);
-      const newPlacement = {
-        word: pendingWord,
-        emoji: emoji || null,
-        x,
-        y,
-        userId,
-      };
-      socket.emit('placeEmoji', newPlacement);
-      setPendingWord(null);
-    };
-
-    const handleClick = (event) => {
-      if (!pendingWord) return;
-      const rect = canvas.getBoundingClientRect();
-      const x = event.clientX - rect.left + containerRef.current.scrollLeft;
-      const y = event.clientY - rect.top + containerRef.current.scrollTop;
-      placeEmojiAt(x, y);
-    };
-
-    const handleTouchStart = (event) => {
-      if (!pendingWord) return;
-      const rect = canvas.getBoundingClientRect();
-      const touch = event.touches[0];
-      const x = touch.clientX - rect.left + containerRef.current.scrollLeft;
-      const y = touch.clientY - rect.top + containerRef.current.scrollTop;
-      placeEmojiAt(x, y);
-    };
+    socket.on('placeEmoji', (data) => {
+      setPlacements((prev) => [...prev, data]);
+    });
 
     if (isMobile) {
-      canvas.addEventListener('touchstart', handleTouchStart);
-      canvas.addEventListener('touchmove', updateTouchPosition);
+      canvas.addEventListener('touchmove', (event) => {
+        const rect = canvas.getBoundingClientRect();
+        const touch = event.touches[0];
+        const x = touch.clientX - rect.left + containerRef.current.scrollLeft;
+        const y = touch.clientY - rect.top + containerRef.current.scrollTop;
+        setMousePos({ x, y });
+      });
+
+      canvas.addEventListener('touchstart', (event) => {
+        if (!pendingWord) return;
+        const rect = canvas.getBoundingClientRect();
+        const touch = event.touches[0];
+        const x = touch.clientX - rect.left + containerRef.current.scrollLeft;
+        const y = touch.clientY - rect.top + containerRef.current.scrollTop;
+        const emoji = getEmojiForWord(pendingWord);
+        const newPlacement = {
+          word: pendingWord,
+          emoji: emoji || null,
+          x,
+          y,
+          userId,
+        };
+        socket.emit('placeEmoji', newPlacement);
+        setPendingWord(null);
+      });
     } else {
-      canvas.addEventListener('mousemove', updateMousePosition);
-      canvas.addEventListener('click', handleClick);
+      canvas.addEventListener('mousemove', (event) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left + containerRef.current.scrollLeft;
+        const y = event.clientY - rect.top + containerRef.current.scrollTop;
+        setMousePos({ x, y });
+      });
+
+      canvas.addEventListener('click', () => {
+        if (!pendingWord) return;
+        const { x, y } = mousePos;
+        const emoji = getEmojiForWord(pendingWord);
+        const newPlacement = {
+          word: pendingWord,
+          emoji: emoji || null,
+          x,
+          y,
+          userId,
+        };
+        socket.emit('placeEmoji', newPlacement);
+        setPendingWord(null);
+      });
     }
 
     socket.emit('requestInitialPlacements');
 
     return () => {
-      if (isMobile) {
-        canvas.removeEventListener('touchstart', handleTouchStart);
-        canvas.removeEventListener('touchmove', updateTouchPosition);
-      } else {
-        canvas.removeEventListener('mousemove', updateMousePosition);
-        canvas.removeEventListener('click', handleClick);
-      }
       socket.off('initialPlacements');
       socket.off('placeEmoji');
     };
-  }, [pendingWord, placements, imagesLoaded, isMobile, mousePos, userId]);
+  }, [pendingWord, mousePos, placements, imagesLoaded, isMobile, userId]);
 
   useEffect(() => {
     if (imagesLoaded) {
       const canvas = canvasRef.current;
       const context = canvas.getContext('2d');
-      context.clearRect(0, 0, canvas.width, canvas.height);
+      if (context) {
+        context.clearRect(0, 0, canvas.width, canvas.height);
 
-      placements.forEach(({ word, emoji, x, y }) => {
-        if (emoji && imageCache[emoji]) {
-          context.drawImage(imageCache[emoji], x, y, 40, 40);
-        } else {
-          context.font = "32px Arial";
-          context.fillText(word, x, y);
-        }
-      });
+        placements.forEach(({ word, emoji, x, y }) => {
+          if (emoji && imageCache[emoji]) {
+            context.drawImage(imageCache[emoji], x, y, 40, 40);
+          } else {
+            context.font = "32px Arial";
+            context.fillText(word, x, y);
+          }
+        });
+      }
     }
   }, [placements, imagesLoaded]);
 
@@ -168,27 +168,18 @@ const Canvas = ({ userId }) => {
     if (imagesLoaded && pendingWord) {
       const canvas = canvasRef.current;
       const context = canvas.getContext('2d');
-      context.clearRect(0, 0, canvas.width, canvas.height);
-
-      placements.forEach(({ word, emoji, x, y }) => {
-        if (emoji && imageCache[emoji]) {
-          context.drawImage(imageCache[emoji], x, y, 40, 40);
+      if (context) {
+        const pendingEmoji = getEmojiForWord(pendingWord);
+        if (pendingEmoji && imageCache[pendingEmoji]) {
+          context.globalAlpha = 0.5;
+          context.drawImage(imageCache[pendingEmoji], mousePos.x, mousePos.y, 40, 40);
+          context.globalAlpha = 1;
         } else {
           context.font = "32px Arial";
-          context.fillText(word, x, y);
+          context.globalAlpha = 0.5;
+          context.fillText(pendingWord, mousePos.x, mousePos.y);
+          context.globalAlpha = 1;
         }
-      });
-
-      const pendingEmoji = getEmojiForWord(pendingWord);
-      if (pendingEmoji && imageCache[pendingEmoji]) {
-        context.globalAlpha = 0.5;
-        context.drawImage(imageCache[pendingEmoji], mousePos.x, mousePos.y, 40, 40);
-        context.globalAlpha = 1;
-      } else {
-        context.font = "32px Arial";
-        context.globalAlpha = 0.5;
-        context.fillText(pendingWord, mousePos.x, mousePos.y);
-        context.globalAlpha = 1;
       }
     }
   }, [pendingWord, mousePos, imagesLoaded]);
