@@ -918,7 +918,7 @@
     "play", "playing", "recreation", "fun activity", "sport", "human playing",
     "leisure", "game", "human activity", "active fun"
   ],
-  "emoji": "Human-Play.png",
+  "emoji": "Human_Play.png",
   "category": "Humanoid"
 },
 
@@ -1044,7 +1044,7 @@
     "ski", "skiing", "winter sport", "skier", "human skiing",
     "snow sport", "human on skis", "slopes", "snow activity"
   ],
-  "emoji": "Human-Ski.png",
+  "emoji": "Human_Ski.png",
   "category": "Humanoid"
 },
 
@@ -1080,7 +1080,7 @@
     "windsurf", "windsurfing", "sailing sport", "board sailing", "human windsurfing",
     "ocean sport", "surf sail", "human on sailboard", "water sport"
   ],
-  "emoji": "Human-Windsurf.png",
+  "emoji": "Human_Windsurf.png",
   "category": "Humanoid"
 },
 
