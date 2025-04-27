@@ -48,7 +48,7 @@ const Canvas = () => {
           img.src = `/icons/${placement.emoji}`;
           img.onerror = () => {
             console.error(`Failed to load image: ${placement.emoji}`);
-            img.src = `/icons/Placeholder.png`;
+            img.src = `/icons/Bat.png`;
           };
           img.onload = () => {
             ctx.drawImage(img, placement.x, placement.y, 50, 50);
