@@ -18,7 +18,12 @@ const Canvas = () => {
   const loadImage = (src) => {
     return new Promise((resolve, reject) => {
       const img = new Image();
-      img.src = src;
+      img.src = `/icons/${placement.emoji}`;
+      img.onerror = () => {
+      console.error(`Failed to load image: ${placement.emoji}`);
+      img.src = `/icons/Placeholder.png`; // or any default fallback
+      };
+
       img.onload = () => resolve(img);
       img.onerror = (err) => reject(err);
     });
