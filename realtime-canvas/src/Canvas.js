@@ -1,144 +1,149 @@
-import React, { useEffect, useRef, useState } from 'react';
-import io from 'socket.io-client';
-import labelMap from './labelMap.json';
+import React, { useEffect, useRef, useState } from "react";
+import io from "socket.io-client";
+import labelMap from "./labelMap.json";
 
-const backendURL = 'https://canvas-version3.onrender.com'; // change to your backend if needed
-const socket = io(backendURL);
+const backendUrl = "https://canvas-version3.onrender.com"; // <== your backend URL
 
 const Canvas = () => {
   const canvasRef = useRef(null);
   const [placements, setPlacements] = useState([]);
-  const [isPlacing, setIsPlacing] = useState(false);
-  const [currentWord, setCurrentWord] = useState('');
-  const [currentUser, setCurrentUser] = useState('');
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [word, setWord] = useState("");
+  const [userId, setUserId] = useState("");
+  const [imageCache, setImageCache] = useState({});
+  const [hoveredImage, setHoveredImage] = useState(null);
 
   useEffect(() => {
-    const username = prompt('Please enter your username:') || `User-${Math.floor(Math.random() * 10000)}`;
-    setCurrentUser(username);
+    const id = prompt("Enter your user ID:");
+    setUserId(id || `user_${Math.floor(Math.random() * 1000)}`);
+  }, []);
 
-    socket.emit('requestInitialPlacements');
+  useEffect(() => {
+    const socket = io(backendUrl);
 
-    socket.on('initialPlacements', (serverPlacements) => {
-      setPlacements(serverPlacements);
+    socket.on("connect", () => {
+      console.log("Connected to server");
+      socket.emit("requestInitialPlacements");
     });
 
-    socket.on('placeEmoji', (data) => {
-      setPlacements(prev => [...prev, data]);
+    socket.on("initialPlacements", (data) => {
+      setPlacements(data);
+    });
+
+    socket.on("placeEmoji", (data) => {
+      setPlacements((prev) => [...prev, data]);
     });
 
     return () => {
-      socket.off('initialPlacements');
-      socket.off('placeEmoji');
+      socket.disconnect();
     };
   }, []);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    canvas.width = 2000;
-    canvas.height = 1200;
+    const ctx = canvasRef.current.getContext("2d");
 
     const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
       placements.forEach((placement) => {
-        if (placement.emoji) {
-          const img = new Image();
-          img.src = `/icons/${placement.emoji}`;
-          img.onerror = () => {
-            console.error(`Failed to load image: ${placement.emoji}`);
-            img.src = `/icons/Bat.png`;
-          };
-          img.onload = () => {
-            ctx.drawImage(img, placement.x, placement.y, 50, 50);
-          };
+        const img = imageCache[placement.emoji];
+        if (img) {
+          ctx.drawImage(img, placement.x, placement.y, 40, 40);
         }
       });
 
-      if (isPlacing && currentWord) {
-        const matched = findMatchingLabel(currentWord);
-        const imageToShow = matched ? matched.emoji : null;
-        if (imageToShow) {
-          const img = new Image();
-          img.src = `/icons/${imageToShow}`;
-          img.onload = () => {
-            ctx.globalAlpha = 0.5;
-            ctx.drawImage(img, mousePosition.x - 25, mousePosition.y - 25, 50, 50);
-            ctx.globalAlpha = 1.0;
-          };
-        } else {
-          ctx.font = '24px Arial';
-          ctx.fillText(currentWord, mousePosition.x, mousePosition.y);
-        }
+      if (hoveredImage) {
+        ctx.globalAlpha = 0.5;
+        ctx.drawImage(hoveredImage.img, hoveredImage.x, hoveredImage.y, 40, 40);
+        ctx.globalAlpha = 1.0;
       }
 
       requestAnimationFrame(draw);
     };
 
     draw();
-  }, [placements, isPlacing, currentWord, mousePosition]);
+  }, [placements, hoveredImage, imageCache]);
 
-  const findMatchingLabel = (inputWord) => {
-    const lowered = inputWord.toLowerCase();
-    for (const key in labelMap) {
-      if (labelMap[key].synonyms.map(s => s.toLowerCase()).includes(lowered)) {
-        return labelMap[key];
+  useEffect(() => {
+    const cache = {};
+    Object.values(labelMap).forEach((entry) => {
+      if (entry.emoji && !cache[entry.emoji]) {
+        const img = new Image();
+        img.src = `/icons/${entry.emoji}`;
+        cache[entry.emoji] = img;
+      }
+    });
+    setImageCache(cache);
+  }, []);
+
+  const handleCanvasClick = (e) => {
+    if (!hoveredImage) return;
+
+    const rect = canvasRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const socket = io(backendUrl);
+    socket.emit("placeEmoji", {
+      word: hoveredImage.word,
+      emoji: hoveredImage.emoji,
+      x,
+      y,
+      userId,
+    });
+    socket.disconnect();
+
+    setHoveredImage(null);
+  };
+
+  const handleConfirm = () => {
+    if (!word.trim()) return;
+
+    let selectedEmoji = null;
+    for (const [label, { synonyms, emoji }] of Object.entries(labelMap)) {
+      if (synonyms.map((s) => s.toLowerCase()).includes(word.toLowerCase())) {
+        selectedEmoji = emoji;
+        break;
       }
     }
-    return null;
+
+    if (selectedEmoji && imageCache[selectedEmoji]) {
+      setHoveredImage({
+        word,
+        emoji: selectedEmoji,
+        img: imageCache[selectedEmoji],
+      });
+    } else {
+      alert("Word not recognized!");
+    }
   };
 
   const handleMouseMove = (e) => {
+    if (!hoveredImage) return;
+
     const rect = canvasRef.current.getBoundingClientRect();
-    setMousePosition({
+    setHoveredImage((prev) => ({
+      ...prev,
       x: e.clientX - rect.left,
-      y: e.clientY - rect.top
-    });
-  };
-
-  const handleMouseClick = (e) => {
-    if (isPlacing && currentWord) {
-      const rect = canvasRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const matched = findMatchingLabel(currentWord);
-
-      const newPlacement = {
-        word: currentWord,
-        emoji: matched ? matched.emoji : '',
-        x,
-        y,
-        userId: currentUser
-      };
-
-      socket.emit('placeEmoji', newPlacement);
-      setIsPlacing(false);
-      setCurrentWord('');
-    }
-  };
-
-  const handleConfirmWord = () => {
-    if (currentWord.trim() !== '') {
-      setIsPlacing(true);
-    }
+      y: e.clientY - rect.top,
+    }));
   };
 
   return (
     <div>
-      <h2>Welcome, {currentUser}</h2>
+      <h1>Welcome, {userId}</h1>
       <input
-        type="text"
+        value={word}
+        onChange={(e) => setWord(e.target.value)}
         placeholder="Type a word..."
-        value={currentWord}
-        onChange={(e) => setCurrentWord(e.target.value)}
       />
-      <button onClick={handleConfirmWord}>Confirm</button>
+      <button onClick={handleConfirm}>Confirm</button>
       <canvas
         ref={canvasRef}
+        width={window.innerWidth}
+        height={window.innerHeight}
+        onClick={handleCanvasClick}
         onMouseMove={handleMouseMove}
-        onClick={handleMouseClick}
-        style={{ border: '1px solid black', marginTop: '10px' }}
+        style={{ border: "1px solid black" }}
       />
     </div>
   );
