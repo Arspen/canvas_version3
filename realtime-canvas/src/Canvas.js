@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import { getEmojiForWord } from './labelMapper';
 
 const socket = io('https://canvas-version3.onrender.com'); // <-- replace with your actual Render backend URL
-
+//COMMENT
 const Canvas = () => {
   const canvasRef = useRef(null);
   const [pendingWord, setPendingWord] = useState('');
