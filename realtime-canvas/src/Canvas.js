@@ -7,19 +7,20 @@ const Canvas = ({ userId }) => {
   const canvasRef = useRef(null);
   const [currentWord, setCurrentWord] = useState("");
   const [pendingWord, setPendingWord] = useState(null);
-  const [pendingEmoji, setPendingEmoji] = useState(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [placements, setPlacements] = useState([]);
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
-  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-  const imageCache = {};
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent); // detect mobile
+
+  const imageCache = useRef({});
+  const animationFrameId = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = 2000;
+    canvas.height = 1500;
 
     const preloadImages = () => {
       const allEmojis = Object.values(labelMap).map(data => data.emoji);
@@ -32,7 +33,7 @@ const Canvas = ({ userId }) => {
         img.src = `/icons/${emoji}`;
 
         img.onload = () => {
-          imageCache[emoji] = img;
+          imageCache.current[emoji] = img;
           loadedCount++;
           if (loadedCount === allEmojis.length) {
             setImagesLoaded(true);
@@ -51,30 +52,41 @@ const Canvas = ({ userId }) => {
 
     preloadImages();
 
-    const drawAll = () => {
+    const draw = () => {
+      if (!imagesLoaded) {
+        animationFrameId.current = requestAnimationFrame(draw);
+        return;
+      }
+
       context.clearRect(0, 0, canvas.width, canvas.height);
 
       placements.forEach(({ word, emoji, x, y }) => {
-        if (emoji && imageCache[emoji]) {
-          context.drawImage(imageCache[emoji], x, y, 40, 40);
+        if (emoji && imageCache.current[emoji]) {
+          context.drawImage(imageCache.current[emoji], x, y, 40, 40);
         } else {
           context.font = "32px Arial";
           context.fillText(word, x, y);
         }
       });
 
-      if (pendingWord && pendingEmoji && imageCache[pendingEmoji]) {
-        context.globalAlpha = 0.5;
-        context.drawImage(imageCache[pendingEmoji], mousePos.x, mousePos.y, 40, 40);
-        context.globalAlpha = 1;
+      if (pendingWord) {
+        const pendingEmoji = getEmojiForWord(pendingWord);
+        if (pendingEmoji && imageCache.current[pendingEmoji]) {
+          context.globalAlpha = 0.5;
+          context.drawImage(imageCache.current[pendingEmoji], mousePos.x, mousePos.y, 40, 40);
+          context.globalAlpha = 1;
+        } else {
+          context.font = "32px Arial";
+          context.globalAlpha = 0.5;
+          context.fillText(pendingWord, mousePos.x, mousePos.y);
+          context.globalAlpha = 1;
+        }
       }
+
+      animationFrameId.current = requestAnimationFrame(draw);
     };
 
-    const interval = setInterval(() => {
-      if (imagesLoaded) {
-        drawAll();
-      }
-    }, 30);
+    animationFrameId.current = requestAnimationFrame(draw);
 
     socket.on('initialPlacements', (data) => {
       setPlacements(data);
@@ -84,22 +96,19 @@ const Canvas = ({ userId }) => {
       setPlacements((prev) => [...prev, data]);
     });
 
-    const handlePointerMove = (event) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = (event.touches ? event.touches[0].clientX : event.clientX) - rect.left;
-      const y = (event.touches ? event.touches[0].clientY : event.clientY) - rect.top;
-      setMousePos({ x, y });
+    const handleMouseMove = (event) => {
+      const rect = canvasRef.current.getBoundingClientRect();
+      setMousePos({ x: event.clientX - rect.left, y: event.clientY - rect.top });
     };
 
-    const handlePointerClick = (event) => {
+    const handleClick = () => {
       if (pendingWord) {
-        const rect = canvas.getBoundingClientRect();
-        const x = (event.touches ? event.touches[0].clientX : event.clientX) - rect.left;
-        const y = (event.touches ? event.touches[0].clientY : event.clientY) - rect.top;
+        const emoji = getEmojiForWord(pendingWord);
+        const { x, y } = mousePos;
 
         const newPlacement = {
           word: pendingWord,
-          emoji: pendingEmoji || null,
+          emoji: emoji || null,
           x,
           y,
           userId,
@@ -107,34 +116,66 @@ const Canvas = ({ userId }) => {
 
         socket.emit('placeEmoji', newPlacement);
         setPendingWord(null);
-        setPendingEmoji(null);
       }
     };
 
-    canvas.addEventListener('mousemove', handlePointerMove);
-    canvas.addEventListener('touchmove', handlePointerMove);
-    canvas.addEventListener('click', handlePointerClick);
-    canvas.addEventListener('touchend', handlePointerClick);
+    const handleTouchMove = (e) => {
+      const rect = canvasRef.current.getBoundingClientRect();
+      const x = e.touches[0].clientX - rect.left;
+      const y = e.touches[0].clientY - rect.top;
+      setMousePos({ x, y });
+    };
+
+    const handleTouchEnd = (e) => {
+      if (pendingWord) {
+        const rect = canvasRef.current.getBoundingClientRect();
+        const x = e.changedTouches[0].clientX - rect.left;
+        const y = e.changedTouches[0].clientY - rect.top;
+
+        const emoji = getEmojiForWord(pendingWord);
+
+        const newPlacement = {
+          word: pendingWord,
+          emoji: emoji || null,
+          x,
+          y,
+          userId,
+        };
+
+        socket.emit('placeEmoji', newPlacement);
+        setPendingWord(null);
+      }
+    };
+
+    // Regular desktop listeners
+    canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('click', handleClick);
+
+    // Add touch listeners only if on mobile
+    if (isMobile) {
+      canvas.addEventListener('touchmove', handleTouchMove);
+      canvas.addEventListener('touchend', handleTouchEnd);
+    }
+
     socket.emit('requestInitialPlacements');
 
     return () => {
-      canvas.removeEventListener('mousemove', handlePointerMove);
-      canvas.removeEventListener('touchmove', handlePointerMove);
-      canvas.removeEventListener('click', handlePointerClick);
-      canvas.removeEventListener('touchend', handlePointerClick);
+      cancelAnimationFrame(animationFrameId.current);
+      canvas.removeEventListener('mousemove', handleMouseMove);
+      canvas.removeEventListener('click', handleClick);
+      if (isMobile) {
+        canvas.removeEventListener('touchmove', handleTouchMove);
+        canvas.removeEventListener('touchend', handleTouchEnd);
+      }
       socket.off('initialPlacements');
       socket.off('placeEmoji');
-      clearInterval(interval);
     };
-  }, [pendingWord, pendingEmoji, mousePos, userId, placements, imagesLoaded]);
+  }, [imagesLoaded, mousePos, userId, pendingWord, placements]);
 
   const handleWordSubmit = (e) => {
     e.preventDefault();
     if (currentWord.trim()) {
-      const word = currentWord.trim();
-      const emoji = getEmojiForWord(word);
-      setPendingWord(word);
-      setPendingEmoji(emoji);
+      setPendingWord(currentWord.trim());
       setCurrentWord("");
     }
   };
@@ -142,17 +183,8 @@ const Canvas = ({ userId }) => {
   return (
     <div>
       {isMobile && (
-        <div style={{
-          position: "absolute",
-          top: 10,
-          left: 10,
-          right: 10,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          zIndex: 10
-        }}>
-          <form onSubmit={handleWordSubmit} style={{ display: 'flex', width: '100%' }}>
+        <div style={{ position: "absolute", top: 10, left: 10, right: 10, zIndex: 10 }}>
+          <form onSubmit={handleWordSubmit} style={{ display: 'flex' }}>
             <input
               type="text"
               value={currentWord}
@@ -160,13 +192,16 @@ const Canvas = ({ userId }) => {
               placeholder="Type a word..."
               style={{ flex: 1, padding: "10px", fontSize: "16px" }}
             />
-            <button type="submit" style={{ padding: "10px", fontSize: "16px" }}>
+            <button type="submit" style={{ padding: "10px" }}>
               Confirm
             </button>
           </form>
         </div>
       )}
-      <canvas ref={canvasRef} style={{ background: '#fff', width: '100vw', height: '100vh' }} />
+      <canvas
+        ref={canvasRef}
+        style={{ background: '#fff', width: '100vw', height: '100vh' }}
+      />
     </div>
   );
 };
