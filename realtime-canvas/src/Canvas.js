@@ -1,168 +1,154 @@
 import React, { useRef, useEffect, useState } from 'react';
 import socket from './socket';
-import { getEmojiForWord } from './labelMapper'; // Mapping words to emoji filenames
-import labelMap from './labelMap.json'; // Full labelMap with icons
+import { getEmojiForWord } from './labelMapper';
+import labelMap from './labelMap.json';
+
+import DesktopLayout from './layouts/DesktopLayout';
+import MobileLayout from './layouts/MobileLayout';
+
+const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
 
 const Canvas = ({ userId }) => {
+  // refs & state common to both layouts
   const canvasRef = useRef(null);
-  const [currentWord, setCurrentWord] = useState("");
+  const containerRef = useRef(null); // only used by mobile
+  const imageCache = useRef({});
+  const [imagesReady, setImagesReady] = useState(false);
+
+  const [placements, setPlacements] = useState([]);
+  const [currentWord, setCurrentWord] = useState('');
   const [pendingWord, setPendingWord] = useState(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [placements, setPlacements] = useState([]);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
-  const imageCache = useRef({}); 
-  const animationFrameId = useRef(null);
 
+  /* ---------- image preload one-time ---------- */
   useEffect(() => {
-    const preloadImages = () => {
-      const allEmojis = Object.values(labelMap).map(data => data.emoji);
-      let loadedCount = 0;
-
-      allEmojis.forEach((emoji) => {
-        if (!emoji) return;
-
-        const img = new Image();
-        img.src = `/icons/${emoji}`;
-
-        img.onload = () => {
-          imageCache.current[emoji] = img;
-          loadedCount++;
-          if (loadedCount === allEmojis.length) {
-            setImagesLoaded(true);
-          }
-        };
-
-        img.onerror = () => {
-          console.error("Failed to load image:", emoji);
-          loadedCount++;
-          if (loadedCount === allEmojis.length) {
-            setImagesLoaded(true);
-          }
-        };
-      });
-    };
-
-    preloadImages();
+    const list = Object.values(labelMap).map((d) => d.emoji);
+    let loaded = 0;
+    list.forEach((file) => {
+      if (!file) return;
+      const img = new Image();
+      img.src = `/icons/${file}`;
+      img.onload = img.onerror = () => {
+        imageCache.current[file] = img;
+        loaded++;
+        if (loaded === list.length) setImagesReady(true);
+      };
+    });
   }, []);
 
+  /* ---------- canvas drawing loop ---------- */
   useEffect(() => {
-    if (!imagesLoaded) return;
+    if (!imagesReady) return;
 
     const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d');
     canvas.width = 2000;
     canvas.height = 1500;
 
+    let id;
     const draw = () => {
-      context.clearRect(0, 0, canvas.width, canvas.height);
-
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       placements.forEach(({ word, emoji, x, y }) => {
         if (emoji && imageCache.current[emoji]) {
-          context.drawImage(imageCache.current[emoji], x, y, 40, 40);
+          ctx.drawImage(imageCache.current[emoji], x, y, 40, 40);
         } else {
-          context.font = "32px Arial";
-          context.fillText(word, x, y);
+          ctx.font = '32px Arial';
+          ctx.fillText(word, x, y);
         }
       });
 
       if (pendingWord) {
         const pendingEmoji = getEmojiForWord(pendingWord);
+        ctx.globalAlpha = 0.5;
         if (pendingEmoji && imageCache.current[pendingEmoji]) {
-          context.globalAlpha = 0.5;
-          context.drawImage(imageCache.current[pendingEmoji], mousePos.x, mousePos.y, 40, 40);
-          context.globalAlpha = 1;
+          ctx.drawImage(
+            imageCache.current[pendingEmoji],
+            mousePos.x,
+            mousePos.y,
+            40,
+            40,
+          );
         } else {
-          context.font = "32px Arial";
-          context.globalAlpha = 0.5;
-          context.fillText(pendingWord, mousePos.x, mousePos.y);
-          context.globalAlpha = 1;
+          ctx.font = '32px Arial';
+          ctx.fillText(pendingWord, mousePos.x, mousePos.y);
         }
+        ctx.globalAlpha = 1;
       }
-
-      animationFrameId.current = requestAnimationFrame(draw);
+      id = requestAnimationFrame(draw);
     };
+    id = requestAnimationFrame(draw);
+    return () => cancelAnimationFrame(id);
+  }, [imagesReady, placements, pendingWord, mousePos]);
 
-    animationFrameId.current = requestAnimationFrame(draw);
-
-    return () => {
-      cancelAnimationFrame(animationFrameId.current);
-    };
-  }, [imagesLoaded, placements, pendingWord, mousePos]);
-
+  /* ---------- sockets ---------- */
   useEffect(() => {
-    socket.on('initialPlacements', (data) => {
-      setPlacements(data);
-    });
-
-    socket.on('placeEmoji', (data) => {
-      setPlacements((prev) => [...prev, data]);
-    });
+    socket.on('initialPlacements', setPlacements);
+    socket.on('placeEmoji', (p) =>
+      setPlacements((prev) => [...prev, p]),
+    );
+    socket.on('undoDone', (removedId) =>
+      setPlacements((prev) => prev.filter((p) => p._id !== removedId)),
+    );
 
     socket.emit('requestInitialPlacements');
 
     return () => {
       socket.off('initialPlacements');
       socket.off('placeEmoji');
+      socket.off('undoDone');
     };
   }, []);
 
-  const handleMouseMove = (event) => {
+  /* ---------- pointer helpers ---------- */
+  const translatePointer = (e) => {
     const rect = canvasRef.current.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    setMousePos({ x, y });
+    const scrollX = containerRef.current ? containerRef.current.scrollLeft : 0;
+    const scrollY = containerRef.current ? containerRef.current.scrollTop : 0;
+    return {
+      x: (e.clientX || e.touches?.[0].clientX) - rect.left + scrollX,
+      y: (e.clientY || e.touches?.[0].clientY) - rect.top + scrollY,
+    };
   };
 
-  const handleClick = () => {
-    if (pendingWord) {
-      const emoji = getEmojiForWord(pendingWord);
-      const { x, y } = mousePos;
+  const handlePointer = (e) => setMousePos(translatePointer(e));
+  const handlePlaceClick = (e) => {
+    if (!pendingWord) return;
+    const { x, y } = translatePointer(e);
+    const emoji = getEmojiForWord(pendingWord);
 
-      const newPlacement = {
-        word: pendingWord,
-        emoji: emoji || null,
-        x,
-        y,
-        userId,
-      };
-
-      socket.emit('placeEmoji', newPlacement);
-      setPendingWord(null);
-    }
+    socket.emit('placeEmoji', {
+      word: pendingWord,
+      emoji: emoji || null,
+      x,
+      y,
+      userId,
+    });
+    setPendingWord(null);
   };
 
+  /* ---------- word form ---------- */
   const handleWordSubmit = (e) => {
     e.preventDefault();
     if (currentWord.trim()) {
       setPendingWord(currentWord.trim());
-      setCurrentWord("");
+      setCurrentWord('');
     }
   };
 
-  return (
-    <div>
-      <form onSubmit={handleWordSubmit} style={{ marginBottom: "10px" }}>
-        <input
-          type="text"
-          value={currentWord}
-          onChange={(e) => setCurrentWord(e.target.value)}
-          placeholder="Type a word..."
-          style={{ padding: "8px", fontSize: "16px" }}
-        />
-        <button type="submit" style={{ marginLeft: "10px", padding: "8px" }}>
-          Confirm
-        </button>
-      </form>
+  /* ---------- render ---------- */
+  const commonProps = {
+    currentWord,
+    setCurrentWord,
+    handleWordSubmit,
+    canvasRef,
+    handlePointer,
+    handlePlaceClick,
+  };
 
-      <div style={{ overflow: 'scroll', border: '1px solid black', height: '80vh', width: '80vw' }}>
-        <canvas
-          ref={canvasRef}
-          onMouseMove={handleMouseMove}
-          onClick={handleClick}
-          style={{ background: '#fff' }}
-        />
-      </div>
-    </div>
+  return isMobile ? (
+    <MobileLayout {...commonProps} containerRef={containerRef} />
+  ) : (
+    <DesktopLayout {...commonProps} />
   );
 };
 
