@@ -49,8 +49,9 @@ const MobileLayout = ({
         <h3>Add a word</h3>
         <form
           onSubmit={(e) => {
-            handleWordSubmit(e);
-            setSheetOpen(false);
+            handleWordSubmit(e, () => setSheetOpen(false)); // pass closer
+            //handleWordSubmit(e);
+            //setSheetOpen(false);
           }}
         >
           <input
@@ -106,7 +107,7 @@ const MobileLayout = ({
         <canvas
           ref={canvasRef}
           onPointerMove={handlePointer}
-          onPointerDown={handlePlaceClick}
+          //onPointerDown={handlePlaceClick}
         />
       </div>
     </>

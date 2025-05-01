@@ -111,7 +111,7 @@ const Canvas = ({ userId }) => {
   };
 
   const handlePointer = (e) => setMousePos(translatePointer(e));
-  /*const handlePlaceClick = (e) => {
+  const handlePlaceClick = (e) => {
     if (!pendingWord) return;
   
     let x, y;
@@ -142,7 +142,8 @@ const Canvas = ({ userId }) => {
     });
   
     setPendingWord(null);
-  };*/
+  };
+  /*
     const handlePlaceClick = (e) => {
     if (!pendingWord) return;
     const scrollX = containerRef.current.scrollLeft;
@@ -160,16 +161,47 @@ const Canvas = ({ userId }) => {
       userId,
     });
     setPendingWord(null);
-  };
+  };*/
 
   /* ---------- word form ---------- */
+  /*
   const handleWordSubmit = (e) => {
     e.preventDefault();
     if (currentWord.trim()) {
       setPendingWord(currentWord.trim());
       setCurrentWord('');
     }
+  };*/
+  const handleWordSubmit = (e, closeSheet /* bool – mobile only */) => {
+    e.preventDefault();
+    const word = currentWord.trim();
+    if (!word) return;
+  
+    // calculate centre coordinates (regardless of tap)
+    const scrollX  = containerRef.current ? containerRef.current.scrollLeft : 0;
+    const scrollY  = containerRef.current ? containerRef.current.scrollTop  : 0;
+    const rect     = containerRef.current
+        ? containerRef.current.getBoundingClientRect()
+        : { width: window.innerWidth, height: window.innerHeight };
+  
+    const x = scrollX + rect.width  / 2;
+    const y = scrollY + rect.height / 2;
+  
+    const emoji = getEmojiForWord(word);
+  
+    socket.emit('placeEmoji', {
+      word,
+      emoji: emoji || null,
+      x,
+      y,
+      userId,
+    });
+  
+    setPendingWord(null);      // nothing left to preview
+    setCurrentWord('');
+    if (closeSheet) closeSheet();   // slide the sheet away (mobile)
   };
+  
 
   /* ---------- render ---------- */
   const commonProps = {
