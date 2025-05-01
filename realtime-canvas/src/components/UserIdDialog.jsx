@@ -24,7 +24,7 @@ const UserIdDialog = ({ onDone }) => {
   return (
     <div style={dialogStyle}>
       <div style={box}>
-        <h2>Enter a nickname</h2>
+        <h2>Enter your user ID</h2>
         <input
           style={{ width: '90%', padding: 8, fontSize: 16 }}
           value={name}
