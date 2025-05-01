@@ -80,6 +80,24 @@ const MobileLayout = ({
         </button>
       </div>
 
+      {/* centred target marker */}
+      <div
+        style={{
+          position: 'fixed',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 32,
+          height: 32,
+          border: '2px solid #f00',
+          borderRadius: '50%',
+          pointerEvents: 'none',
+          zIndex: 30,
+        }}
+      />
+
+
+
       {/* full-viewport scrollable canvas */}
       <div
         ref={containerRef}

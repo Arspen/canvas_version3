@@ -113,6 +113,38 @@ const Canvas = ({ userId }) => {
   const handlePointer = (e) => setMousePos(translatePointer(e));
   const handlePlaceClick = (e) => {
     if (!pendingWord) return;
+  
+    let x, y;
+  
+    if (isMobile) {
+      // place at screen-centre “target”
+      const scrollX = containerRef.current ? containerRef.current.scrollLeft : 0;
+      const scrollY = containerRef.current ? containerRef.current.scrollTop  : 0;
+      const rect = containerRef.current
+        ? containerRef.current.getBoundingClientRect()
+        : { width: window.innerWidth, height: window.innerHeight };
+  
+      x = scrollX + rect.width  / 2;
+      y = scrollY + rect.height / 2;
+    } else {
+      // desktop: click position
+      ({ x, y } = translatePointer(e));
+    }
+  
+    const emoji = getEmojiForWord(pendingWord);
+  
+    socket.emit('placeEmoji', {
+      word: pendingWord,
+      emoji: emoji || null,
+      x,
+      y,
+      userId,
+    });
+  
+    setPendingWord(null);
+  };
+ /* const handlePlaceClick = (e) => {
+    if (!pendingWord) return;
     const { x, y } = translatePointer(e);
     const emoji = getEmojiForWord(pendingWord);
 
@@ -124,7 +156,7 @@ const Canvas = ({ userId }) => {
       userId,
     });
     setPendingWord(null);
-  };
+  };*/
 
   /* ---------- word form ---------- */
   const handleWordSubmit = (e) => {
