@@ -111,7 +111,7 @@ const Canvas = ({ userId }) => {
   };
 
   const handlePointer = (e) => setMousePos(translatePointer(e));
-  const handlePlaceClick = (e) => {
+  /*const handlePlaceClick = (e) => {
     if (!pendingWord) return;
   
     let x, y;
@@ -142,10 +142,14 @@ const Canvas = ({ userId }) => {
     });
   
     setPendingWord(null);
-  };
- /* const handlePlaceClick = (e) => {
+  };*/
+    const handlePlaceClick = (e) => {
     if (!pendingWord) return;
-    const { x, y } = translatePointer(e);
+    const scrollX = containerRef.current.scrollLeft;
+    const scrollY = containerRef.current.scrollTop;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = scrollX + rect.width / 2;
+    const y = scrollY + rect.height / 2;
     const emoji = getEmojiForWord(pendingWord);
 
     socket.emit('placeEmoji', {
@@ -156,7 +160,7 @@ const Canvas = ({ userId }) => {
       userId,
     });
     setPendingWord(null);
-  };*/
+  };
 
   /* ---------- word form ---------- */
   const handleWordSubmit = (e) => {
