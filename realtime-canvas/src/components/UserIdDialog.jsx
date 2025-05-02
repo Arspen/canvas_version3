@@ -1,36 +1,5 @@
-import { useState } from 'react';
-import './userIdModal.css';           // next section
-
-export default function UserIdModal({ onSubmit }) {
-  const [id, setId] = useState('');
-
-  const handle = (e) => {
-    e.preventDefault();
-    if (id.trim()) onSubmit(id.trim());
-  };
-
-  return (
-    <div className="uid-backdrop">
-      <form className="uid-card" onSubmit={handle}>
-        {/* Shadow icon top-left */}
-        <img src="/icons/Shadow.png" alt="" className="shadow-mark" />
-        <h2>Enter your&nbsp;user ID</h2>
-
-        <input
-          type="text"
-          placeholder="e.g. P1"
-          value={id}
-          onChange={(e) => setId(e.target.value)}
-        />
-
-        <button type="submit">Continue</button>
-      </form>
-    </div>
-  );
-}
-
-/*
 import React, { useState } from 'react';
+import './userIdModal.css';        // keep your CSS import if you have one
 
 const dialogStyle = {
   position: 'fixed',
@@ -42,30 +11,65 @@ const dialogStyle = {
   zIndex: 999,
 };
 
-const box = {
+const boxStyle = {
+  position: 'relative',        // ⬅️ allow absolute-positioned children
   background: '#fff',
-  padding: 24,
-  borderRadius: 8,
-  width: 300,
+  padding: 40,
+  borderRadius: 12,
+  width: 340,
   textAlign: 'center',
+  boxShadow: '0 12px 22px rgba(0,0,0,0.15)',
 };
 
-const UserIdDialog = ({ onDone }) => {
+export default function UserIdDialog({ onDone }) {
   const [name, setName] = useState('');
 
   return (
     <div style={dialogStyle}>
-      <div style={box}>
-        <h2>Enter your user ID</h2>
+      <div style={boxStyle}>
+        {/*  shadow sticker  */}
+        <img
+          src="/icons/Shadow.png"
+          alt=""
+          style={{
+            position: 'absolute',
+            left: -84,
+            top: -104,
+            width: 200,          // ≈ 3× the previous ~24 px icon
+            height: 200,
+            objectFit: 'contain',
+            pointerEvents: 'none',
+            userSelect: 'none',
+          }}
+        />
+
+        <h2 style={{ marginTop: 0 }}>Enter your user ID</h2>
+
         <input
-          style={{ width: '90%', padding: 8, fontSize: 16 }}
+          style={{
+            width: '90%',
+            padding: 12,
+            fontSize: 18,
+            borderRadius: 8,
+            border: '1px solid #ccc',
+          }}
           value={name}
-          placeholder="e.g. alice42"
+          placeholder="e.g. P1"
           onChange={(e) => setName(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && name && onDone(name)}
         />
+
         <button
-          style={{ marginTop: 16, padding: '8px 16px' }}
+          style={{
+            marginTop: 24,
+            padding: '10px 24px',
+            fontSize: 16,
+            background: '#0d1117',
+            color: '#fff',
+            border: 'none',
+            borderRadius: 8,
+            cursor: 'pointer',
+          }}
           onClick={() => name && onDone(name)}
         >
           Continue
@@ -73,7 +77,4 @@ const UserIdDialog = ({ onDone }) => {
       </div>
     </div>
   );
-};
-
-export default UserIdDialog;
-*/
+}
