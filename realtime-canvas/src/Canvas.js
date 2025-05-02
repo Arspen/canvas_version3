@@ -53,6 +53,8 @@ const Canvas = ({ userId }) => {
           ctx.drawImage(imageCache.current[emoji], x-20, y-20, 40, 40);
         } else {
           ctx.font = '32px Arial';
+          ctx.textAlign = 'center'
+          ctx.textBaseLine = 'middle';
           ctx.fillText(word, x, y);
         }
       });

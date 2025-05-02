@@ -1,0 +1,30 @@
+/* Container that holds ALL six widgets */
+.dash-grid{
+    display:grid;
+    /* 3 columns: 1 narrow sidebar, centre grow, right column */
+    grid-template-columns: 280px 1fr 320px;
+    /* 2 rows: top row and bottom row */
+    grid-template-rows: auto 1fr;
+    gap:24px;
+    padding:24px;
+    background:#f2eef9;    /* pale lavender like your mock-up */
+    height:100vh;          /* full screen */
+    box-sizing:border-box;
+  }
+  
+  /* Position each widget (only Donut for now) */
+  .dash-grid > .donut-card{
+    grid-column:1 / 2;   /* first column           */
+    grid-row:1 / 2;      /* first row (top-left)    */
+  }
+  .dash-grid > .alist-card  { grid-column:1 / 2; grid-row:2 / 3;}
+  .dash-grid > .hour-card {grid-column:  2/ 2,; grid-row: 1 / 2 ;}
+
+
+  /* When you add the other widgets you can target them with their
+     own className and place them similarly, e.g.
+     .dash-grid > .activity-card  { grid-column:1 / 2; grid-row:2 / 3;}
+     .dash-grid > .bar-card       { grid-column:2 / 3; grid-row:1 / 2;}
+     … etc …
+  */
+  

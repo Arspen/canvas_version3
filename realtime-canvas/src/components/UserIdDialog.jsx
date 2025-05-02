@@ -1,3 +1,35 @@
+import { useState } from 'react';
+import './userIdModal.css';           // next section
+
+export default function UserIdModal({ onSubmit }) {
+  const [id, setId] = useState('');
+
+  const handle = (e) => {
+    e.preventDefault();
+    if (id.trim()) onSubmit(id.trim());
+  };
+
+  return (
+    <div className="uid-backdrop">
+      <form className="uid-card" onSubmit={handle}>
+        {/* Shadow icon top-left */}
+        <img src="/icons/Shadow.png" alt="" className="shadow-mark" />
+        <h2>Enter your&nbsp;user ID</h2>
+
+        <input
+          type="text"
+          placeholder="e.g. P1"
+          value={id}
+          onChange={(e) => setId(e.target.value)}
+        />
+
+        <button type="submit">Continue</button>
+      </form>
+    </div>
+  );
+}
+
+/*
 import React, { useState } from 'react';
 
 const dialogStyle = {
@@ -44,3 +76,4 @@ const UserIdDialog = ({ onDone }) => {
 };
 
 export default UserIdDialog;
+*/

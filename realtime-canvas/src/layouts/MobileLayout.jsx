@@ -21,13 +21,13 @@ const MobileLayout = ({
   canvasRef,
   containerRef,
   handlePointer,
-  handlePlaceClick,
+  handlePlaceClick,        // untouched – still available
 }) => {
   const [sheetOpen, setSheetOpen] = useState(false);
 
   return (
     <>
-      {/* floating plus button */}
+      {/* floating button (Send_Icon) */}
       <button
         onClick={() => setSheetOpen(true)}
         style={{
@@ -37,11 +37,21 @@ const MobileLayout = ({
           width: 56,
           height: 56,
           borderRadius: '50%',
-          fontSize: 32,
+          background: '#111827',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 4px 12px rgba(0,0,0,.25)',
           zIndex: 50,
+          border: 'none',
+          cursor: 'pointer',
         }}
       >
-        ＋
+        <img
+          src="/icons/Send_Icon.png"
+          alt="open input"
+          style={{ width: 28, height: 28, filter: 'invert(1)' }}
+        />
       </button>
 
       {/* slide-up sheet */}
@@ -50,8 +60,6 @@ const MobileLayout = ({
         <form
           onSubmit={(e) => {
             handleWordSubmit(e, () => setSheetOpen(false)); // pass closer
-            //handleWordSubmit(e);
-            //setSheetOpen(false);
           }}
         >
           <input
@@ -68,7 +76,18 @@ const MobileLayout = ({
           />
           <button
             type="submit"
-            style={{ marginTop: 12, padding: 10, width: '90%' }}
+            style={{
+              marginTop: 12,
+              padding: 10,
+              width: '90%',
+              fontSize: 16,
+              fontWeight: 600,
+              background: '#111827',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 8,
+              cursor: 'pointer',
+            }}
           >
             Place
           </button>
@@ -97,8 +116,6 @@ const MobileLayout = ({
         }}
       />
 
-
-
       {/* full-viewport scrollable canvas */}
       <div
         ref={containerRef}
@@ -107,7 +124,7 @@ const MobileLayout = ({
         <canvas
           ref={canvasRef}
           onPointerMove={handlePointer}
-          //onPointerDown={handlePlaceClick}
+          /* onPointerDown={handlePlaceClick}  (still here if you reactivate) */
         />
       </div>
     </>

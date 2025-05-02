@@ -115,6 +115,27 @@ app.post('/api/query', async (req, res) => {
   res.json({ ok: true });
 });
 
+/* ---------- dashboard data endpoint ---------- */
+app.get('/dashboard-data', async (req, res) => {
+  try {
+    const placements = await Placement.find().lean();
+    res.json(placements);              // plain JSON array
+  } catch (err) {
+    console.error('GET /dashboard-data failed', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+/*
+app.get('/api/placements', async (_req, res) => {
+  try {
+    const all = await Placement.find().lean();
+    res.json(all);                // ← valid JSON!
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'db fail' });
+  }
+});
+*/
 
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

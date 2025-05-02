@@ -1,0 +1,27 @@
+.alist-card{
+    width:260px;
+    height:300px;
+    padding:12px 12px 6px;
+    background:#fff;border-radius:16px;
+    box-shadow:0 2px 6px rgba(0,0,0,.08);
+    display:flex;flex-direction:column;gap:6px;
+  }
+  .alist-scroll{
+    flex:1;overflow-y:auto;margin:0;padding:0;list-style:none;
+  }
+  .alist-scroll li{
+    display:flex;align-items:center;gap:6px;
+    padding:4px 0;font-size:13px;line-height:18px;
+  }
+  .tag{
+    display:inline-block;color:#fff;font-size:11px;
+    border-radius:6px;padding:1px 6px;min-width:28px;text-align:center;
+  }
+  .alist-scroll img{width:20px;height:20px}
+  .word{font-weight:500}
+  .time{margin-left:auto;color:#6b7280;font-size:11px}
+  .unk-toggle{
+    font-size:11px;color:#374151;display:flex;align-items:center;gap:4px;
+    user-select:none;
+  }
+  .unk-toggle input{accent-color:#6b7280;cursor:pointer;}
