@@ -11,6 +11,7 @@
   "description": "",
   "dependencies": {
     "cors": "^2.8.5",
+    "dayjs": "^1.11.13",
     "express": "^5.1.0",
     "mongoose": "^8.13.2",
     "natural": "^8.0.1",
