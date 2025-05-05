@@ -15,20 +15,39 @@ export default function MobileLayout({
 }) {
   /* ----- keep the centre target ring (unchanged) ----- */
   const target = (
+<div
+    style={{
+      position: 'fixed',
+      left: '50%',
+      top: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: 32,
+      height: 32,
+      pointerEvents: 'none',
+      zIndex: 30,
+      /* draw a plus: two centred bars */
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}
+  >
     <div
       style={{
-        position: 'fixed',
-        left: '50%',
-        top: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 32,
-        height: 32,
-        border: '2px solid #ff4d4f',
-        borderRadius: '50%',
-        pointerEvents: 'none',
-        zIndex: 30,
+        position: 'absolute',
+        width: 2,
+        height: 24,
+        background: '#000',
       }}
     />
+    <div
+      style={{
+        position: 'absolute',
+        width: 24,
+        height: 2,
+        background: '#000',
+      }}
+    />
+  </div>
   );
 
   /* ----- make Enter key trigger send, too ----- */
