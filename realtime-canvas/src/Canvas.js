@@ -85,6 +85,7 @@ const Canvas = ({ userId }) => {
 
   /* ---------- sockets ---------- */
   useEffect(() => {
+    const deletedIds = new Set();
     socket.on('initialPlacements', raw => {
       setPlacements(
             raw.map(r => ({ ...r, _id: String(r._id) }))   // stringify every _id
@@ -92,11 +93,12 @@ const Canvas = ({ userId }) => {
         });
 
 
-    socket.on('placeEmoji', (p) =>
-      setPlacements((prev) => [...prev, p]),
+    socket.on('placeEmoji', (p) => {if (deletedIds.has(String(p._id))) return; setPlacements((prev) => [...prev, p])}
     );
-    socket.on('markDeleted', idToRemove => {
-        setPlacements(prev => prev.filter(r => r._id !== idToRemove));
+
+    socket.on('markDeleted', id => {
+      deletedIds.add(String(id));        // remember it
+        setPlacements(prev => prev.filter(r => r._id !== String(id)));
       });
 
     socket.emit('requestInitialPlacements');
