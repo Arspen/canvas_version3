@@ -1,8 +1,9 @@
-const express = require('express');
-const http = require('http');
-const cors = require('cors');
+/* ---------- core setup ---------- */
+const express   = require('express');
+const http      = require('http');
+const cors      = require('cors');
 const { Server } = require('socket.io');
-const mongoose = require('mongoose');
+const mongoose  = require('mongoose');
 
 const app = express();
 app.use(cors());
@@ -11,14 +12,15 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: ['http://localhost:3000', 'https://canvas-frontend.onrender.com'],
-    methods: ['GET', 'POST']
-  }
+    methods: ['GET', 'POST'],
+  },
 });
 
-// MongoDB connection
-mongoose.connect('mongodb+srv://constein98:goingtofish@clusterc1804.zawuirl.mongodb.net/?retryWrites=true&w=majority&appName=ClusterC1804');
+/* ---------- Mongo ---------- */
+mongoose.connect(
+  'mongodb+srv://constein98:goingtofish@clusterc1804.zawuirl.mongodb.net/?retryWrites=true&w=majority&appName=ClusterC1804',
+);
 
-// Schema
 const placementSchema = new mongoose.Schema({
   word: String,
   emoji: String,
@@ -26,36 +28,40 @@ const placementSchema = new mongoose.Schema({
   y: Number,
   userId: String,
   timestamp: { type: Date, default: Date.now },
-  deleted: {type: Boolean, default: false}
+  deleted:   { type: Boolean, default: false },
 });
 
 const Placement = mongoose.model('Placement', placementSchema);
 
-// Socket.IO logic
+/* ---------- Socket.IO ---------- */
 io.on('connection', (socket) => {
   console.log(`Connected: ${socket.id}`);
 
-  // Initial placements to new user
-  Placement.find({ deleted: false })
-    .then(placements => socket.emit('initialPlacements', placements));
+  /* first burst to the newcomer */
+  Placement.find({ deleted: false }).then((placements) =>
+    socket.emit('initialPlacements', placements),
+  );
 
-  // Handle new placements
+  /* placement from a user */
   socket.on('placeEmoji', async (data) => {
     const placement = new Placement(data);
     await placement.save();
     io.emit('placeEmoji', data);
   });
 
+  /* manual refresh request */
   socket.on('requestInitialPlacements', async () => {
-    const placements = await Placement.find();
+    const placements = await Placement.find({ deleted: false });
     socket.emit('initialPlacements', placements);
   });
 
+  /* -----------------------------------
+     delete: mark ONE (nearest) as deleted
+     then broadcast its _id in  markDeleted
+  ----------------------------------- */
   socket.on('deletePlacement', async ({ userId, x, y }) => {
-    // radius to consider (≈ icon size)
-    const R = 30;
+    const R = 30; // px radius to match the icon size
 
-    // find the nearest one owned by userId that is not yet deleted
     const doc = await Placement.findOneAndUpdate(
       {
         userId,
@@ -64,23 +70,27 @@ io.on('connection', (socket) => {
         y: { $gte: y - R, $lte: y + R },
       },
       { $set: { deleted: true } },
-      { sort: {  // pick the nearest
-          $addFields: { dist: { $sqrt: { $add: [
-            { $pow: [{ $subtract: ['$x', x] }, 2] },
-            { $pow: [{ $subtract: ['$y', y] }, 2] },
-          ]}}},
+      {
+        sort: {
+          $addFields: {
+            dist: {
+              $sqrt: {
+                $add: [
+                  { $pow: [{ $subtract: ['$x', x] }, 2] },
+                  { $pow: [{ $subtract: ['$y', y] }, 2] },
+                ],
+              },
+            },
+          },
         },
-        sort: { dist: 1 },
-        new: true
-      }
+        new: true,
+      },
     );
 
-    if (doc) io.emit('undoDone', doc._id);   // tell every client
+    if (doc) io.emit('markDeleted', doc._id); // << changed event name
   });
 
-  socket.on('disconnect', () => {
-    console.log(`Disconnected: ${socket.id}`);
-  });
+  socket.on('disconnect', () => console.log(`Disconnected: ${socket.id}`));
 });
 
 const PORT = process.env.PORT || 5000;
