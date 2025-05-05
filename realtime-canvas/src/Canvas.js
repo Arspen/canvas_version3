@@ -89,7 +89,7 @@ const Canvas = ({ userId }) => {
     socket.on('placeEmoji', (p) =>
       setPlacements((prev) => [...prev, p]),
     );
-    socket.on('markDeleted', id =>
+    socket.on('UndoDone', id =>
        setPlacements(prev => prev.filter(r => r._id !== id))
       );
 
