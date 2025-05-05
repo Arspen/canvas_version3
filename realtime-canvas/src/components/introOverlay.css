@@ -20,7 +20,7 @@
   font-weight:500;
   background:#fff;
 
-  animation: bubbleFade 1s 3s forwards; /* stay 3 s, fade 1 s */
+  animation: bubbleFade 1s 20s forwards; /* stay 3 s, fade 1 s */
 }
 
 @keyframes bubbleFade{
