@@ -11,6 +11,7 @@ const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
 const Canvas = ({ userId }) => {
   // refs & state common to both layouts
   const canvasRef = useRef(null);
+  const throttleRef = useRef(0);
   const containerRef = useRef(null); // only used by mobile
   const imageCache = useRef({});
   const [imagesReady, setImagesReady] = useState(false);
@@ -145,6 +146,18 @@ const Canvas = ({ userId }) => {
   
     setPendingWord(null);
   };
+
+  const handleDelete = () => {
+        const now = Date.now();
+        if (now - throttleRef.current < 300) return;   // ignore burst taps
+        throttleRef.current = now;
+    
+        const centreX = containerRef.current.scrollLeft + window.innerWidth  / 2;
+        const centreY = containerRef.current.scrollTop  + window.innerHeight / 2;
+    
+        socket.emit('deletePlacement', { userId, x: centreX, y: centreY });
+      };
+    
   /*
     const handlePlaceClick = (e) => {
     if (!pendingWord) return;
@@ -213,6 +226,7 @@ const Canvas = ({ userId }) => {
     canvasRef,
     handlePointer,
     handlePlaceClick,
+    handleDelete,
     userId,
   };
 

@@ -62,30 +62,28 @@ io.on('connection', (socket) => {
   socket.on('deletePlacement', async ({ userId, x, y }) => {
     const R = 30; // px radius to match the icon size
 
-    const doc = await Placement.findOneAndUpdate(
-      {
-        userId,
-        deleted: false,
-        x: { $gte: x - R, $lte: x + R },
-        y: { $gte: y - R, $lte: y + R },
-      },
-      { $set: { deleted: true } },
-      {
-        sort: {
-          $addFields: {
-            dist: {
-              $sqrt: {
-                $add: [
-                  { $pow: [{ $subtract: ['$x', x] }, 2] },
-                  { $pow: [{ $subtract: ['$y', y] }, 2] },
-                ],
-              },
-            },
-          },
-        },
-        new: true,
-      },
-    );
+
+     // 1️⃣  find all candidate icons from this user inside the R-radius box
+     const candidates = await Placement.find({
+       userId,
+       deleted: false,
+       x: { $gte: x - R, $lte: x + R },
+       y: { $gte: y - R, $lte: y + R },
+     }).lean();
+    
+     if (!candidates.length) return;          // nothing there
+    
+     // 2️⃣  pick the nearest in JS (≪ 50 docs, cheap)
+     const nearest = candidates.reduce((a, b) => {
+       const da = (a.x - x) ** 2 + (a.y - y) ** 2;
+       const db = (b.x - x) ** 2 + (b.y - y) ** 2;
+       return da < db ? a : b;
+     });
+    
+     // 3️⃣  mark that one as deleted
+     await Placement.updateOne({ _id: nearest._id }, { $set: { deleted: true } });
+    
+     const doc = { _id: nearest._id };        // what we emit below
 
     if (doc) io.emit('markDeleted', doc._id); // << changed event name
   });

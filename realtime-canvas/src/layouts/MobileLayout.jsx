@@ -118,14 +118,11 @@ export default function MobileLayout({
           style={{ width: 22, height: 22, filter: 'invert(1)' }}
         />
       </button>
+
+
       <button
-  type="button"
-  onClick={() => socket.emit('deletePlacement', {
-    userId,
-    // centre of viewport target
-    x: containerRef.current.scrollLeft + window.innerWidth  /2,
-    y: containerRef.current.scrollTop  + window.innerHeight /2,
-  })}
+        type="button"
+        onClick={handleDelete}        
   style={{
     position:'fixed', right:18, bottom:84,
     width:56,height:56,borderRadius:'50%',
