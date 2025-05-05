@@ -85,13 +85,19 @@ const Canvas = ({ userId }) => {
 
   /* ---------- sockets ---------- */
   useEffect(() => {
-    socket.on('initialPlacements', setPlacements);
+    socket.on('initialPlacements', raw => {
+      setPlacements(
+            raw.map(r => ({ ...r, _id: String(r._id) }))   // stringify every _id
+         );
+        });
+
+
     socket.on('placeEmoji', (p) =>
       setPlacements((prev) => [...prev, p]),
     );
-    socket.on('markDeleted', id =>
-       setPlacements(prev => prev.filter(r => r._id !== id))
-      );
+    socket.on('markDeleted', idToRemove => {
+        setPlacements(prev => prev.filter(r => r._id !== idToRemove));
+      });
 
     socket.emit('requestInitialPlacements');
 

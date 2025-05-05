@@ -83,9 +83,13 @@ io.on('connection', (socket) => {
      // 3️⃣  mark that one as deleted
      await Placement.updateOne({ _id: nearest._id }, { $set: { deleted: true } });
     
-     const doc = { _id: nearest._id };        // what we emit below
+     //const doc = { _id: nearest._id };        // what we emit below
 
-    if (doc) io.emit('markDeleted', doc._id); // << changed event name
+    //if (doc) io.emit('markDeleted', doc._id); // << changed event name
+    if (nearest) {
+        io.emit('markDeleted', String(nearest._id));   // ← stringify
+      }
+
   });
 
   socket.on('disconnect', () => console.log(`Disconnected: ${socket.id}`));
