@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-
+import socket from '../socket';
 /* colours reused from the pills */
 const BAR_BG = '#ffffffee';            // translucent white
 const BORDER  = '#d1d5db';
