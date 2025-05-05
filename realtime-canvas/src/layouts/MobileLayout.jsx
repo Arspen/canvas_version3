@@ -110,9 +110,15 @@ export default function MobileLayout({
       <div
         ref={containerRef}
         style={{
-          height: '100vh',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          /* 56 px bar + 8 px padding  = 64 px */
+          bottom: 64,
           overflow: 'scroll',
           background: '#fff',
+          zIndex: 20,           /* under the input bar (z-index 40) */
         }}
       >
         <canvas
