@@ -6,7 +6,8 @@ import GhostIcon    from './components/GhostIcon';        // ← new
 
 export default function App() {
   const [userId, setUserId]  = useState(localStorage.getItem('uid') || null);
-  const [showIntro, setIntro]= useState(true);
+  const [showIntro, setIntro] =
+  useState(!localStorage.getItem('introSeen'));
 
   if (!userId) {
     return (
@@ -18,11 +19,15 @@ export default function App() {
       />
     );
   }
+    const dismissIntro = () => {
+        localStorage.setItem('introSeen', 'yes');
+        setIntro(false);
+      };
 
   return (
     <>
       <GhostIcon />                                    {/* always there */}
-      {showIntro && <IntroOverlay onDone={() => setIntro(false)} />}
+      {showIntro && <IntroOverlay onDone={dismissIntro} />}
 
       <Canvas userId={userId} />
     </>
