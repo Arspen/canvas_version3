@@ -12,6 +12,7 @@ export default function MobileLayout({
   containerRef,
   handlePointer,
   handlePlaceClick,
+  userId,
 }) {
   /* ----- keep the centre target ring (unchanged) ----- */
   const target = (

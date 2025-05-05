@@ -213,7 +213,7 @@ const Canvas = ({ userId }) => {
     canvasRef,
     handlePointer,
     handlePlaceClick,
-    userId
+    userId,
   };
 
   return isMobile ? (
