@@ -140,20 +140,6 @@ export default function MobileLayout({
           style={{ width: 22, height: 22, filter: 'invert(1)' }}
         />
       </button>
-
-
-      <button
-        type="button"
-        onClick={handleDelete}        
-  style={{
-    position:'fixed', right:18, bottom:84,
-    width:56,height:56,borderRadius:'50%',
-    background:'#ff4444',color:'#fff',border:'none',
-    display:'flex',alignItems:'center',justifyContent:'center',
-  }}
->
-  🗑
-</button>
     </form>
   );
 
