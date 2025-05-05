@@ -46,7 +46,7 @@ export default function Canvas({ userId }) {
 
       placements.forEach(p => {
         if (p.emoji && imgCache.current[p.emoji]) {
-          ctx.drawImage(imgCache.current[p.emoji], p.x - 20, p.y + 12, 40, 40);
+          ctx.drawImage(imgCache.current[p.emoji], p.x - 20, p.y - 14, 40, 40);
         } else {
           ctx.font = '32px Arial';
           ctx.textAlign = 'center';

@@ -1,32 +1,28 @@
+/* transparent full-screen shim just for the bubble */
 .intro-cover{
-    position:fixed;inset:0;
-    background:rgba(0,0,0,0.0);      /* transparent – we only show ghost & bubble */
-    z-index:998;                     /* just below the user-id modal (999) */
-    animation:fadeOut 1s 3s forwards;/* stay opaque 3 s, fade 1 s → triggers onDone */
-  }
-  
-  /* ghost in TL corner */
-  .ghost{
-    position:absolute;
-    left:16px;top:20px;
-    width:72px;height:auto;
-    user-select:none;pointer-events:none;
-  }
-  
-  /* speech bubble */
-  .bubble{
-    position:absolute;
-    left:100px;top:30px;
-    max-width:240px;
-    padding:12px 18px;
-    border:2px solid #000;
-    border-radius:26px;
-    font-size:16px;font-weight:500;
-    background:#fff;
-  }
-  
-  /* fade animation */
-  @keyframes fadeOut{
-    to{opacity:0;}
-  }
-  
+  position:fixed;
+  inset:0;
+  background:transparent;
+  z-index:998;                 /* below user-ID modal (999) */
+}
+
+/* speech bubble – identical look */
+.bubble{
+  position:absolute;
+  left:100px;
+  top:30px;
+  max-width:240px;
+
+  padding:12px 18px;
+  border:2px solid #000;
+  border-radius:26px;
+  font-size:16px;
+  font-weight:500;
+  background:#fff;
+
+  animation: bubbleFade 1s 3s forwards; /* stay 3 s, fade 1 s */
+}
+
+@keyframes bubbleFade{
+  to{ opacity:0; }
+}

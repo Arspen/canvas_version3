@@ -2,23 +2,20 @@ import { useEffect } from 'react';
 import './introOverlay.css';
 
 /**
- * Appears once (after the user ID dialog), shows a ghost and a
- * speech-bubble, then fades away automatically (or on tap).
- *
- * props:
- *   onDone()  – called when the overlay disappears
+ * Speech bubble that appears once after the user has entered an ID.
+ * It auto-dismisses after 4 s (or tap) and then notifies the parent
+ * via onDone.   (The ghost itself now lives in <GhostIcon/>)
  */
 export default function IntroOverlay({ onDone }) {
-  // auto-dismiss after 4 s
+  /* auto-dismiss */
   useEffect(() => {
-    const id = setTimeout(onDone, 4000);
+    const id = setTimeout(onDone, 20000);
     return () => clearTimeout(id);
   }, [onDone]);
 
   return (
     <div className="intro-cover" onClick={onDone}>
-      <img className="ghost" src="/icons/Shadow.png" alt="" />
-      <div className="bubble">It starts with a word …</div>
+      <div className="bubble">Start creating your world with one word …</div>
     </div>
   );
 }
