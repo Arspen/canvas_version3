@@ -25,7 +25,8 @@ const placementSchema = new mongoose.Schema({
   x: Number,
   y: Number,
   userId: String,
-  timestamp: { type: Date, default: Date.now }
+  timestamp: { type: Date, default: Date.now },
+  deleted: {type: Boolean, default: false}
 });
 
 const Placement = mongoose.model('Placement', placementSchema);
@@ -35,9 +36,8 @@ io.on('connection', (socket) => {
   console.log(`Connected: ${socket.id}`);
 
   // Initial placements to new user
-  Placement.find().then(placements => {
-    socket.emit('initialPlacements', placements);
-  });
+  Placement.find({ deleted: false })
+    .then(placements => socket.emit('initialPlacements', placements));
 
   // Handle new placements
   socket.on('placeEmoji', async (data) => {
@@ -49,6 +49,33 @@ io.on('connection', (socket) => {
   socket.on('requestInitialPlacements', async () => {
     const placements = await Placement.find();
     socket.emit('initialPlacements', placements);
+  });
+
+  socket.on('deletePlacement', async ({ userId, x, y }) => {
+    // radius to consider (≈ icon size)
+    const R = 30;
+
+    // find the nearest one owned by userId that is not yet deleted
+    const doc = await Placement.findOneAndUpdate(
+      {
+        userId,
+        deleted: false,
+        x: { $gte: x - R, $lte: x + R },
+        y: { $gte: y - R, $lte: y + R },
+      },
+      { $set: { deleted: true } },
+      { sort: {  // pick the nearest
+          $addFields: { dist: { $sqrt: { $add: [
+            { $pow: [{ $subtract: ['$x', x] }, 2] },
+            { $pow: [{ $subtract: ['$y', y] }, 2] },
+          ]}}},
+        },
+        sort: { dist: 1 },
+        new: true
+      }
+    );
+
+    if (doc) io.emit('undoDone', doc._id);   // tell every client
   });
 
   socket.on('disconnect', () => {
