@@ -9,7 +9,7 @@ import './introOverlay.css';
 export default function IntroOverlay({ onDone }) {
   /* auto-dismiss */
   useEffect(() => {
-    const id = setTimeout(onDone, 4000);
+    const id = setTimeout(onDone, 8000);
     return () => clearTimeout(id);
   }, [onDone]);
 

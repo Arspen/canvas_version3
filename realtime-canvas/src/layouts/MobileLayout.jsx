@@ -98,6 +98,27 @@ export default function MobileLayout({
           borderRadius: 8,
         }}
       />
+      {/* ---------- trash button (new) ---------- */}
+      <button
+        type="button"
+        onClick={handleDelete}
+        style={{
+          width: 44,
+          height: 44,
+          borderRadius: 8,
+          border: 'none',
+          background: '#ff4444',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <img
+          src="/icons/Trash_2.png"
+          alt="Delete last"
+          style={{ width: 22, height: 22, filter: 'invert(1)' }}
+        />
+      </button>
 
       {/* send icon button (- triangle) */}
       <button
