@@ -50,7 +50,7 @@ const Canvas = ({ userId }) => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       placements.forEach(({ word, emoji, x, y }) => {
         if (emoji && imageCache.current[emoji]) {
-          ctx.drawImage(imageCache.current[emoji], x-20, y-20, 40, 40);
+          ctx.drawImage(imageCache.current[emoji], x-20, y-40, 40, 40);
         } else {
           ctx.font = '32px Arial';
           ctx.textAlign = 'center'
