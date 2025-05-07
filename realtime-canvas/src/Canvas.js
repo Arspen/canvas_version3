@@ -124,13 +124,11 @@ export default function Canvas({ userId }) {
   const handlePlaceClick = e => {
     if (!pendingWord) return;
     const { x, y } = isMobile
-          ? {
-              x: (containerRef.current?.scrollLeft || 0) +
-                 canvasRef.current.width  / 2,
-              y: (containerRef.current?.scrollTop  || 0) +
-                 canvasRef.current.height / 2,
-            }
-          : ptr(e);
+      ? {
+          x: (containerRef.current?.scrollLeft || 0) + window.innerWidth  / 2,
+          y: (containerRef.current?.scrollTop  || 0) + window.innerHeight / 2,
+        }
+      : ptr(e);
     placeNow(x, y, pendingWord);
     setPendingWord(null);
   };
@@ -140,10 +138,8 @@ export default function Canvas({ userId }) {
     if (now - throttleRef.current < 300) return;
     throttleRef.current = now;
 
-    const x = (containerRef.current?.scrollLeft || 0) +
-              canvasRef.current.width  / 2;
-    const y = (containerRef.current?.scrollTop  || 0) +
-              canvasRef.current.height / 2;
+    const x = (containerRef.current?.scrollLeft || 0) + window.innerWidth  / 2;
+    const y = (containerRef.current?.scrollTop  || 0) + window.innerHeight / 2;
     socket.emit('deletePlacement', { userId, x, y });
   };
 
@@ -151,10 +147,9 @@ export default function Canvas({ userId }) {
     e.preventDefault();
     const w = currentWord.trim();
     if (!w) return;
-    const x = (containerRef.current?.scrollLeft || 0) +
-            canvasRef.current.width  / 2;
-    const y = (containerRef.current?.scrollTop  || 0) +
-            canvasRef.current.height / 2;
+    const x = (containerRef.current?.scrollLeft || 0) + window.innerWidth  / 2;
+    const y = (containerRef.current?.scrollTop  || 0) + window.innerHeight / 2;
+    placeNow(x, y, w);
     setCurrentWord('');
     setPendingWord(null);
     close && close();
