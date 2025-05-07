@@ -1,14 +1,14 @@
-/* src/Canvas.js */
 import React, { useRef, useEffect, useState } from 'react';
-import socket                 from './socket';
-import { getEmojiForWord }    from './labelMapper';
-import labelMap               from './labelMap.json';
+import socket from './socket';
+import { getEmojiForWord } from './labelMapper';
+import labelMap from './labelMap.json';
 
 import DesktopLayout from './layouts/DesktopLayout';
 import MobileLayout  from './layouts/MobileLayout';
 
 const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
-const ICON_W = 40, ICON_H = 40;        // draw sizes
+const ICON_W = 40;
+const ICON_H = 40;
 
 export default function Canvas({ userId }) {
   /* ------------ refs / state ------------ */
@@ -18,12 +18,12 @@ export default function Canvas({ userId }) {
   const imgCache     = useRef({});
   const [imagesReady, setImagesReady] = useState(false);
 
-  const [placements, setPlacements]   = useState([]);
+  const [placements, setPlacements] = useState([]);
   const [currentWord, setCurrentWord] = useState('');
   const [pendingWord, setPendingWord] = useState(null);
   const [mousePos,    setMousePos]    = useState({ x: 0, y: 0 });
 
-  /* -------- preload every icon once ---- */
+  /* ------------ preload icons once ------- */
   useEffect(() => {
     const list = Object.values(labelMap).map(d => d.emoji).filter(Boolean);
     let loaded = 0;
@@ -37,13 +37,11 @@ export default function Canvas({ userId }) {
     });
   }, []);
 
-  /* ------------- draw loop ------------- */
+  /* ------------ draw loop ---------------- */
   useEffect(() => {
     if (!imagesReady) return;
-    const c  = canvasRef.current;
-    const ctx = c.getContext('2d');
-    c.width  = 2000;
-    c.height = 1500;
+    const c = canvasRef.current, ctx = c.getContext('2d');
+    c.width = 2000; c.height = 1500;
 
     const draw = () => {
       ctx.clearRect(0, 0, c.width, c.height);
@@ -74,25 +72,26 @@ export default function Canvas({ userId }) {
     draw();
   }, [imagesReady, placements, pendingWord, mousePos]);
 
-  /* ------------- sockets --------------- */
+  /* ------------ sockets ------------------ */
   useEffect(() => {
-    const gone = new Set();                  // remember already-deleted ids
+    /* keep a set of already-deleted ids – avoids “ghost” icons                 */
+    const gone = new Set();
 
     socket.on('initialPlacements', raw =>
-      setPlacements(raw.map(r => ({ ...r, _id: String(r._id) })))
+      setPlacements(raw.map(d => ({ ...d, _id: String(d._id) })))
     );
 
     socket.on('placeEmoji', doc => {
       const id = String(doc._id);
-      if (gone.has(id)) return;              // ignore if it was deleted
-      setPlacements(p =>
-        p.some(r => r._id === id) ? p : [...p, { ...doc, _id: id }],
+      if (gone.has(id)) return;                 // it was already deleted
+      setPlacements(prev =>
+        prev.some(r => r._id === id) ? prev : [...prev, { ...doc, _id: id }],
       );
     });
 
     socket.on('markDeleted', id => {
       gone.add(id);
-      setPlacements(p => p.filter(r => r._id !== id));
+      setPlacements(prev => prev.filter(p => p._id !== id));
     });
 
     socket.emit('requestInitialPlacements');
@@ -103,24 +102,18 @@ export default function Canvas({ userId }) {
     };
   }, []);
 
-  /* ---------- helpers ------------------ */
-  const pointer = e => {
+  /* ------------ helpers ------------------ */
+  const ptr = e => {
     const rect = canvasRef.current.getBoundingClientRect();
-    const sx   = containerRef.current?.scrollLeft || 0;
-    const sy   = containerRef.current?.scrollTop  || 0;
+    const sx = containerRef.current?.scrollLeft || 0;
+    const sy = containerRef.current?.scrollTop  || 0;
     return {
       x: (e.clientX || e.touches?.[0].clientX) - rect.left + sx,
       y: (e.clientY || e.touches?.[0].clientY) - rect.top  + sy,
     };
   };
 
-  const handlePointer = e => setMousePos(pointer(e));
-
-  /* centre of the visible viewport, independent of browser */
-  const centreCoords = () => ({
-    x: (containerRef.current?.scrollLeft || 0) + window.innerWidth  / 2,
-    y: (containerRef.current?.scrollTop  || 0) + window.innerHeight / 2,
-  });
+  const handlePointer = e => setMousePos(ptr(e));
 
   const placeNow = (x, y, word) => {
     socket.emit('placeEmoji', {
@@ -132,31 +125,60 @@ export default function Canvas({ userId }) {
 
   const handlePlaceClick = e => {
     if (!pendingWord) return;
-    const { x, y } = isMobile ? centreCoords() : pointer(e);
+    const vv      = window.visualViewport;
+     const halfW   = (vv ? vv.width  : window.innerWidth ) / 2;
+     const halfH   = (vv ? vv.height : window.innerHeight) / 2;
+     const { x, y } = isMobile
+       ? {
+           x: (containerRef.current?.scrollLeft || 0) + halfW,
+           y: (containerRef.current?.scrollTop  || 0) + halfH,
+         }
+      : ptr(e);
     placeNow(x, y, pendingWord);
     setPendingWord(null);
   };
 
   const handleDelete = () => {
     const now = Date.now();
-    if (now - throttleRef.current < 300) return; // simple throttle
+    if (now - throttleRef.current < 300) return;
     throttleRef.current = now;
 
-    socket.emit('deletePlacement', { userId, ...centreCoords() });
+    const x = (containerRef.current?.scrollLeft || 0) + window.innerWidth  / 2;
+    const y = (containerRef.current?.scrollTop  || 0) + window.innerHeight / 2;
+    socket.emit('deletePlacement', { userId, x, y });
   };
 
-  const submitWord = (e, close) => {
+  const submitWord = (e, closeSheet /* bool – mobile only */) => {
     e.preventDefault();
-    const w = currentWord.trim();
-    if (!w) return;
-    const { x, y } = centreCoords();
-    placeNow(x, y, w);
+    const word = currentWord.trim();
+    if (!word) return;
+  
+    // calculate centre coordinates (regardless of tap)
+    const scrollX  = containerRef.current ? containerRef.current.scrollLeft : 0;
+    const scrollY  = containerRef.current ? containerRef.current.scrollTop  : 0;
+    const rect     = containerRef.current
+        ? containerRef.current.getBoundingClientRect()
+        : { width: window.innerWidth, height: window.innerHeight };
+  
+    const x = scrollX + rect.width  / 2;
+    const y = scrollY + rect.height / 2;
+  
+    const emoji = getEmojiForWord(word);
+  
+    socket.emit('placeEmoji', {
+      word,
+      emoji: emoji || null,
+      x,
+      y,
+      userId,
+    });
+  
+    setPendingWord(null);      // nothing left to preview
     setCurrentWord('');
-    setPendingWord(null);
-    close && close();
-  };
+    if (closeSheet) closeSheet();   // slide the sheet away (mobile)
+  };	 
 
-  /* ---------- render -------------------- */
+  /* ------------ pass props to layouts ------ */
   const common = {
     currentWord, setCurrentWord,
     handleWordSubmit: submitWord,
@@ -168,3 +190,4 @@ export default function Canvas({ userId }) {
     ? <MobileLayout {...common} containerRef={containerRef} />
     : <DesktopLayout {...common} />;
 }
+
