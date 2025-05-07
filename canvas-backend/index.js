@@ -74,6 +74,45 @@ io.on('connection', (socket) => {
   });
 });
 
+/* ---------- dashboard: heat-map endpoint ---------- */
+/*   GET /api/heatmap                → all users
+ *   GET /api/heatmap?uid=P3         → just P3’s icons
+ */
+app.get('/api/heatmap', async (req, res) => {
+  try {
+    const uid   = req.query.uid;                 // e.g. "P3"
+    const match = uid ? { userId: uid } : {};    // filter or all
+
+    /*  comment-out the next line if you *do* want deleted icons counted  */
+    match.deleted = false;
+
+    const cells = await Placement.aggregate([
+      { $match: match },
+
+      /* bucket coordinates into 40-px “cells” */
+      {
+        $project: {
+          cellX: { $floor: { $divide: ['$x', 40] } },
+          cellY: { $floor: { $divide: ['$y', 40] } },
+        },
+      },
+
+      /* count how many landed in each cell */
+      {
+        $group: {
+          _id:   { x: '$cellX', y: '$cellY' },
+          n:     { $sum: 1 },
+        },
+      },
+    ]);
+
+    /* →  [{ _id:{x:12,y:7}, n:3 }, { _id:{x:13,y:7}, n:1 }, … ]  */
+    res.json(cells);
+  } catch (err) {
+    console.error('GET /api/heatmap failed', err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
 
 /* --------- the rest of your routes stay unchanged -------- */
