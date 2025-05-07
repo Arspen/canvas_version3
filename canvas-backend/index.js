@@ -7,12 +7,7 @@ const mongoose = require('mongoose');
 
 const app = express();
 app.use(cors());
-app.use((_req, res, next) => {
-  if (res.req.url.endsWith('.html')) {
-    res.setHeader('Cache-Control', 'no-store');  // never cache HTML
-  }
-  next();
-});
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {

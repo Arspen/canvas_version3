@@ -125,11 +125,14 @@ export default function Canvas({ userId }) {
 
   const handlePlaceClick = e => {
     if (!pendingWord) return;
-    const { x, y } = isMobile
-      ? {
-          x: (containerRef.current?.scrollLeft || 0) + window.innerWidth  / 2,
-          y: (containerRef.current?.scrollTop  || 0) + window.innerHeight / 2,
-        }
+    const vv      = window.visualViewport;
+     const halfW   = (vv ? vv.width  : window.innerWidth ) / 2;
+     const halfH   = (vv ? vv.height : window.innerHeight) / 2;
+     const { x, y } = isMobile
+       ? {
+           x: (containerRef.current?.scrollLeft || 0) + halfW,
+           y: (containerRef.current?.scrollTop  || 0) + halfH,
+         }
       : ptr(e);
     placeNow(x, y, pendingWord);
     setPendingWord(null);
