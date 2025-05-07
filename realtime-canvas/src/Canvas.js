@@ -10,6 +10,23 @@ const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
 const ICON_W = 40;
 const ICON_H = 40;
 
+// ─── add once, near the top of Canvas.jsx ─────────────────────────────
+function visualCentre(container) {
+  const vv   = window.visualViewport;
+  const offX = vv ? vv.offsetLeft : 0;   // iOS toolbar / notch
+  const offY = vv ? vv.offsetTop  : 0;
+
+  const halfW = (vv ? vv.width  : window.innerWidth ) / 2;
+  const halfH = (vv ? vv.height : window.innerHeight) / 2;
+
+  return {
+    x: (container?.scrollLeft || 0) + offX + halfW,
+    y: (container?.scrollTop  || 0) + offY  + halfH,
+  };
+}
+
+
+
 export default function Canvas({ userId }) {
   /* ------------ refs / state ------------ */
   const canvasRef    = useRef(null);
@@ -48,7 +65,7 @@ export default function Canvas({ userId }) {
 
       placements.forEach(p => {
         if (p.emoji && imgCache.current[p.emoji]) {
-          ctx.drawImage(imgCache.current[p.emoji], p.x - 20, p.y +80, 40, 40);
+          ctx.drawImage(imgCache.current[p.emoji], p.x - 20, p.y - 20, 40, 40);
         } else {
           ctx.font = '32px Arial';
           ctx.textAlign = 'center';
@@ -128,12 +145,7 @@ export default function Canvas({ userId }) {
     const vv      = window.visualViewport;
      const halfW   = (vv ? vv.width  : window.innerWidth ) / 2;
      const halfH   = (vv ? vv.height : window.innerHeight) / 2;
-     const { x, y } = isMobile
-       ? {
-           x: (containerRef.current?.scrollLeft || 0) + halfW,
-           y: (containerRef.current?.scrollTop  || 0) + halfH,
-         }
-      : ptr(e);
+     const { x, y } = isMobile ? visualCentre(containerRef.current) : ptr(e);
     placeNow(x, y, pendingWord);
     setPendingWord(null);
   };
@@ -143,8 +155,7 @@ export default function Canvas({ userId }) {
     if (now - throttleRef.current < 300) return;
     throttleRef.current = now;
 
-    const x = (containerRef.current?.scrollLeft || 0) + window.innerWidth  / 2;
-    const y = (containerRef.current?.scrollTop  || 0) + window.innerHeight / 2;
+    const { x, y } = visualCentre(containerRef.current);
     socket.emit('deletePlacement', { userId, x, y });
   };
 
@@ -152,8 +163,7 @@ export default function Canvas({ userId }) {
     e.preventDefault();
     const w = currentWord.trim();
     if (!w) return;
-    const x = (containerRef.current?.scrollLeft || 0) + window.innerWidth  / 2;
-    const y = (containerRef.current?.scrollTop  || 0) + window.innerHeight / 2;
+    const { x, y } = visualCentre(containerRef.current);
     placeNow(x, y, w);
     setCurrentWord('');
     setPendingWord(null);
