@@ -7,6 +7,8 @@ import DesktopLayout from './layouts/DesktopLayout';
 import MobileLayout  from './layouts/MobileLayout';
 
 const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+const ICON_W = 40;
+const ICON_H = 40;
 
 export default function Canvas({ userId }) {
   /* ------------ refs / state ------------ */
@@ -46,7 +48,7 @@ export default function Canvas({ userId }) {
 
       placements.forEach(p => {
         if (p.emoji && imgCache.current[p.emoji]) {
-          ctx.drawImage(imgCache.current[p.emoji], p.x - 20, p.y - 14, 40, 40);
+          ctx.drawImage(imgCache.current[p.emoji], x - 20, y - 14, 40, 40);
         } else {
           ctx.font = '32px Arial';
           ctx.textAlign = 'center';
