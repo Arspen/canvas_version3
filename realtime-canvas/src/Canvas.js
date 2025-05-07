@@ -124,9 +124,12 @@ export default function Canvas({ userId }) {
     const rect = canvasRef.current.getBoundingClientRect();
     const sx = containerRef.current?.scrollLeft || 0;
     const sy = containerRef.current?.scrollTop  || 0;
+    const vv = window.visualViewport;
+    const offX = vv ? vv.offsetLeft: 0;
+    const offY = vv ? vv.offsetTop : 0;
     return {
-      x: (e.clientX || e.touches?.[0].clientX) - rect.left + sx,
-      y: (e.clientY || e.touches?.[0].clientY) - rect.top  + sy,
+      x: (e.clientX || e.touches?.[0].clientX) - rect.left + sx + offX,
+      y: (e.clientY || e.touches?.[0].clientY) - rect.top  + sy + offY,
     };
   };
 
