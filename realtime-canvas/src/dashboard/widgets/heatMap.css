@@ -1,0 +1,9 @@
+.hm-grid{
+    display:grid;
+    grid-template-columns: repeat(50, 1fr); /* GRID_W */
+    width:260px; height:200px;              /* fit dashboard card */
+  }
+  .hm-cell{
+    border:1px solid transparent;           /* optional faint grid */
+  }
+  
