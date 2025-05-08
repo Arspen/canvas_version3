@@ -156,6 +156,18 @@ app.get('/api/dashboard-data', async (req, res) => {
   }
 });
 
+// GET /api/pending-query?uid=P3
+app.get('/api/pending-query', async (req,res)=>{
+  const uid = req.query.uid;
+  const doc = await mongoose.connection
+               .collection('queries')
+               .findOne({ target: { $in: [uid,'all'] }, answered:false },
+                        { sort:{ createdAt:-1 } });
+  res.json(doc || {});          // {} if nothing pending
+});
+
+
+
 /*  POST /api/query   body = { target:"P3"|"all", question:"…" } */
 app.use(express.json());
 app.post('/api/query', async (req, res) => {

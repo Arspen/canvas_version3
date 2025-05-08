@@ -110,6 +110,18 @@ export default function Canvas({ userId }) {
     };
   }, []);
 
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        const res  = await fetch(`/api/pending-query?uid=${encodeURIComponent(userId)}`);
+        const json = await res.json();              // { _id, question }  or  {}
+        if (alive && json._id) setPendingQ(json);   // <= existing state setter
+      } catch (e) { console.error(e); }
+    })();
+    return () => { alive = false; };
+  }, [userId]);
+
   /* ------------ helpers ------------------ */
   const ptr = e => {
     const rect = canvasRef.current.getBoundingClientRect();
