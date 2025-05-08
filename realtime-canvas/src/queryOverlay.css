@@ -8,17 +8,45 @@
 .btn-row button{flex:1 1 auto;padding:4px 6px;border:none;border-radius:6px;background:#111827;color:#fff;cursor:pointer}
 */
 
+/* q-cover: full-screen overlay */
 .q-cover{
-  position:fixed;inset:0;z-index:998;
-  background:rgba(0,0,0,.35);          /* dim backdrop */
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.35);     /* dim page */
+  z-index:998;
 }
 
-.modal{
-  position:absolute;left:50%;top:50%;
-  transform:translate(-50%,-50%);
-  width:260px;background:#fff;border:2px solid #000;
-  border-radius:12px;padding:14px;box-shadow:0 8px 24px rgba(0,0,0,.25);
+/* ghost in TL corner */
+.ghost{
+  position:absolute; left:16px; top:20px;
+  width:72px; user-select:none; pointer-events:none;
 }
+
+/* speech bubble */
+.bubble{
+  position:absolute; left:100px; top:30px;
+  max-width:240px; padding:12px 18px;
+  border:2px solid #000; border-radius:26px;
+  background:#fff; font-size:16px; font-weight:500;
+  cursor:pointer;
+}
+
+/* centred modal for answer */
+.modal{
+  position:absolute; left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  width:280px; padding:18px 20px;
+  background:#fff; border:2px solid #000; border-radius:10px;
+  display:flex; flex-direction:column; gap:12px;
+}
+
+.modal textarea{
+  width:100%; font-size:15px; resize:none;
+}
+
 .btn-row{
-  display:flex;gap:8px;margin-top:8px;justify-content:flex-end;
+  display:flex; justify-content:space-between;
+}
+
+.btn-row button{
+  padding:6px 14px; font-size:14px; cursor:pointer;
 }
