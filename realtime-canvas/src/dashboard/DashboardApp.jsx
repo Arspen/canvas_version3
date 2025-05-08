@@ -5,6 +5,7 @@ import Donut from './widgets/Donut';
 import ActivityList from './widgets/ActivityList';
 import BarByHour    from './widgets/BarByHour';
 import HeatMap from './widgets/HeatMap';
+import QueryPanel from './widgets/QueryPanel';
 // …
 
 export default function DashboardApp() {
@@ -31,6 +32,7 @@ export default function DashboardApp() {
       <ActivityList data={placements} filter={filter} onFilter={setFilter}/>
       <BarByHour data = {placements}/>
       <HeatMap filter={filter} />
+      <QueryPanel />
       {/* You‘ll drop the other widgets in here one by one.
           Example (when you build them):
           <ActivityList data={placements} filter={filter}/>

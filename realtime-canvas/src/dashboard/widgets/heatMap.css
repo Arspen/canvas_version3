@@ -1,9 +1,12 @@
-.hm-grid{
-    display:grid;
-    grid-template-columns: repeat(50, 1fr); /* GRID_W */
-    width:260px; height:200px;              /* fit dashboard card */
-  }
-  .hm-cell{
-    border:1px solid transparent;           /* optional faint grid */
-  }
-  
+.heat-card{
+  width:1000px;background:#fff;border-radius:16px;
+  padding:12px 14px 10px;box-shadow:0 2px 6px rgba(0,0,0,.08);
+  display:flex;flex-direction:column;gap:6px;
+}
+.svg-wrap{position:relative;overflow:auto;border:1px solid #e5e7eb;}
+.empty-msg{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:#888;background:#fff8;
+}
+/* reuse pill / pill-row from earlier widgets
+   (nothing to add here if they are already global) */

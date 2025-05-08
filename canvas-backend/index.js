@@ -32,6 +32,16 @@ const placementSchema = new mongoose.Schema({
 });
 const Placement = mongoose.model('Placement', placementSchema);
 
+const querySchema = new mongoose.Schema({
+  target   : { type:String, default:'all' },   // 'P3' … or 'all'
+  question : String,
+  answered : { type:Boolean, default:false },
+  answer   : String,
+  askedAt  : { type:Date, default:Date.now },
+  answeredAt: Date,
+});
+const Query = mongoose.model('Query', querySchema);
+
 /* ---------- socket logic ------ */
 io.on('connection', (socket) => {
   console.log('connected', socket.id);
@@ -72,47 +82,145 @@ io.on('connection', (socket) => {
     await Placement.updateOne({ _id: nearest._id }, { $set: { deleted: true } });
     io.emit('markDeleted', String(nearest._id));   // always string
   });
+
+ /* --- dashboard asks once for *all* queries --------------------------- */
+ socket.on('requestAllQueries', async () => {
+  const qs = await Query.find().sort({ askedAt:-1 });
+  socket.emit('allQueries', qs);
 });
 
-/* ---------- dashboard: heat-map endpoint ---------- */
-/*   GET /api/heatmap                → all users
- *   GET /api/heatmap?uid=P3         → just P3’s icons
- */
-app.get('/api/heatmap', async (req, res) => {
+/* --- dashboard (or auto-rule) creates a question -------------------- */
+socket.on('createQuery', async ({ target='all', question }) => {
+  if(!question) return;
+  const doc = await new Query({ target, question }).save();
+  io.emit('newQuery', doc);                 // broadcast
+});
+
+/* --- user answers (or declines) ------------------------------------- */
+socket.on('answerQuery', async ({ id, answer, declined }) => {
+  const q = await Query.findByIdAndUpdate(
+    id,
+    { answered:true,
+      answer   : declined ? 'Declined to answer' : answer,
+      answeredAt:new Date() },
+    { new:true }
+  );
+  if(q) io.emit('queryAnswered', q);        // dashboard update
+});
+
+});
+/* =================================================================== */
+/* =======================  DASHBOARD ROUTES  ======================== */
+/* =================================================================== */
+
+/* ---------- DASHBOARD ROUTES ---------- */
+
+// GET /api/dashboard-data  (called every ~5 s by dashboard)
+app.get('/api/dashboard-data', async (req, res) => {
   try {
-    const uid   = req.query.uid;                 // e.g. "P3"
-    const match = uid ? { userId: uid } : {};    // filter or all
+    const today = new Date();
+    const past7 = new Date(today);
+    past7.setDate(today.getDate() - 6);
 
-    /*  comment-out the next line if you *do* want deleted icons counted  */
-    match.deleted = false;
-
-    const cells = await Placement.aggregate([
-      { $match: match },
-
-      /* bucket coordinates into 40-px “cells” */
+    // big aggregation in one go
+    const facet = await Placement.aggregate([
+      { $match: { timestamp: { $gte: past7 } } },
       {
-        $project: {
-          cellX: { $floor: { $divide: ['$x', 40] } },
-          cellY: { $floor: { $divide: ['$y', 40] } },
-        },
-      },
-
-      /* count how many landed in each cell */
-      {
-        $group: {
-          _id:   { x: '$cellX', y: '$cellY' },
-          n:     { $sum: 1 },
-        },
-      },
+        $facet: {
+          donut: [
+            { $group: { _id: '$emoji', count: { $sum: 1 } } }
+          ],
+          perDay: [
+            {
+              $group: {
+                _id: {
+                  $dateToString: { format: '%Y-%m-%d', date: '$timestamp' }
+                },
+                count: { $sum: 1 }
+              }
+            },
+            { $sort: { _id: 1 } }
+          ],
+          last: [
+            { $sort: { timestamp: -1 } },
+            { $limit: 30 }
+          ]
+        }
+      }
     ]);
 
-    /* →  [{ _id:{x:12,y:7}, n:3 }, { _id:{x:13,y:7}, n:1 }, … ]  */
-    res.json(cells);
+    res.json(facet[0]);
   } catch (err) {
-    console.error('GET /api/heatmap failed', err);
+    console.error(err);
+    res.status(500).json({ error: 'aggregation failed' });
+  }
+});
+
+/*  POST /api/query   body = { target:"P3"|"all", question:"…" } */
+app.use(express.json());
+app.post('/api/query', async (req, res) => {
+  const { target, question } = req.body;
+  if (!question) return res.status(400).json({ error: 'question missing' });
+
+  const doc = { target: target || 'all', question, createdAt: new Date() };
+  const col = mongoose.connection.collection('queries');
+  await col.insertOne(doc);
+
+  io.emit('newQuery', doc);          // push to everyone; client filters
+  res.json({ ok: true });
+});
+app.get('/api/queries', async (_req,res)=>
+  res.json(await Query.find().sort({ askedAt:-1 })));
+
+/* ---------- dashboard data endpoint ---------- */
+app.get('/dashboard-data', async (req, res) => {
+  try {
+    const placements = await Placement.find().lean();
+    res.json(placements);              // plain JSON array
+  } catch (err) {
+    console.error('GET /dashboard-data failed', err);
     res.status(500).json({ error: err.message });
   }
 });
+
+/* 3) GET  /api/heatmap   or  /api/heatmap?uid=P3   */
+app.get('/api/heatmap', async (req, res) => {
+  try{
+    const match = { deleted:false };
+    if(req.query.uid && req.query.uid!=='All') match.userId = req.query.uid;
+
+    const cells = await Placement.aggregate([
+      { $match: match },
+      {
+        $project:{
+          cellX:{ $floor:{ $divide:['$x',40] }},
+          cellY:{ $floor:{ $divide:['$y',40] }},
+          uid  :'$userId'
+        }
+      },
+      { $group: { _id:{ x:'$cellX', y:'$cellY', uid:'$userId' }, n:{ $sum:1 } } }
+    ]);
+    res.json(cells);
+  }catch(e){
+    console.error(e); res.status(500).json({ error:e.message });
+  }
+});
+
+/* 4) POST /api/query   { target:"P4"| "all", question:"?" }  */
+/*
+app.post('/api/query', async (req, res) => {
+  const { target='all', question } = req.body;
+  if(!question) return res.status(400).json({ error:'question missing' });
+
+  const doc = { target, question, createdAt:new Date() };
+  await mongoose.connection.collection('queries').insertOne(doc);
+
+  io.emit('newQuery', doc);                 // frontend filters by target
+  res.json({ ok:true });
+});
+
+*/
+
 
 
 /* --------- the rest of your routes stay unchanged -------- */

@@ -1,30 +1,30 @@
-/* Container that holds ALL six widgets */
+/* 1440-px desktop grid – same spacing you showed in Figma
+   ┌─────280─────┬─────────flex─────────┬─────320────┐
+   │ donut       │ bar-by-hour          │ heat-map   │  280 px tall
+   ├─────────────┼──────────────────────┼────────────┤
+   │ activity-list │  (empty)           │ query-list │  auto-grow
+   └─────────────┴──────────────────────┴────────────┘               */
 .dash-grid{
-    display:grid;
-    /* 3 columns: 1 narrow sidebar, centre grow, right column */
-    grid-template-columns: 280px 1fr 320px;
-    /* 2 rows: top row and bottom row */
-    grid-template-rows: auto 1fr;
-    gap:24px;
-    padding:24px;
-    background:#f2eef9;    /* pale lavender like your mock-up */
-    height:100vh;          /* full screen */
-    box-sizing:border-box;
-  }
-  
-  /* Position each widget (only Donut for now) */
-  .dash-grid > .donut-card{
-    grid-column:1 / 2;   /* first column           */
-    grid-row:1 / 2;      /* first row (top-left)    */
-  }
-  .dash-grid > .alist-card  { grid-column:1 / 2; grid-row:2 / 3;}
-  .dash-grid > .hour-card {grid-column:  2/ 2,; grid-row: 1 / 2 ;}
+  display:grid;
+    /* grow the middle “content” lane so the bar-chart gets ample width   */
+  grid-template-columns: 300px minmax(900px, 1fr) 320px;
+  grid-template-rows: 280px 1fr;
+  gap:24px;
+  padding:24px;
+  height:100vh;
+  box-sizing:border-box;
+  background:#e9e5f4;             /* lavender */
+  overflow:hidden;
+}
+/* ——— place the six widgets ——— */
+.donut-card      { grid-area: 1 / 1; }
+.bar-card        { grid-area: 1 / 2; }
+.heat-card       { grid-area: 2 / 2; }
 
+.alist-card      { grid-area: 2 / 1; }
+.query-card    { grid-area: 2 / 3; }    /* if you have a query widget */
 
-  /* When you add the other widgets you can target them with their
-     own className and place them similarly, e.g.
-     .dash-grid > .activity-card  { grid-column:1 / 2; grid-row:2 / 3;}
-     .dash-grid > .bar-card       { grid-column:2 / 3; grid-row:1 / 2;}
-     … etc …
-  */
-  
+/* each card stretches / scrolls inside its cell */
+.dash-grid > *{ width:100%; height:100%; overflow:auto; }
+
+/* keep existing card-specific styles (pill-row, etc.) */

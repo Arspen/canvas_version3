@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import socket from './socket';
 import { getEmojiForWord } from './labelMapper';
 import labelMap from './labelMap.json';
+import QueryOverlay from './QueryOverlay';
 
 import DesktopLayout from './layouts/DesktopLayout';
 import MobileLayout  from './layouts/MobileLayout';
@@ -17,7 +18,7 @@ export default function Canvas({ userId }) {
   const throttleRef  = useRef(0);
   const imgCache     = useRef({});
   const [imagesReady, setImagesReady] = useState(false);
-
+  const [pendingQ, setPendingQ] = useState(null);
   const [placements, setPlacements] = useState([]);
   const [currentWord, setCurrentWord] = useState('');
   const [pendingWord, setPendingWord] = useState(null);
@@ -93,6 +94,13 @@ export default function Canvas({ userId }) {
       gone.add(id);
       setPlacements(prev => prev.filter(p => p._id !== id));
     });
+    socket.on('newQuery', q=>{
+      if(q.answered) return;
+      if(q.target==='all' || q.target===userId) setPendingQ(q);
+    });
+    socket.on('queryAnswered', q=>{
+      if(pendingQ && q._id===pendingQ._id) setPendingQ(null);
+    });
 
     socket.emit('requestInitialPlacements');
     return () => {
@@ -122,7 +130,14 @@ export default function Canvas({ userId }) {
       x, y, userId,
     });
   };
-
+  const finishQuery = (ans, declined)=>{
+    socket.emit('answerQuery',{
+      id: pendingQ._id,
+      answer: ans,
+      declined
+    });
+    setPendingQ(null);
+  };
   const handlePlaceClick = e => {
     if (!pendingWord) return;
     const vv      = window.visualViewport;
@@ -186,8 +201,18 @@ export default function Canvas({ userId }) {
     handleDelete, userId,
   };
 
-  return isMobile
-    ? <MobileLayout {...common} containerRef={containerRef} />
-    : <DesktopLayout {...common} />;
+  return (
+        <>
+          {pendingQ && (
+            <QueryOverlay
+              q={pendingQ}
+              onClose={(ans, declined)=>finishQuery(ans, declined)}
+            />
+          )}
+          {isMobile
+            ? <MobileLayout {...common} containerRef={containerRef} />
+            : <DesktopLayout {...common} />}
+        </>
+      );
 }
 
