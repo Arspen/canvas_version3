@@ -15,8 +15,9 @@ Humanoid: '#85d5f6',
 Objects: '#4750dd',
 Structures: '#212161',
 Food_Drinks: '#d3a4ea',
-Communication: '#a24571',
-Unknown: '#ed564f'
+Unknown: '#ed564f',
+Communication: '#a24571'
+
 };
 
 //           ── user pills ──

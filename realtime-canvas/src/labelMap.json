@@ -2289,7 +2289,7 @@
     "snowman", "snow man", "frosty figure", "winter decoration",
     "snow sculpture", "frosty friend", "icy figure", "cold statue"
   ],
-  "emoji": "Snow_Man.png",
+  "emoji": "Snow_man.png",
   "category": "Objects"
 },
 
@@ -2316,7 +2316,7 @@
     "wheelbarrow", "garden cart", "hand cart", "yard cart",
     "construction barrow", "single-wheel cart", "hauling cart", "landscaping tool"
   ],
-  "emoji": "WheelBarrel.png",
+  "emoji": "Wheel_Barrel.png",
   "category": "Objects"
 },
 
@@ -2325,7 +2325,7 @@
     "road curve left down", "left downward curve", "downhill left turn", "left bend down",
     "curved road sign", "left descent", "winding road left", "road turning left and down", "road", "street"
   ],
-  "emoji": "RoadCurveLeftDown.png",
+  "emoji": "Road_Curve_Left_Down.png",
   "category": "Objects"
 },
 
@@ -2334,7 +2334,7 @@
     "road curve left up", "uphill left turn", "left bend up", "left upward curve",
     "curved road sign", "left incline", "road turning left and up", "winding road up", "road", "street"
   ],
-  "emoji": "RoadCurveLeftUp.png",
+  "emoji": "Road_Curve_Left_Up.png",
   "category": "Objects"
 },
 
@@ -2343,7 +2343,7 @@
     "road curve right down", "right downward curve", "downhill right turn", "right bend down",
     "curved road sign", "right descent", "road turning right and down", "winding road right", "road", "street"
   ],
-  "emoji": "RoadCurveRightDown.png",
+  "emoji": "Road_Curve_Right_Down.png",
   "category": "Objects"
 },
 
@@ -2352,7 +2352,7 @@
     "road curve right up", "uphill right turn", "right bend up", "right upward curve",
     "curved road sign", "right incline", "road turning right and up", "winding road upward", "road", "street"
   ],
-  "emoji": "RoadCurveRightUp.png",
+  "emoji": "Road_Curve_Right_Up.png",
   "category": "Objects"
 },
 
@@ -2361,7 +2361,7 @@
     "road vertical", "straight road", "vertical path", "up and down road",
     "north-south road", "straight lane", "vertical street", "road going straight", "road", "street"
   ],
-  "emoji": "RoadVertical.png",
+  "emoji": "Road_Vertical.png",
   "category": "Objects"
 },
 
@@ -2370,7 +2370,7 @@
     "road horizontal", "straight road", "horizontal path", "left to right road",
     "east-west road", "straight lane", "horizontal street", "road going sideways", "road", "street"
   ],
-  "emoji": "RoadHorizontal.png",
+  "emoji": "Road_Horizontal.png",
   "category": "Objects"
 },
 
