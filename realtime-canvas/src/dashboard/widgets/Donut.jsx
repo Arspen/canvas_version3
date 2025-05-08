@@ -8,14 +8,15 @@ import './donut.css';
 
 /* ---------- colour palette ---------- */
 const CATEGORY_COLOURS = {
-  Animals:     '#BCFB89',
-  Structures: '#212161',
-  Humanoid:  '#85D5F6',
-  Nature:     '#8bff9f',
-  Objects:    '#4750DD',
-  Ground:     '#094542',
-  Unknown:    '#D3A4EA',
-
+Animal: '#f5bf17',
+Nature: '#05c274',
+Elemental: '#094542',
+Humanoid: '#85d5f6',
+Objects: '#4750dd',
+Structures: '#212161',
+Food_Drinks: '#d3a4ea',
+Communication: '#a24571',
+Unknown: '#ed564f'
 };
 
 //           ── user pills ──

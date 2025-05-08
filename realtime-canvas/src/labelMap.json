@@ -2323,7 +2323,7 @@
 "Road_Curve_Left_Down": {
   "synonyms": [
     "road curve left down", "left downward curve", "downhill left turn", "left bend down",
-    "curved road sign", "left descent", "winding road left", "road turning left and down"
+    "curved road sign", "left descent", "winding road left", "road turning left and down", "road", "street"
   ],
   "emoji": "RoadCurveLeftDown.png",
   "category": "Objects"
@@ -2332,7 +2332,7 @@
 "Road_Curve_Left_Up": {
   "synonyms": [
     "road curve left up", "uphill left turn", "left bend up", "left upward curve",
-    "curved road sign", "left incline", "road turning left and up", "winding road up"
+    "curved road sign", "left incline", "road turning left and up", "winding road up", "road", "street"
   ],
   "emoji": "RoadCurveLeftUp.png",
   "category": "Objects"
@@ -2341,7 +2341,7 @@
 "Road_Curve_Right_Down": {
   "synonyms": [
     "road curve right down", "right downward curve", "downhill right turn", "right bend down",
-    "curved road sign", "right descent", "road turning right and down", "winding road right"
+    "curved road sign", "right descent", "road turning right and down", "winding road right", "road", "street"
   ],
   "emoji": "RoadCurveRightDown.png",
   "category": "Objects"
@@ -2350,7 +2350,7 @@
 "Road_Curve_Right_Up": {
   "synonyms": [
     "road curve right up", "uphill right turn", "right bend up", "right upward curve",
-    "curved road sign", "right incline", "road turning right and up", "winding road upward"
+    "curved road sign", "right incline", "road turning right and up", "winding road upward", "road", "street"
   ],
   "emoji": "RoadCurveRightUp.png",
   "category": "Objects"
@@ -2359,7 +2359,7 @@
 "Road_Vertical": {
   "synonyms": [
     "road vertical", "straight road", "vertical path", "up and down road",
-    "north-south road", "straight lane", "vertical street", "road going straight"
+    "north-south road", "straight lane", "vertical street", "road going straight", "road", "street"
   ],
   "emoji": "RoadVertical.png",
   "category": "Objects"
@@ -2368,7 +2368,7 @@
 "Road_Horizontal": {
   "synonyms": [
     "road horizontal", "straight road", "horizontal path", "left to right road",
-    "east-west road", "straight lane", "horizontal street", "road going sideways"
+    "east-west road", "straight lane", "horizontal street", "road going sideways", "road", "street"
   ],
   "emoji": "RoadHorizontal.png",
   "category": "Objects"
@@ -2623,7 +2623,7 @@
     "orchard fruit", "sweet fruit", "crunchy fruit", "apple slice"
   ],
   "emoji": "Apple.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "avocado": {
@@ -2632,7 +2632,7 @@
     "superfood", "pit fruit", "avocado slice", "healthy fat"
   ],
   "emoji": "Avocado.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "banana": {
@@ -2641,7 +2641,7 @@
     "ripe banana", "sweet fruit", "banana slice", "snack fruit"
   ],
   "emoji": "Banana.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "blueberry": {
@@ -2650,7 +2650,7 @@
     "wild berry", "sweet berry", "juicy fruit", "antioxidant fruit"
   ],
   "emoji": "Blueberry.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "bread": {
@@ -2659,7 +2659,7 @@
     "baked good", "sandwich base", "bread roll", "yeast bread"
   ],
   "emoji": "Bread.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "broccoli": {
@@ -2668,7 +2668,7 @@
     "steamed broccoli", "healthy food", "vegetable", "green plant"
   ],
   "emoji": "Broccoli.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "burger": {
@@ -2677,7 +2677,7 @@
     "beef patty", "fast food", "bun", "grilled burger"
   ],
   "emoji": "Burger.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "candy": {
@@ -2686,7 +2686,7 @@
     "sugar", "dessert", "sweets", "lollipop"
   ],
   "emoji": "Candy.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "carrot": {
@@ -2695,7 +2695,7 @@
     "healthy snack", "raw carrot", "cooked carrot", "garden vegetable"
   ],
   "emoji": "Carrot.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "cheese": {
@@ -2704,7 +2704,7 @@
     "fromage", "cheese wedge", "melted cheese", "cheese block"
   ],
   "emoji": "Cheese.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "chocolate": {
@@ -2713,7 +2713,7 @@
     "sweet treat", "dark chocolate", "milk chocolate", "dessert"
   ],
   "emoji": "Chocolate.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "cookie": {
@@ -2722,7 +2722,7 @@
     "sweet snack", "dessert", "soft cookie", "crunchy cookie"
   ],
   "emoji": "Cookie.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "croissant": {
@@ -2731,7 +2731,7 @@
     "french pastry", "breakfast roll", "crescent roll", "flaky bread"
   ],
   "emoji": "Croissant.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "cucumber": {
@@ -2740,7 +2740,7 @@
     "fresh produce", "crunchy vegetable", "garden veggie", "cooling food"
   ],
   "emoji": "Cucumber.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "cupcake": {
@@ -2749,7 +2749,7 @@
     "muffin", "party cake", "sweet bite", "individual cake"
   ],
   "emoji": "Cupcake.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "donut": {
@@ -2758,7 +2758,7 @@
     "sweet snack", "dessert", "baked good", "frosted donut"
   ],
   "emoji": "Donut.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "grapes": {
@@ -2767,7 +2767,7 @@
     "vine fruit", "juicy fruit", "grapevine", "snack fruit"
   ],
   "emoji": "Grapes.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "honey": {
@@ -2776,7 +2776,7 @@
     "honeycomb", "liquid gold", "sugar alternative", "sweet spread"
   ],
   "emoji": "Honey.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "ice_cream": {
@@ -2785,7 +2785,7 @@
     "sweet treat", "cold dessert", "cone", "ice cream bowl"
   ],
   "emoji": "Ice_Cream.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "ice_cube": {
@@ -2794,7 +2794,7 @@
     "drink cooler", "frozen water", "cooling cube", "ice block"
   ],
   "emoji": "Ice_Cube.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "jam": {
@@ -2803,7 +2803,7 @@
     "sweet spread", "berry jam", "toast topping", "breakfast spread"
   ],
   "emoji": "Jam.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "lollipop": {
@@ -2812,7 +2812,7 @@
     "hard candy", "stick candy", "colorful candy", "child's treat"
   ],
   "emoji": "Lollipop.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "orange": {
@@ -2821,7 +2821,7 @@
     "vitamin c", "peeled fruit", "sweet citrus", "fruit"
   ],
   "emoji": "Orange.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "paella": {
@@ -2830,7 +2830,7 @@
     "saffron rice", "mixed paella", "valencian dish", "rice meal"
   ],
   "emoji": "Paella.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "pancake": {
@@ -2839,7 +2839,7 @@
     "stack of pancakes", "buttermilk pancake", "sweet breakfast", "maple syrup topping"
   ],
   "emoji": "Pancake.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "peach": {
@@ -2848,7 +2848,7 @@
     "summer fruit", "sweet peach", "peach slice", "ripe fruit"
   ],
   "emoji": "Peach.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "pear": {
@@ -2857,7 +2857,7 @@
     "juicy fruit", "autumn fruit", "pear slice", "ripe pear"
   ],
   "emoji": "Pear.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "pineapple": {
@@ -2866,7 +2866,7 @@
     "sweet pineapple", "yellow fruit", "pineapple slice", "exotic fruit"
   ],
   "emoji": "Pineapple.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "pizza": {
@@ -2875,7 +2875,7 @@
     "hot pizza", "Italian food", "baked pizza", "pizza pie"
   ],
   "emoji": "Pizza.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "potato": {
@@ -2884,7 +2884,7 @@
     "mashed potato", "boiled potato", "crispy potato", "golden potato"
   ],
   "emoji": "Potato.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "raspberry": {
@@ -2893,7 +2893,7 @@
     "juicy berry", "fresh raspberry", "wild raspberry", "ripe raspberry"
   ],
   "emoji": "Raspberry.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "salad": {
@@ -2902,7 +2902,7 @@
     "garden salad", "healthy salad", "vegetable salad", "bowl of salad"
   ],
   "emoji": "Salad.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "steak": {
@@ -2911,7 +2911,7 @@
     "ribeye", "sirloin", "meat", "tender steak"
   ],
   "emoji": "Steak.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "strawberry": {
@@ -2920,7 +2920,7 @@
     "juicy berry", "fresh strawberry", "ripe strawberry", "summer fruit"
   ],
   "emoji": "Strawberry.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "taco": {
@@ -2929,7 +2929,7 @@
     "beef taco", "chicken taco", "spicy taco", "stuffed taco"
   ],
   "emoji": "Taco.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "tomato": {
@@ -2938,7 +2938,7 @@
     "juicy tomato", "cherry tomato", "sliced tomato", "garden tomato"
   ],
   "emoji": "Tomato.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "watermelon": {
@@ -2947,7 +2947,7 @@
     "red fruit", "seeded fruit", "fresh watermelon", "watermelon slice"
   ],
   "emoji": "Watermelon.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "ginger": {
@@ -2956,7 +2956,7 @@
     "ground ginger", "raw ginger", "aromatic root", "zesty spice"
   ],
   "emoji": "Ginger.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "wine": {
@@ -2965,7 +2965,7 @@
     "vintage wine", "grape wine", "fine wine", "alcoholic beverage"
   ],
   "emoji": "Wine.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "cocktail": {
@@ -2974,7 +2974,7 @@
     "fruit cocktail", "party drink", "colorful cocktail", "refreshing cocktail"
   ],
   "emoji": "Cocktail.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "clap": {
