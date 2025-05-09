@@ -1,9 +1,14 @@
 /* ---------- unchanged imports / app / io setup --------- */
-const express  = require('express');
-const http     = require('http');
-const cors     = require('cors');
+const express   = require('express');
+const http      = require('http');
+const cors      = require('cors');
 const { Server } = require('socket.io');
-const mongoose = require('mongoose');
+const mongoose  = require('mongoose');
+
+/* === NEW – helpers for the auto-rules === */
+const autoRules = require('./autoRules');       // array of rule objects
+const labelMap  = require('./labelMap.json');   // emoji → category lookup
+/* ---------------------------------------- */
 
 const app = express();
 app.use(cors());
@@ -39,13 +44,13 @@ const querySchema = new mongoose.Schema({
   answer   : String,
   askedAt  : { type:Date, default:Date.now },
   answeredAt: Date,
-    /* NEW */
-    ruleId    : String,          // present when auto-generated
-    isAuto    : { type:Boolean, default:false },
+  /* --- new flags so the dashboard can distinguish -------- */
+  isAuto   : { type:Boolean, default:false },
+  ruleId   : String,
 });
 const Query = mongoose.model('Query', querySchema);
 
-/* ---------- socket logic ------ */
+/* ═════════════  SOCKET LOGIC  ════════════ */
 io.on('connection', (socket) => {
   console.log('connected', socket.id);
 
@@ -54,11 +59,13 @@ io.on('connection', (socket) => {
     socket.emit('initialPlacements', docs)
   );
 
-  /* ◆ save first – then broadcast the *saved* doc so it already
-        contains the Mongo _id field                                       */
+  /* save first – then broadcast the *saved* doc */
   socket.on('placeEmoji', async (raw) => {
     const doc = await new Placement(raw).save();
-    io.emit('placeEmoji', doc);                    // <-- with _id
+    io.emit('placeEmoji', doc);                 // ← with _id
+
+    /* ── NEW: evaluate automatic rules for this user ── */
+    runAutoRules(doc.userId).catch(console.error);
   });
 
   socket.on('requestInitialPlacements', async () => {
@@ -66,7 +73,7 @@ io.on('connection', (socket) => {
     socket.emit('initialPlacements', docs);
   });
 
-  /* deletePlacement stays logically the same, just emits _id */
+  /* deletePlacement unchanged */
   socket.on('deletePlacement', async ({ userId, x, y }) => {
     const R = 30;
     const cand = await Placement.find({
@@ -83,85 +90,87 @@ io.on('connection', (socket) => {
     });
 
     await Placement.updateOne({ _id: nearest._id }, { $set: { deleted: true } });
-    io.emit('markDeleted', String(nearest._id));   // always string
+    io.emit('markDeleted', String(nearest._id));
   });
 
+  /* ---------------- dashboard ↔ query list ---------------- */
+  socket.on('requestAllQueries', async () => {
+    const qs = await Query.find().sort({ askedAt:-1 });
+    socket.emit('allQueries', qs);
+  });
 
-  const autoRules = require('./autoRules');
- /* --- dashboard asks once for *all* queries --------------------------- */
- socket.on('requestAllQueries', async () => {
-  const qs = await Query.find().sort({ askedAt:-1 });
-  socket.emit('allQueries', qs);
+  socket.on('createQuery', async ({ target='all', question }) => {
+    if(!question) return;
+    const doc = await new Query({ target, question }).save();
+    io.emit('newQuery', doc);
+  });
+
+  socket.on('answerQuery', async ({ id, answer, declined }) => {
+    const q = await Query.findByIdAndUpdate(
+      id,
+      { answered:true,
+        answer: declined ? 'Declined to answer' : answer,
+        answeredAt:new Date() },
+      { new:true }
+    );
+    if(q) io.emit('queryAnswered', q);
+  });
 });
 
-/********  helper: evaluate all rules for one user  ***/
-async function runAutoRules(userId) {
-  /* 1️⃣  aggregate per-word + emoji -------------------------------- */
-  const raw = await Placement.aggregate([
-    { $match: { userId, deleted:false } },
-    { $group: {
-        _id   :'$word',
-        count :{ $sum:1 },
-        emoji :{ $first:'$emoji' }
-    }}
-  ]);
+/* ═════════════  AUTO-RULE ENGINE  ════════════ */
 
-  /* 2️⃣  derive stats --------------------------------------------- */
-  const perWord = {};
-  const byCat   = {};
-  let   total   = 0;
-
-  raw.forEach(r => {
-    const cat = labelForEmoji(r.emoji) || 'Unknown';
-    perWord[r._id] = { count:r.count, cat };
-    byCat  [cat]   = (byCat[cat] || 0) + r.count;
-    total         += r.count;
-  });
-
-  /* 3️⃣  already-pending queries so we don’t duplicate ------------- */
-  const open = new Set(
-    (await Query.find({ target:userId, answered:false },'_id')).map(q=>q.id)
-  );
-
-  /* 4️⃣  evaluate every rule --------------------------------------- */
-  for (const rule of autoRules) {
-    if (open.has(rule.id)) continue;
-
-    const param = rule.test({ total, byCat, perWord });
-    if (!param) continue;                         // condition not met
-
-    const qText = rule.dynamic ? rule.question(param) : rule.question;
-
-    const doc = await new Query({
-      _id     : rule.id,
-      target  : userId,
-      question: qText
-    }).save();
-
-    io.emit('newQuery', doc);
-  }
+/* helper: find category for an emoji filename */
+function labelForEmoji(emoji){
+  if(!emoji) return null;
+  const entry = Object.values(labelMap).find(e => e.emoji === emoji);
+  return entry ? entry.category : null;
 }
 
-/* --- dashboard (or auto-rule) creates a question -------------------- */
-socket.on('createQuery', async ({ target='all', question }) => {
-  if(!question) return;
-  const doc = await new Query({ target, question }).save();
-  io.emit('newQuery', doc);                 // broadcast
-});
+/* run every rule for the given user */
+async function runAutoRules(userId){
+  /* recent icons from that user (1 day) */
+  const oneDay = new Date(Date.now() - 24*60*60*1000);
+  const icons  = await Placement.find({
+    userId, deleted:false, timestamp:{ $gte:oneDay }
+  }).lean();
 
-/* --- user answers (or declines) ------------------------------------- */
-socket.on('answerQuery', async ({ id, answer, declined }) => {
-  const q = await Query.findByIdAndUpdate(
-    id,
-    { answered:true,
-      answer   : declined ? 'Declined to answer' : answer,
-      answeredAt:new Date() },
-    { new:true }
+  /* quick stats used by the demo rule ------------------ */
+  const total   = icons.length;
+  const byCat   = {};
+  const perWord = {};
+
+  icons.forEach(p => {
+    const cat = labelForEmoji(p.emoji) || 'Unknown';
+    byCat[cat] = (byCat[cat] || 0) + 1;
+    perWord[p.word] = (perWord[p.word] || 0) + 1;
+  });
+
+  /* open auto-queries so we don’t repeat ---------------- */
+  const open = new Set(
+    (await Query.find({ target:userId, isAuto:true, answered:false }))
+      .map(q => q.ruleId)
   );
-  if(q) io.emit('queryAnswered', q);        // dashboard update
-});
 
-});
+  /* evaluate every rule -------------------------------- */
+  for (const rule of autoRules) {
+    if (open.has(rule.id)) continue;             // already asked
+
+    const param = rule.test({ total, byCat, perWord });
+    if (!param) continue;                        // condition not met
+
+    /* personalise the question ({{param}}) */
+    const text = rule.question.replace('{{param}}', param);
+
+    const qDoc = await new Query({
+      target  : userId,
+      question: text,
+      isAuto  : true,
+      ruleId  : rule.id
+    }).save();
+
+    io.emit('newQuery', qDoc);                   // push to user & dashboard
+  }
+}
 /* =================================================================== */
 /* =======================  DASHBOARD ROUTES  ======================== */
 /* =================================================================== */

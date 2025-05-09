@@ -9,11 +9,11 @@ export default function AutoQueryList() {
   useEffect(() => {
     socket.emit('requestAllQueries');
     socket.on('allQueries', qs =>
-      setItems(qs.filter(q => q.isAuto)));
+      setItems(qs.filter(q => q.isAuto || q.ruleId)));
     socket.on('newQuery', q =>
-      q.isAuto && setItems(prev => [q, ...prev]));
+        (q.isAuto || q.ruleId) && setItems(prev => [q, ...prev]));
     socket.on('queryAnswered', q =>
-      q.isAuto && setItems(prev =>
+        (q.isAuto || q.ruleId) && setItems(prev =>
         prev.map(p => p._id === q._id ? q : p)));
 
     return () => {
