@@ -8,7 +8,7 @@ import './donut.css';
 
 /* ---------- colour palette ---------- */
 const CATEGORY_COLOURS = {
-Animal: '#f5bf17',
+Animals: '#f5bf17',
 Nature: '#05c274',
 Elemental: '#094542',
 Humanoid: '#85d5f6',
