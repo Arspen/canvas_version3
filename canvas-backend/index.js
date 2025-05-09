@@ -308,14 +308,16 @@ async function runAutoRules(userId, lastPlacement) {
           const ruleParams = rule.test(params); // Get the specific params for this rule
           if (ruleParams) {
             for (const key in ruleParams) {
-              if (params[key] !== undefined) {
+              if (params.hasOwnProperty(key) && params[key] !== undefined) {
                 // Use a global replace to handle multiple occurrences
                 const regex = new RegExp(`{{${key}}}`, 'g');
                 text = text.replace(regex, params[key]);
               } else {
-                console.warn(`[autoRules] Warning: Parameter '${key}' is undefined for rule '${rule.id}'`);
+                console.warn(`[autoRules] Warning: Parameter '${key}' is missing or undefined for rule '${rule.id}'`);
               }
             }
+          } else {
+            console.warn(`[autoRules] Warning: ruleParams is undefined for rule '${rule.id}'`);
           }
         }
 
@@ -466,7 +468,7 @@ app.get('/api/dashboard-data', async (req, res) => {
 
     res.json(facet[0]);
   } catch (err) {
-    console.error(err);
+    console.error('GET /dashboard-data failed', err);
     res.status(500).json({
       error: err.message
     });
