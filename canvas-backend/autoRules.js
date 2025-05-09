@@ -28,7 +28,7 @@ module.exports = [{
   
   module.exports = [{
       id: 'repeat-object-10',
-      question: "I've noticed you often use the word: '{{word}}'. What are you making?",
+      question: `I've noticed you often use the word: '{{word}}'. What are you making?`, // Use backticks
       dynamic: true,
       test: ({
         wordCounts
@@ -45,7 +45,7 @@ module.exports = [{
     },
     {
       id: 'dominant-category',
-      question: "I've noticed your language often leans towards '{{category}}'. What is your plan?",
+      question: `I've noticed your language often leans towards '{{category}}'. What is your plan?`, // Use backticks
       dynamic: true,
       test: ({
         total,
@@ -72,7 +72,7 @@ module.exports = [{
     },
     {
       id: 'hotspot-activity',
-      question: "You've been working intently over there, your own little hot spot on the map. Can you share a bit about what you've been creating? What does it mean to you?",
+      question: `You've been working intently over there, your own little hot spot on the map. Can you share a bit about what you've been creating? What does it mean to you?`, // Use backticks
       test: ({
         heatmapDensity
       }) => {
