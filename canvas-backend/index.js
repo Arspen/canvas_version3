@@ -529,6 +529,7 @@ app.get('/dashboard-data', async (req, res) => {
 });
 
 /* 3) GET  /api/heatmap   or  /api/heatmap?uid=P3   */
+/* 3) GET  /api/heatmap   or  /api/heatmap?uid=P3   */
 app.get('/api/heatmap', async (req, res) => {
   try {
     const match = {
@@ -557,9 +558,9 @@ app.get('/api/heatmap', async (req, res) => {
       {
         $group: {
           _id: {
-            x: '$cellX',
-            y: '$cellY',
-            uid: '$userId'
+            x: '$_id.cellX', // Explicitly access nested fields
+            y: '$_id.cellY',
+            uid: '$_id.uid'
           },
           n: {
             $sum: 1
@@ -569,7 +570,7 @@ app.get('/api/heatmap', async (req, res) => {
     ]);
     res.json(cells);
   } catch (e) {
-    console.error(e);
+    console.error('Error in /api/heatmap:', e);
     res.status(500).json({
       error: e.message
     });
