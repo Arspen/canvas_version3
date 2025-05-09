@@ -42,6 +42,7 @@ const placementSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  category: String, // NEW: Add category field to schema
 });
 const Placement = mongoose.model('Placement', placementSchema);
 
@@ -83,11 +84,27 @@ io.on('connection', (socket) => {
 
   /* save first – then broadcast the *saved* doc */
   socket.on('placeEmoji', async (raw) => {
-    const doc = await new Placement(raw).save();
+    // Determine the category *before* saving
+    let category = 'Unknown';
+    for (const key in labelMap) {
+      if (labelMap[key].emoji === raw.emoji) {
+        category = labelMap[key].category;
+        break;
+      }
+    }
+
+    const doc = await new Placement({
+      ...raw,
+      category
+    }).save(); // Save with category
     io.emit('placeEmoji', doc);
 
     /* ── NEW: evaluate automatic rules for this user ── */
-    runAutoRules(doc.userId, doc).catch(console.error);
+    try {
+      await runAutoRules(doc.userId, doc);
+    } catch (error) {
+      console.error('Error running auto rules:', error);
+    }
   });
 
   socket.on('requestInitialPlacements', async () => {
@@ -183,190 +200,196 @@ function labelForEmoji(emoji) {
 
 /* run every rule for the given user */
 async function runAutoRules(userId, lastPlacement) {
-  /* 1️⃣  aggregate per-word counts -------------------------------- */
-  const wordCounts = await Placement.aggregate([{
-      $match: {
-        userId,
-        deleted: false
-      }
-    },
-    {
-      $group: {
-        _id: '$word',
-        count: {
-          $sum: 1
-        },
-        emoji: {
-          $first: '$emoji'
+  try {
+    console.log(`[autoRules] Running rules for userId: ${userId}`);
+    /* 1️⃣  aggregate per-word counts -------------------------------- */
+    const wordCounts = await Placement.aggregate([{
+        $match: {
+          userId,
+          deleted: false
         }
-      }
-    },
-    {
-      $project: {
-        _id: 0,
-        word: '$_id',
-        count: 1
-      }
-    }
-  ]).then(res =>
-    res.reduce((acc, cur) => {
-      acc[cur.word] = cur.count;
-      return acc;
-    }, {})
-  );
-
-  /* 2️⃣  aggregate per-category counts -------------------------------- */
-  const categoryCounts = await Placement.aggregate([{
-      $match: {
-        userId,
-        deleted: false
-      }
-    },
-    {
-      $group: {
-        _id: {
-          $function: {
-            body: function(emoji) {
-              const labelMap = require('./labelMap.json'); // Import labelMap here
-              const entry = Object.values(labelMap).find(e => e.emoji === emoji);
-              return entry ? entry.category : 'Unknown';
-            },
-            args: ['$emoji']
+      },
+      {
+        $group: {
+          _id: '$word',
+          count: {
+            $sum: 1
+          },
+          emoji: {
+            $first: '$emoji'
           }
-        },
-        count: {
-          $sum: 1
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          word: '$_id',
+          count: 1
         }
       }
-    },
-    {
-      $project: {
-        _id: 0,
-        category: '$_id',
-        count: 1
+    ]).then(res =>
+      res.reduce((acc, cur) => {
+        acc[cur.word] = cur.count;
+        return acc;
+      }, {})
+    );
+    console.log(`[autoRules] wordCounts:`, wordCounts);
+
+    /* 2️⃣  aggregate per-category counts -------------------------------- */
+    const categoryCounts = await Placement.aggregate([{
+        $match: {
+          userId,
+          deleted: false
+        }
+      },
+      {
+        $group: {
+          _id: '$category', // Access the pre-saved category
+          count: {
+            $sum: 1
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          category: '$_id',
+          count: 1
+        }
       }
-    }
-  ]).then(res =>
-    res.reduce((acc, cur) => {
-      acc[cur.category] = cur.count;
-      return acc;
-    }, {})
-  );
+    ]).then(res =>
+      res.reduce((acc, cur) => {
+        acc[cur.category] = cur.count;
+        return acc;
+      }, {})
+    );
+    console.log(`[autoRules] categoryCounts:`, categoryCounts);
 
-  /* 3️⃣  calculate total placements -------------------------------- */
-  const total = await Placement.countDocuments({
-    userId,
-    deleted: false
-  });
-
-  /* 4️⃣  evaluate every rule --------------------------------------- */
-  for (const rule of autoRules) {
-    let shouldFire = false;
-
-    // Check if the rule has already been triggered for this user
-    const existingQuery = await Query.findOne({
-      ruleId: rule.id,
-      queryUserId: userId,
+    /* 3️⃣  calculate total placements -------------------------------- */
+    const total = await Placement.countDocuments({
+      userId,
+      deleted: false
     });
+    console.log(`[autoRules] total:`, total);
 
-    if (!existingQuery) {
-      // Prepare parameters for the rule's test
-      let params = {
-        lastPlacement,
-        wordCounts,
-        categoryCounts,
-        total,
-        // heatmapDensity: 0, // Placeholder - you'll need to calculate this
-      };
+    /* 4️⃣  evaluate every rule --------------------------------------- */
+    for (const rule of autoRules) {
+      let shouldFire = false;
 
-      if (rule.id === 'hotspot-activity') {
-        // Calculate heatmapDensity here (example - replace with your logic)
-        params.heatmapDensity = await getHeatmapDensity(userId);
-      }
-      shouldFire = !!rule.test(params);
-    }
-
-    if (shouldFire) {
-      // Personalize the question (if needed)
-      let text = rule.question;
-      if (rule.dynamic) {
-        for (const key in rule.test(params)) {
-          text = text.replace(`{{${key}}}`, params[key]);
-        }
-      }
-
-      console.log(`[autoRule] firing ${rule.id} for ${userId}`);
-      const qDoc = await new Query({
-        target: userId,
-        question: text,
-        isAuto: true,
+      // Check if the rule has already been triggered for this user
+      const existingQuery = await Query.findOne({
         ruleId: rule.id,
-        queryUserId: userId, // Store the userId
-      }).save();
+        queryUserId: userId,
+      });
 
-      io.emit('newQuery', qDoc); // push to user & dashboard
+      if (!existingQuery) {
+        // Prepare parameters for the rule's test
+        let params = {
+          lastPlacement,
+          wordCounts,
+          categoryCounts,
+          total,
+          // heatmapDensity: 0, // Placeholder - you'll need to calculate this
+        };
+
+        if (rule.id === 'hotspot-activity') {
+          // Calculate heatmapDensity here (example - replace with your logic)
+          params.heatmapDensity = await getHeatmapDensity(userId);
+        }
+        console.log(`[autoRules] Testing rule: ${rule.id} with params:`, params);
+        shouldFire = !!rule.test(params);
+      }
+
+      if (shouldFire) {
+        // Personalize the question (if needed)
+        let text = rule.question;
+        if (rule.dynamic) {
+          for (const key in rule.test(params)) {
+            text = text.replace(`{{${key}}}`, params[key]);
+          }
+        }
+
+        console.log(`[autoRules] Firing rule: ${rule.id} for userId: ${userId}`);
+        const qDoc = await new Query({
+          target: userId,
+          question: text,
+          isAuto: true,
+          ruleId: rule.id,
+          queryUserId: userId, // Store the userId
+        }).save();
+
+        io.emit('newQuery', qDoc); // push to user & dashboard
+      }
     }
+  } catch (error) {
+    console.error('Error in runAutoRules:', error);
   }
 }
 
 async function getHeatmapDensity(userId) {
-  const heatmapData = await Placement.aggregate([
-    {
-      $match: {
-        userId: userId,
-        deleted: false
-      }
-    },
-    {
-      $project: {
-        cellX: {
-          $floor: {
-            $divide: ['$x', 40]
-          }
-        },
-        cellY: {
-          $floor: {
-            $divide: ['$y', 40]
-          }
-        },
-        _id: 0,
-        x: '$x',
-        y: '$y'
-      }
-    },
-    {
-      $group: {
-        _id: {
-          x: '$cellX',
-          y: '$cellY'
-        },
-        count: {
-          $sum: 1
-        },
-        points: {
-          $push: {
-            x: '$x',
-            y: '$y'
+  try {
+    const heatmapData = await Placement.aggregate([
+      {
+        $match: {
+          userId: userId,
+          deleted: false
+        }
+      },
+      {
+        $project: {
+          cellX: {
+            $floor: {
+              $divide: ['$x', 40]
+            }
+          },
+          cellY: {
+            $floor: {
+              $divide: ['$y', 40]
+            }
+          },
+          _id: 0,
+          x: '$x',
+          y: '$y'
+        }
+      },
+      {
+        $group: {
+          _id: {
+            x: '$cellX',
+            y: '$cellY'
+          },
+          count: {
+            $sum: 1
+          },
+          points: {
+            $push: {
+              x: '$x',
+              y: '$y'
+            }
           }
         }
+      },
+      {
+        $project: {
+          _id: 0,
+          x: '$_id.x',
+          y: '$_id.y',
+          density: '$count'
+        }
       }
-    },
-    {
-      $project: {
-        _id: 0,
-        x: '$_id.x',
-        y: '$_id.y',
-        density: '$count'
-      }
-    }
-  ]);
-  // Calculate a combined density (example: average density)
-  let totalDensity = 0;
-  heatmapData.forEach(cell => {
-    totalDensity += cell.density;
-  });
-  const averageDensity = heatmapData.length > 0 ? totalDensity / heatmapData.length : 0;
-  return averageDensity;
+    ]);
+    // Calculate a combined density (example: average density)
+    let totalDensity = 0;
+    heatmapData.forEach(cell => {
+      totalDensity += cell.density;
+    });
+    const averageDensity = heatmapData.length > 0 ? totalDensity / heatmapData.length : 0;
+    console.log(`[getHeatmapDensity] averageDensity:`, averageDensity);
+    return averageDensity;
+  } catch (error) {
+    console.error('Error in getHeatmapDensity:', error);
+    return 0; // Return a default value in case of error
+  }
 }
 /* =================================================================== */
 /* =======================  DASHBOARD ROUTES  ======================== */

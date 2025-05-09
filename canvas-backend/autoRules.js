@@ -34,7 +34,7 @@ module.exports = [{
         wordCounts
       }) => {
         for (const [word, count] of Object.entries(wordCounts)) {
-          if (count >= 10) {
+          if (count >= 3) {
             return {
               word
             };
