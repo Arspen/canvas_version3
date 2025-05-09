@@ -71,6 +71,7 @@
   .q-list .question-text { /* Wrap question in a span if needed for styling */
     flex-grow: 1; /* Allow question text to take available space */
     margin-right: 10px; /* Space before the answer section */
+    word-break: break-word; /* Allow long words in question to break and wrap */
   }
   .q-list b {
     margin-right: 5px; /* Space after target name */
@@ -79,24 +80,27 @@
   
   .q-list .answer-section {
     display: flex; /* Align tick and answer text */
-    align-items: center;
-    white-space: nowrap; /* Prevent answer section from wrapping too early */
-    flex-shrink: 0; /* Prevent answer section from shrinking */
+    align-items: flex-start; /* Align tick to the top of the answer text */
+    /* white-space: nowrap; */ /* REMOVED: This was preventing wrapping */
+    flex-shrink: 0; /* Prevent answer section from shrinking excessively */
+    max-width: 50%; /* Optional: Give answer section a max width relative to li */
+                    /* Adjust as needed, or remove if you want it to take more space */
   }
   
   .q-list .tick {
-    /* float:right; */ /* Replaced by flexbox */
     color: #16a34a; /* Darker green */
     margin-right: 5px; /* Space between tick and answer text */
     font-size: 16px; /* Slightly larger tick */
+    line-height: 1.4; /* Align with first line of text if answer wraps */
   }
   
   .q-list .answer-text {
     font-style: italic;
     color: #374151; /* Slightly darker color for answer text */
-    max-width: 200px; /* Optional: constrain width and allow wrap */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    /* white-space: normal; */ /* Remove if you want it to wrap */
+    /* max-width: 200px; */ /* REMOVED or adjust: This was a fixed max-width */
+    /* overflow: hidden; */   /* REMOVED */
+    /* text-overflow: ellipsis; */ /* REMOVED */
+    white-space: normal;  /* ADDED: Explicitly allow normal white-space handling (wrapping) */
+    word-break: break-word; /* ADDED: Allow long words to break and wrap */
   }
   
