@@ -34,7 +34,7 @@ module.exports = [{
         wordCounts
       }) => {
         for (const [word, count] of Object.entries(wordCounts)) {
-          if (count >= 3) {
+          if (count >= 10) {
             return {
               word
             };
@@ -51,7 +51,7 @@ module.exports = [{
         total,
         categoryCounts
       }) => {
-        if (total < 10) return false;
+        if (total < 50) return false;
   
         let dominantCategory = null;
         let maxCount = 0;
@@ -62,7 +62,7 @@ module.exports = [{
             dominantCategory = category;
           }
         }
-        if (dominantCategory && maxCount / total >= 0.5) {
+        if (dominantCategory && maxCount / total >= 0.42) {
           return {
             category: dominantCategory
           };
