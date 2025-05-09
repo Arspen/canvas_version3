@@ -302,30 +302,22 @@ async function runAutoRules(userId, lastPlacement) {
       }
 
       if (shouldFire) {
-        // Personalize the question (if needed)
-        let text = rule.question;
+        let questionText = rule.question; // Start with the base question
         if (rule.dynamic) {
           const ruleParams = rule.test(params); // Get the specific params for this rule
           if (ruleParams) {
-            // Build a regex that matches *any* placeholder in the string
-            const regex = /{{(\w+)}}/g;
-            text = text.replace(regex, (match, key) => {
-              if (ruleParams.hasOwnProperty(key) && params[key] !== undefined) {
-                return params[key]; // Replace with the actual value
-              } else {
-                console.warn(`[autoRules] Warning: Parameter '${key}' is missing or undefined for rule '${rule.id}'`);
-                return ''; // Replace with an empty string or a default value
-              }
-            });
-          } else {
-            console.warn(`[autoRules] Warning: ruleParams is undefined for rule '${rule.id}'`);
+            if (rule.id === 'repeat-object-10' && ruleParams.word) {
+              questionText += `'${ruleParams.word}'. What are you making?`;
+            } else if (rule.id === 'dominant-category' && ruleParams.category) {
+              questionText += `'${ruleParams.category}'. What is your plan?`;
+            }
           }
         }
 
         console.log(`[autoRules] Firing rule: ${rule.id} for userId: ${userId}`);
         const qDoc = await new Query({
           target: userId,
-          question: text,
+          question: questionText, // Use the constructed question
           isAuto: true,
           ruleId: rule.id,
           queryUserId: userId, // Store the userId
