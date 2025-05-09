@@ -14,5 +14,20 @@ module.exports = [
     },
   
     // { id:'anotherRule', question:'…', test:stats=>… },
+
+    {
+    id       : 'repeatWord-5',
+    dynamic  : true,      // question depends on which word
+    test     : ({ perWord }) => {
+      // look for any word that appears ≥ 5 times & whose category ≠ Elementals
+      for (const [word, { count, cat }] of Object.entries(perWord)) {
+        if (count >= 5 && cat !== 'Elementals') return { word };
+      }
+      return null;        // no match ⇒ rule does not fire
+    },
+    question : ({ word }) =>
+      `You have placed “${word}” quite a few times. ` +
+      `What’s special about it for you?`
+  }
   ];
   

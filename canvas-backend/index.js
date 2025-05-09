@@ -95,37 +95,50 @@ io.on('connection', (socket) => {
 });
 
 /********  helper: evaluate all rules for one user  ***/
-async function checkAutoQueries(uid){
-  /* 1) quick stats for that user (ignore deleted) */
-  const stats = await Placement.aggregate([
-    { $match:{ userId:uid, deleted:false }},
-    {
-      $group:{
-        _id:'$category',
-        n:{ $sum:1 }
-      }
-    }
+async function runAutoRules(userId) {
+  /* 1️⃣  aggregate per-word + emoji -------------------------------- */
+  const raw = await Placement.aggregate([
+    { $match: { userId, deleted:false } },
+    { $group: {
+        _id   :'$word',
+        count :{ $sum:1 },
+        emoji :{ $first:'$emoji' }
+    }}
   ]);
-  const byCat = Object.fromEntries(stats.map(s=>[s._id || 'Unknown',s.n]));
-  const total = stats.reduce((t,s)=>t+s.n,0);
 
-  /* 2) iterate over rules */
-  for(const rule of autoRules){
-    if(!rule.test({ total, byCat })) continue;
+  /* 2️⃣  derive stats --------------------------------------------- */
+  const perWord = {};
+  const byCat   = {};
+  let   total   = 0;
 
-    /* already asked for this rule? */
-    const exists = await Query.findOne({ target:uid, ruleId:rule.id });
-    if(exists) continue;
+  raw.forEach(r => {
+    const cat = labelForEmoji(r.emoji) || 'Unknown';
+    perWord[r._id] = { count:r.count, cat };
+    byCat  [cat]   = (byCat[cat] || 0) + r.count;
+    total         += r.count;
+  });
 
-    /* 3) create & broadcast */
-    const q = await new Query({
-      target:uid,
-      question:rule.question,
-      ruleId:rule.id,
-      isAuto:true
+  /* 3️⃣  already-pending queries so we don’t duplicate ------------- */
+  const open = new Set(
+    (await Query.find({ target:userId, answered:false },'_id')).map(q=>q.id)
+  );
+
+  /* 4️⃣  evaluate every rule --------------------------------------- */
+  for (const rule of autoRules) {
+    if (open.has(rule.id)) continue;
+
+    const param = rule.test({ total, byCat, perWord });
+    if (!param) continue;                         // condition not met
+
+    const qText = rule.dynamic ? rule.question(param) : rule.question;
+
+    const doc = await new Query({
+      _id     : rule.id,
+      target  : userId,
+      question: qText
     }).save();
 
-    io.emit('newQuery', q);
+    io.emit('newQuery', doc);
   }
 }
 
