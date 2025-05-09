@@ -1,0 +1,13 @@
+.auto-card{
+    background:#fff;border-radius:12px;padding:12px;
+    display:flex;flex-direction:column;
+  }
+  .auto-card h4{margin:0 0 6px 0;font-size:14px;}
+  .scroll{flex:1;overflow-y:auto;font-size:13px;list-style:none;padding:0;margin:0}
+  .scroll li{padding:4px 0;border-bottom:1px solid #eee}
+  .tag{
+    display:inline-block;font-size:10px;padding:2px 5px;margin-right:6px;
+    background:#111827;color:#fff;border-radius:6px;
+  }
+  .badge{margin-left:6px;font-size:10px;color:#22c55e}
+  

@@ -39,6 +39,9 @@ const querySchema = new mongoose.Schema({
   answer   : String,
   askedAt  : { type:Date, default:Date.now },
   answeredAt: Date,
+    /* NEW */
+    ruleId    : String,          // present when auto-generated
+    isAuto    : { type:Boolean, default:false },
 });
 const Query = mongoose.model('Query', querySchema);
 
@@ -83,11 +86,48 @@ io.on('connection', (socket) => {
     io.emit('markDeleted', String(nearest._id));   // always string
   });
 
+
+  const autoRules = require('./autoRules');
  /* --- dashboard asks once for *all* queries --------------------------- */
  socket.on('requestAllQueries', async () => {
   const qs = await Query.find().sort({ askedAt:-1 });
   socket.emit('allQueries', qs);
 });
+
+/********  helper: evaluate all rules for one user  ***/
+async function checkAutoQueries(uid){
+  /* 1) quick stats for that user (ignore deleted) */
+  const stats = await Placement.aggregate([
+    { $match:{ userId:uid, deleted:false }},
+    {
+      $group:{
+        _id:'$category',
+        n:{ $sum:1 }
+      }
+    }
+  ]);
+  const byCat = Object.fromEntries(stats.map(s=>[s._id || 'Unknown',s.n]));
+  const total = stats.reduce((t,s)=>t+s.n,0);
+
+  /* 2) iterate over rules */
+  for(const rule of autoRules){
+    if(!rule.test({ total, byCat })) continue;
+
+    /* already asked for this rule? */
+    const exists = await Query.findOne({ target:uid, ruleId:rule.id });
+    if(exists) continue;
+
+    /* 3) create & broadcast */
+    const q = await new Query({
+      target:uid,
+      question:rule.question,
+      ruleId:rule.id,
+      isAuto:true
+    }).save();
+
+    io.emit('newQuery', q);
+  }
+}
 
 /* --- dashboard (or auto-rule) creates a question -------------------- */
 socket.on('createQuery', async ({ target='all', question }) => {

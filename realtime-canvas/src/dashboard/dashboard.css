@@ -23,7 +23,7 @@
 
 .alist-card      { grid-area: 2 / 1; }
 .query-card    { grid-area: 2 / 3; }    /* if you have a query widget */
-
+.auto-card {grid-area: 1 / 3}
 /* each card stretches / scrolls inside its cell */
 .dash-grid > *{ width:100%; height:100%; overflow:auto; }
 

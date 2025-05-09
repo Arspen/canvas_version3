@@ -6,6 +6,7 @@ import ActivityList from './widgets/ActivityList';
 import BarByHour    from './widgets/BarByHour';
 import HeatMap from './widgets/HeatMap';
 import QueryPanel from './widgets/QueryPanel';
+import AutoQueryList from './widgets/AutoQueryList';
 // …
 
 export default function DashboardApp() {
@@ -33,6 +34,7 @@ export default function DashboardApp() {
       <BarByHour data = {placements}/>
       <HeatMap filter={filter} />
       <QueryPanel />
+      <AutoQueryList />
       {/* You‘ll drop the other widgets in here one by one.
           Example (when you build them):
           <ActivityList data={placements} filter={filter}/>
