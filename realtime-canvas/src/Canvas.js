@@ -3,7 +3,6 @@ import socket from './socket';
 import { getEmojiForWord } from './labelMapper';
 import labelMap from './labelMap.json';
 import QueryOverlay from './QueryOverlay';
-import { BACKEND } from './socket';
 
 import DesktopLayout from './layouts/DesktopLayout';
 import MobileLayout  from './layouts/MobileLayout';
@@ -115,8 +114,7 @@ export default function Canvas({ userId }) {
     let alive = true;
     (async () => {
       try {
-        const url = `${BACKEND}/api/pending-query?uid=${encodeURIComponent(userId)}`;
-        const res = await fetch(url);
+        const res  = await fetch(`/api/pending-query?uid=${encodeURIComponent(userId)}`);
         const json = await res.json();              // { _id, question }  or  {}
         if (alive && json._id) setPendingQ(json);   // <= existing state setter
       } catch (e) { console.error(e); }
