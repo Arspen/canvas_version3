@@ -284,7 +284,7 @@ async function runAutoRules(userId, lastPlacement) {
 
       if (!existingQuery) {
         // Prepare parameters for the rule's test
-        let params = {
+        const params = { // Declare params *before* calling rule.test
           lastPlacement,
           wordCounts,
           categoryCounts,
@@ -304,6 +304,12 @@ async function runAutoRules(userId, lastPlacement) {
         // Personalize the question (if needed)
         let text = rule.question;
         if (rule.dynamic) {
+          const params = { // Declare params *again* for the replacement
+            lastPlacement,
+            wordCounts,
+            categoryCounts,
+            total,
+          };
           for (const key in rule.test(params)) {
             text = text.replace(`{{${key}}}`, params[key]);
           }
@@ -458,7 +464,7 @@ app.get('/api/dashboard-data', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({
-      error: 'aggregation failed'
+      error: err.message
     });
   }
 });
