@@ -275,6 +275,7 @@ async function runAutoRules(userId, lastPlacement) {
     /* 4️⃣  evaluate every rule --------------------------------------- */
     for (const rule of autoRules) {
       let shouldFire = false;
+      let params = {}; // Initialize params here
 
       // Check if the rule has already been triggered for this user
       const existingQuery = await Query.findOne({
@@ -284,7 +285,7 @@ async function runAutoRules(userId, lastPlacement) {
 
       if (!existingQuery) {
         // Prepare parameters for the rule's test
-        const params = { // Declare params *before* calling rule.test
+        params = {
           lastPlacement,
           wordCounts,
           categoryCounts,
@@ -304,14 +305,12 @@ async function runAutoRules(userId, lastPlacement) {
         // Personalize the question (if needed)
         let text = rule.question;
         if (rule.dynamic) {
-          const params = { // Declare params *again* for the replacement
-            lastPlacement,
-            wordCounts,
-            categoryCounts,
-            total,
-          };
           for (const key in rule.test(params)) {
-            text = text.replace(`{{${key}}}`, params[key]);
+            if (params[key] !== undefined) { // Check if param exists
+              text = text.replace(`{{${key}}}`, params[key]);
+            } else {
+              console.warn(`[autoRules] Warning: Parameter '${key}' is undefined for rule '${rule.id}'`);
+            }
           }
         }
 
@@ -464,7 +463,7 @@ app.get('/api/dashboard-data', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({
-      error: err.message
+      error: 'aggregation failed'
     });
   }
 });
