@@ -1,7 +1,7 @@
 /* ---------- unchanged imports / app / io setup --------- */
-const express  = require('express');
-const http     = require('http');
-const cors     = require('cors');
+const express = require('express');
+const http = require('http');
+const cors = require('cors');
 const { Server } = require('socket.io');
 const mongoose = require('mongoose');
 
@@ -11,37 +11,40 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin : ['http://localhost:3000', 'https://canvas-frontend.onrender.com'],
+    origin: [
+      'http://localhost:3000',
+      'https://canvas-frontend.onrender.com',
+    ],
     methods: ['GET', 'POST'],
   },
 });
 
 /* ---------- Mongo ------------ */
 mongoose.connect(
-  'mongodb+srv://constein98:goingtofish@clusterc1804.zawuirl.mongodb.net/?retryWrites=true&w=majority&appName=ClusterC1804',
+  'mongodb+srv://constein98:goingtofish@clusterc1804.zawuirl.mongodb.net/?retryWrites=true&w=majority&appName=ClusterC1804'
 );
 
 const placementSchema = new mongoose.Schema({
-  word  : String,
-  emoji : String,
-  x     : Number,
-  y     : Number,
+  word: String,
+  emoji: String,
+  x: Number,
+  y: Number,
   userId: String,
   timestamp: { type: Date, default: Date.now },
-  deleted  : { type: Boolean, default: false },
+  deleted: { type: Boolean, default: false },
 });
 const Placement = mongoose.model('Placement', placementSchema);
 
 const querySchema = new mongoose.Schema({
-  target   : { type:String, default:'all' },   // 'P3' … or 'all'
-  question : String,
-  answered : { type:Boolean, default:false },
-  answer   : String,
-  askedAt  : { type:Date, default:Date.now },
+  target: { type: String, default: 'all' }, // 'P3' … or 'all'
+  question: String,
+  answered: { type: Boolean, default: false },
+  answer: String,
+  askedAt: { type: Date, default: Date.now },
   answeredAt: Date,
-    /* NEW */
-    ruleId    : String,          // present when auto-generated
-    isAuto    : { type:Boolean, default:false },
+  /* NEW */
+  ruleId: String, // present when auto-generated
+  isAuto: { type: Boolean, default: false },
 });
 const Query = mongoose.model('Query', querySchema);
 
@@ -50,7 +53,7 @@ io.on('connection', (socket) => {
   console.log('connected', socket.id);
 
   // send only *live* icons
-  Placement.find({ deleted: false }).then(docs =>
+  Placement.find({ deleted: false }).then((docs) =>
     socket.emit('initialPlacements', docs)
   );
 
@@ -58,7 +61,8 @@ io.on('connection', (socket) => {
         contains the Mongo _id field                                       */
   socket.on('placeEmoji', async (raw) => {
     const doc = await new Placement(raw).save();
-    io.emit('placeEmoji', doc);                    // <-- with _id
+    io.emit('placeEmoji', doc); // <-- with _id
+    await runAutoRules(raw.userId); // Trigger auto-rules after each placement
   });
 
   socket.on('requestInitialPlacements', async () => {
@@ -70,7 +74,8 @@ io.on('connection', (socket) => {
   socket.on('deletePlacement', async ({ userId, x, y }) => {
     const R = 30;
     const cand = await Placement.find({
-      userId, deleted: false,
+      userId,
+      deleted: false,
       x: { $gte: x - R, $lte: x + R },
       y: { $gte: y - R, $lte: y + R },
     }).lean();
@@ -82,85 +87,110 @@ io.on('connection', (socket) => {
       return da < db ? a : b;
     });
 
-    await Placement.updateOne({ _id: nearest._id }, { $set: { deleted: true } });
-    io.emit('markDeleted', String(nearest._id));   // always string
+    await Placement.updateOne(
+      { _id: nearest._id },
+      { $set: { deleted: true } }
+    );
+    io.emit('markDeleted', String(nearest._id)); // always string
   });
-
 
   const autoRules = require('./autoRules');
- /* --- dashboard asks once for *all* queries --------------------------- */
- socket.on('requestAllQueries', async () => {
-  const qs = await Query.find().sort({ askedAt:-1 });
-  socket.emit('allQueries', qs);
-});
-
-/********  helper: evaluate all rules for one user  ***/
-async function runAutoRules(userId) {
-  /* 1️⃣  aggregate per-word + emoji -------------------------------- */
-  const raw = await Placement.aggregate([
-    { $match: { userId, deleted:false } },
-    { $group: {
-        _id   :'$word',
-        count :{ $sum:1 },
-        emoji :{ $first:'$emoji' }
-    }}
-  ]);
-
-  /* 2️⃣  derive stats --------------------------------------------- */
-  const perWord = {};
-  const byCat   = {};
-  let   total   = 0;
-
-  raw.forEach(r => {
-    const cat = labelForEmoji(r.emoji) || 'Unknown';
-    perWord[r._id] = { count:r.count, cat };
-    byCat  [cat]   = (byCat[cat] || 0) + r.count;
-    total         += r.count;
+  /* --- dashboard asks once for *all* queries --------------------------- */
+  socket.on('requestAllQueries', async () => {
+    const qs = await Query.find().sort({ askedAt: -1 });
+    socket.emit('allQueries', qs);
   });
 
-  /* 3️⃣  already-pending queries so we don’t duplicate ------------- */
-  const open = new Set(
-    (await Query.find({ target:userId, answered:false },'_id')).map(q=>q.id)
-  );
+  /******** helper: evaluate all rules for one user  **/
+  async function runAutoRules(userId) {
+    /* 1️⃣  aggregate for emoji counts -------------------------------- */
+    const emojiCounts = await Placement.aggregate([
+      { $match: { userId: userId, deleted: false } },
+      { $group: { _id: '$emoji', count: { $sum: 1 } } },
+    ]);
 
-  /* 4️⃣  evaluate every rule --------------------------------------- */
-  for (const rule of autoRules) {
-    if (open.has(rule.id)) continue;
+    /* 2️⃣  aggregate for word counts ---------------------------------- */
+    const wordCounts = await Placement.aggregate([
+      { $match: { userId: userId, deleted: false } },
+      {
+        $group: {
+          _id: '$word',
+          count: { $sum: 1 },
+          emoji: { $first: '$emoji' },
+        },
+      },
+    ]);
 
-    const param = rule.test({ total, byCat, perWord });
-    if (!param) continue;                         // condition not met
+    /* 3️⃣  derive stats --------------------------------------------- */
+    const perWord = {};
+    const byCat = {};
+    let total = 0;
+    const perEmoji = {};
 
-    const qText = rule.dynamic ? rule.question(param) : rule.question;
+    wordCounts.forEach((r) => {
+      const cat = labelForEmoji(r.emoji) || 'Unknown';
+      perWord[r._id] = { count: r.count, cat };
+      byCat[cat] = (byCat[cat] || 0) + r.count;
+      total += r.count;
+    });
 
-    const doc = await new Query({
-      _id     : rule.id,
-      target  : userId,
-      question: qText
-    }).save();
+    emojiCounts.forEach((e) => {
+      perEmoji[e._id] = e.count;
+    });
 
-    io.emit('newQuery', doc);
+    /* 4️⃣  already-pending queries so we don’t duplicate ------------- */
+    const open = new Set(
+      (await Query.find({ target: userId, answered: false }, '_id')).map(
+        (q) => q.id
+      )
+    );
+
+    /* 5️⃣  evaluate every rule --------------------------------------- */
+    for (const rule of autoRules) {
+      if (open.has(rule.id)) continue;
+
+      let param;
+      if (rule.id === 'manySameIcon') {
+        param = rule.test({ perEmoji });
+      } else {
+        param = rule.test({ total, byCat, perWord });
+      }
+
+      if (!param) continue; // condition not met
+
+      const qText = rule.dynamic ? rule.question(param) : rule.question;
+
+      const doc = await new Query({
+        ruleId: rule.id,
+        target: userId,
+        question: qText,
+        isAuto: true,
+      }).save();
+
+      io.emit('newQuery', doc);
+    }
   }
-}
 
-/* --- dashboard (or auto-rule) creates a question -------------------- */
-socket.on('createQuery', async ({ target='all', question }) => {
-  if(!question) return;
-  const doc = await new Query({ target, question }).save();
-  io.emit('newQuery', doc);                 // broadcast
-});
+  /* --- dashboard (or auto-rule) creates a question -------------------- */
+  socket.on('createQuery', async ({ target = 'all', question }) => {
+    if (!question) return;
+    const doc = await new Query({ target, question }).save();
+    io.emit('newQuery', doc); // broadcast
+  });
 
-/* --- user answers (or declines) ------------------------------------- */
-socket.on('answerQuery', async ({ id, answer, declined }) => {
-  const q = await Query.findByIdAndUpdate(
-    id,
-    { answered:true,
-      answer   : declined ? 'Declined to answer' : answer,
-      answeredAt:new Date() },
-    { new:true }
-  );
-  if(q) io.emit('queryAnswered', q);        // dashboard update
-});
-
+  /* --- user answers (or declines) ------------------------------------- */
+  socket.on('answerQuery', async ({ id, answer, declined }) => {
+    const q = await Query.findByIdAndUpdate(
+      id,
+      {
+        answered: true,
+        answer: declined ? 'Declined to answer' : answer,
+        answeredAt: new Date(),
+      },
+      { new: true }
+    );
+    if (q) io.emit('queryAnswered', q); // dashboard update
+  });
 });
 /* =================================================================== */
 /* =======================  DASHBOARD ROUTES  ======================== */
@@ -180,26 +210,21 @@ app.get('/api/dashboard-data', async (req, res) => {
       { $match: { timestamp: { $gte: past7 } } },
       {
         $facet: {
-          donut: [
-            { $group: { _id: '$emoji', count: { $sum: 1 } } }
-          ],
+          donut: [{ $group: { _id: '$emoji', count: { $sum: 1 } } }],
           perDay: [
             {
               $group: {
                 _id: {
-                  $dateToString: { format: '%Y-%m-%d', date: '$timestamp' }
+                  $dateToString: { format: '%Y-%m-%d', date: '$timestamp' },
                 },
-                count: { $sum: 1 }
-              }
+                count: { $sum: 1 },
+              },
             },
-            { $sort: { _id: 1 } }
+            { $sort: { _id: 1 } },
           ],
-          last: [
-            { $sort: { timestamp: -1 } },
-            { $limit: 30 }
-          ]
-        }
-      }
+          last: [{ $sort: { timestamp: -1 } }, { $limit: 30 }],
+        },
+      },
     ]);
 
     res.json(facet[0]);
@@ -210,71 +235,109 @@ app.get('/api/dashboard-data', async (req, res) => {
 });
 
 // GET /api/pending-query?uid=P3
-app.get('/api/pending-query', async (req,res)=>{
+app.get('/api/pending-query', async (req, res) => {
   const uid = req.query.uid;
   const doc = await mongoose.connection
-               .collection('queries')
-               .findOne({ target: { $in: [uid,'all'] }, answered:false },
-                        { sort:{ askedAtAt:-1 } });
-  res.json(doc || {});          // {} if nothing pending
+    .collection('queries')
+    .findOne({ target: { $in: [uid, 'all'] }, answered: false }, {
+      sort: {
+        askedAtAt: -1
+      }
+    });
+  res.json(doc || {}); // {} if nothing pending
 });
 
-
-
-/*  POST /api/query   body = { target:"P3"|"all", question:"…" } */
+/* POST /api/query   body = { target:"P3"|"all", question:"…" } */
 app.use(express.json());
 app.post('/api/query', async (req, res) => {
-  const { target, question } = req.body;
-  if (!question) return res.status(400).json({ error: 'question missing' });
+  const {
+    target,
+    question
+  } = req.body;
+  if (!question) return res.status(400).json({
+    error: 'question missing'
+  });
 
   //const doc = { target: target || 'all', question, askedAt: new Date() };
   //const col = mongoose.connection.collection('queries');
   //await col.insertOne(doc);
-  const doc = await new Query({ target: target || 'all', question }).save();
+  const doc = await new Query({
+    target: target || 'all',
+    question
+  }).save();
 
-  io.emit('newQuery', doc);          // push to everyone; client filters
+  io.emit('newQuery', doc); // push to everyone; client filters
   //res.json({ ok: true });
   res.json(doc);
 });
-app.get('/api/queries', async (_req,res)=>
-  res.json(await Query.find().sort({ askedAt:-1 })));
+app.get('/api/queries', async (_req, res) =>
+  res.json(await Query.find().sort({
+    askedAt: -1
+  }))
+);
 
 /* ---------- dashboard data endpoint ---------- */
 app.get('/dashboard-data', async (req, res) => {
   try {
     const placements = await Placement.find().lean();
-    res.json(placements);              // plain JSON array
+    res.json(placements); // plain JSON array
   } catch (err) {
     console.error('GET /dashboard-data failed', err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({
+      error: err.message
+    });
   }
 });
 
 /* 3) GET  /api/heatmap   or  /api/heatmap?uid=P3   */
 app.get('/api/heatmap', async (req, res) => {
-  try{
-    const match = { deleted:false };
-    if(req.query.uid && req.query.uid!=='All') match.userId = req.query.uid;
+  try {
+    const match = {
+      deleted: false
+    };
+    if (req.query.uid && req.query.uid !== 'All') match.userId = req.query.uid;
 
-    const cells = await Placement.aggregate([
-      { $match: match },
+    const cells = await Placement.aggregate([{
+        $match: match
+      },
       {
-        $project:{
-          cellX:{ $floor:{ $divide:['$x',40] }},
-          cellY:{ $floor:{ $divide:['$y',40] }},
-          uid  :'$userId'
+        $project: {
+          cellX: {
+            $floor: {
+              $divide: ['$x', 40]
+            }
+          },
+          cellY: {
+            $floor: {
+              $divide: ['$y', 40]
+            }
+          },
+          uid: '$userId'
         }
       },
-      { $group: { _id:{ x:'$cellX', y:'$cellY', uid:'$userId' }, n:{ $sum:1 } } }
+      {
+        $group: {
+          _id: {
+            x: '$cellX',
+            y: '$cellY',
+            uid: '$userId'
+          },
+          n: {
+            $sum: 1
+          }
+        }
+      },
     ]);
     res.json(cells);
-  }catch(e){
-    console.error(e); res.status(500).json({ error:e.message });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({
+      error: e.message
+    });
   }
 });
 
-
 /* --------- the rest of your routes stay unchanged -------- */
 server.listen(process.env.PORT || 5000, () =>
-  console.log('API listening'),
+  console.log('API listening')
 );
