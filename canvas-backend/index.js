@@ -178,9 +178,10 @@ app.post('/api/query', async (req, res) => {
   //const col = mongoose.connection.collection('queries');
   //await col.insertOne(doc);
   const doc = await new Query({ target: target || 'all', question }).save();
-  
+
   io.emit('newQuery', doc);          // push to everyone; client filters
-  res.json({ ok: true });
+  //res.json({ ok: true });
+  res.json(doc);
 });
 app.get('/api/queries', async (_req,res)=>
   res.json(await Query.find().sort({ askedAt:-1 })));
