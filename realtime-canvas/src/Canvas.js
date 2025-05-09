@@ -189,7 +189,7 @@ export default function Canvas({ userId }) {
         : { width: window.innerWidth, height: window.innerHeight };
   
     const x = scrollX + rect.width  / 2;
-    const y = scrollY + rect.height / 2 + 16;
+    const y = scrollY + rect.height / 2 + 10;
   
     const emoji = getEmojiForWord(word);
   
