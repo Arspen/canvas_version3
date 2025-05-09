@@ -1,7 +1,102 @@
-.query-card{background:#fff;border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
-.query-card textarea{width:100%;height:60px;border:1px solid #ccc;border-radius:6px;padding:6px;font:14px/1.3 sans-serif;resize:none}
-.query-card .send-btn{align-self:flex-end;padding:6px 12px;border:none;border-radius:6px;background:#111827;color:#fff;cursor:pointer}
-.q-list{flex:1 1 auto;overflow:auto;margin:0;padding:0;list-style:none}
-.q-list li{padding:4px 0;border-bottom:1px solid #eee;font:14px/1.3 sans-serif}
-.q-list li.done{opacity:.5}
-.q-list .tick{float:right;color:#2ecc71}
+.query-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Slightly increased gap */
+    overflow: hidden;
+    height: 100%; /* Ensure it takes available height */
+  }
+  
+  .query-card textarea {
+    width: 100%;
+    height: 60px;
+    border: 1px solid #d1d5db; /* Softer border color */
+    border-radius: 6px;
+    padding: 8px; /* Increased padding */
+    font: 14px/1.4 sans-serif; /* Adjusted line height */
+    resize: none;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  }
+  
+  .query-card textarea:focus {
+    border-color: #4f46e5; /* Highlight on focus */
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+  }
+  
+  
+  .query-card .send-btn {
+    align-self: flex-end;
+    padding: 8px 14px; /* Slightly larger button */
+    border: none;
+    border-radius: 6px;
+    background: #111827;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+  }
+  
+  .query-card .send-btn:hover {
+    background: #374151; /* Darker on hover */
+  }
+  
+  .q-list {
+    flex: 1 1 auto;
+    overflow: auto;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .q-list li {
+    padding: 8px 4px; /* Increased padding */
+    border-bottom: 1px solid #eee;
+    font: 14px/1.4 sans-serif; /* Adjusted line height */
+    display: flex; /* Use flexbox for better alignment */
+    justify-content: space-between; /* Push question and answer apart */
+    align-items: flex-start; /* Align items to the top */
+  }
+  
+  .q-list li:last-child {
+    border-bottom: none;
+  }
+  
+  .q-list li.done .question-text { /* Target question text specifically for opacity */
+    opacity: .6;
+  }
+  
+  .q-list .question-text { /* Wrap question in a span if needed for styling */
+    flex-grow: 1; /* Allow question text to take available space */
+    margin-right: 10px; /* Space before the answer section */
+  }
+  .q-list b {
+    margin-right: 5px; /* Space after target name */
+  }
+  
+  
+  .q-list .answer-section {
+    display: flex; /* Align tick and answer text */
+    align-items: center;
+    white-space: nowrap; /* Prevent answer section from wrapping too early */
+    flex-shrink: 0; /* Prevent answer section from shrinking */
+  }
+  
+  .q-list .tick {
+    /* float:right; */ /* Replaced by flexbox */
+    color: #16a34a; /* Darker green */
+    margin-right: 5px; /* Space between tick and answer text */
+    font-size: 16px; /* Slightly larger tick */
+  }
+  
+  .q-list .answer-text {
+    font-style: italic;
+    color: #374151; /* Slightly darker color for answer text */
+    max-width: 200px; /* Optional: constrain width and allow wrap */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* white-space: normal; */ /* Remove if you want it to wrap */
+  }
+  

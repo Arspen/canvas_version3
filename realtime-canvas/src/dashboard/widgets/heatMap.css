@@ -1,12 +1,78 @@
-.heat-card{
-  width:1000px;background:#fff;border-radius:16px;
-  padding:12px 14px 10px;box-shadow:0 2px 6px rgba(0,0,0,.08);
-  display:flex;flex-direction:column;gap:6px;
+/* heatMap.css */
+.heat-card {
+  width: 100%;
+  max-width: 1000px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px 14px 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .08);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: sans-serif;
 }
-.svg-wrap{position:relative;overflow:auto;border:1px solid #e5e7eb;}
-.empty-msg{
-  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-size:12px;color:#888;background:#fff8;
+
+.pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 8px;
 }
-/* reuse pill / pill-row from earlier widgets
-   (nothing to add here if they are already global) */
+
+.pill {
+  padding: 6px 12px;
+  border-radius: 16px;
+  border: 2px solid #e5e7eb;
+  background-color: #f9fafb;
+  color: #374151;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.pill:hover {
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.pill.active {
+  background-color: #4f46e5; /* Example active color */
+  color: white;
+  border-color: #4f46e5 !important;
+}
+
+.svg-wrap {
+  position: relative;
+  overflow: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background-color: #f8f9fa; /* Light background for the SVG area */
+  min-height: 100px;
+}
+
+.svg-wrap svg {
+  display: block;
+}
+
+.empty-msg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #6b7280;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  text-align: center;
+  padding: 20px;
+}
+
+/* .blendable-rect class is no longer needed for this approach */
+/* If it exists from previous attempts, it can be removed or commented out */
+/*
+.blendable-rect {
+  mix-blend-mode: screen;
+}
+*/

@@ -531,48 +531,98 @@ app.get('/dashboard-data', async (req, res) => {
 /* 3) GET  /api/heatmap   or  /api/heatmap?uid=P3   */
 app.get('/api/heatmap', async (req, res) => {
   try {
-    const match = {
-      deleted: false
-    };
-    if (req.query.uid && req.query.uid !== 'All') match.userId = req.query.uid;
+    const specificUserId = req.query.uid;
+    const BUCKET_SIZE = 40; // Define bucket size for cell calculation
 
-    const cells = await Placement.aggregate([{
-        $match: match
-      },
-      {
-        $project: {
-          cellX: {
-            $floor: {
-              $divide: ['$x', 40]
-            }
-          },
-          cellY: {
-            $floor: {
-              $divide: ['$y', 40]
-            }
-          },
-          uid: '$userId'
-        }
-      },
-      {
-        $group: {
-          _id: {
-            x: '$cellX',
-            y: '$cellY',
-            uid: '$userId'
-          },
-          n: {
-            $sum: 1
+    let aggregationPipeline = [];
+
+    if (specificUserId && specificUserId !== 'All') {
+      // AGGREGATION FOR A SPECIFIC USER
+      aggregationPipeline = [
+        { 
+          $match: { 
+            deleted: false, 
+            userId: specificUserId // Filter by the specific user
+          } 
+        },
+        {
+          $project: { // Determine cell coordinates for each placement
+            cellX: { $floor: { $divide: ['$x', BUCKET_SIZE] } },
+            cellY: { $floor: { $divide: ['$y', BUCKET_SIZE] } },
+            userId: '$userId', 
+            // _id: 0 // No longer excluding _id here, group stage will handle it
+          }
+        },
+        {
+          $group: { // Group by cell for the filtered user
+            _id: { x: '$cellX', y: '$cellY' },
+            userN: { $sum: 1 }, // Count of activities for this user in this cell
+            uid: { $first: '$userId' } // The uid is constant due to the $match stage
+          }
+        },
+        {
+          $project: { // Structure the output consistently
+            _id: 0,
+            x: '$_id.x',
+            y: '$_id.y',
+            activities: [{ uid: '$uid', n: '$userN' }], // Array with one user's activity
+            totalN: '$userN' // For a single user, totalN in cell is their own N
           }
         }
-      }
-    ]);
+      ];
+    } else {
+      // AGGREGATION FOR "ALL" USERS
+      aggregationPipeline = [
+        { 
+          $match: { deleted: false } // Get all non-deleted placements
+        },
+        {
+          $project: { // Determine cell coordinates and user ID for each placement
+            cellX: { $floor: { $divide: ['$x', BUCKET_SIZE] } },
+            cellY: { $floor: { $divide: ['$y', BUCKET_SIZE] } },
+            userId: '$userId',
+          }
+        },
+        {
+          $group: { // Group by cell AND user to count activities per user per cell
+            _id: { x: '$cellX', y: '$cellY', uid: '$userId' },
+            userN_count: { $sum: 1 } // Total activities for this specific user in this cell
+          }
+        },
+        {
+          $group: { // Group again by cell to collect all users and their activities
+            _id: { x: '$_id.x', y: '$_id.y' }, // Group only by cell coordinates
+            activitiesInCell: { 
+              $push: { uid: '$_id.uid', n: '$userN_count' } // Create array of {uid, n}
+            },
+            totalNInCell: { $sum: '$userN_count' } // Sum of all activities from all users in this cell
+          }
+        },
+        {
+          $project: { // Final structure for each cell
+            _id: 0,
+            x: '$_id.x',
+            y: '$_id.y',
+            activities: '$activitiesInCell', 
+            totalN: '$totalNInCell'
+          }
+        }
+      ];
+    }
+
+    const cells = await Placement.aggregate(aggregationPipeline);
+    // console.log(`[API /heatmap] Filter: ${specificUserId || 'All'}, Cells found: ${cells.length}`);
+    // cells.forEach(cell => {
+    //   if (cell.totalN === 0) console.warn("[API /heatmap] Cell with totalN=0:", cell);
+    //   cell.activities.forEach(act => {
+    //     if (act.n === 0) console.warn("[API /heatmap] Activity with n=0:", act, "in cell:", cell.x, cell.y);
+    //   });
+    // });
     res.json(cells);
+
   } catch (e) {
-    console.error(e);
-    res.status(500).json({
-      error: e.message
-    });
+    console.error('GET /api/heatmap failed:', e);
+    res.status(500).json({ error: e.message, details: e.stack });
   }
 });
 
