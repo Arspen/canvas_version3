@@ -305,11 +305,14 @@ async function runAutoRules(userId, lastPlacement) {
         // Personalize the question (if needed)
         let text = rule.question;
         if (rule.dynamic) {
-          for (const key in rule.test(params)) {
-            if (params[key] !== undefined) { // Check if param exists
-              text = text.replace(`{{${key}}}`, params[key]);
-            } else {
-              console.warn(`[autoRules] Warning: Parameter '${key}' is undefined for rule '${rule.id}'`);
+          const ruleParams = rule.test(params); // Get the specific params for this rule
+          if (ruleParams) {
+            for (const key in ruleParams) {
+              if (params[key] !== undefined) {
+                text = text.replace(`{{${key}}}`, params[key]);
+              } else {
+                console.warn(`[autoRules] Warning: Parameter '${key}' is undefined for rule '${rule.id}'`);
+              }
             }
           }
         }
@@ -463,7 +466,7 @@ app.get('/api/dashboard-data', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({
-      error: 'aggregation failed'
+      error: err.message
     });
   }
 });
