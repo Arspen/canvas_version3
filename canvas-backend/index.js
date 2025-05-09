@@ -307,15 +307,16 @@ async function runAutoRules(userId, lastPlacement) {
         if (rule.dynamic) {
           const ruleParams = rule.test(params); // Get the specific params for this rule
           if (ruleParams) {
-            for (const key in ruleParams) {
-              if (params.hasOwnProperty(key) && params[key] !== undefined) {
-                // Use a global replace to handle multiple occurrences
-                const regex = new RegExp(`{{${key}}}`, 'g');
-                text = text.replace(regex, params[key]);
+            // Build a regex that matches *any* placeholder in the string
+            const regex = /{{(\w+)}}/g;
+            text = text.replace(regex, (match, key) => {
+              if (ruleParams.hasOwnProperty(key) && params[key] !== undefined) {
+                return params[key]; // Replace with the actual value
               } else {
                 console.warn(`[autoRules] Warning: Parameter '${key}' is missing or undefined for rule '${rule.id}'`);
+                return ''; // Replace with an empty string or a default value
               }
-            }
+            });
           } else {
             console.warn(`[autoRules] Warning: ruleParams is undefined for rule '${rule.id}'`);
           }
