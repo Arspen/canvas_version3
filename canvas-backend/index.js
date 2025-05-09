@@ -65,7 +65,7 @@ io.on('connection', (socket) => {
     io.emit('placeEmoji', doc);                 // ← with _id
 
     /* ── NEW: evaluate automatic rules for this user ── */
-    runAutoRules(doc.userId).catch(console.error);
+    runAutoRules(doc.userId, doc).catch(console.error);
   });
 
   socket.on('requestInitialPlacements', async () => {
@@ -155,12 +155,12 @@ async function runAutoRules(userId){
   for (const rule of autoRules) {
     if (open.has(rule.id)) continue;             // already asked
 
-    const param = rule.test({ total, byCat, perWord });
-    if (!param) continue;                        // condition not met
+    const shouldFire = !!rule.test({ total, byCat, perWord, lastPlacement });
+    if (!shouldFire) continue;
 
     /* personalise the question ({{param}}) */
     const text = rule.question.replace('{{param}}', param);
-
+    console.log(`[autoRule] firing ${rule.id} for ${userId}`);
     const qDoc = await new Query({
       target  : userId,
       question: text,

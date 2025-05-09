@@ -1,33 +1,15 @@
-// server/autoRules.js
-// add new rules here ↓↓↓
-module.exports = [
-    {
-      id: 'manyAnimals',                             // unique ID
-      /* text the user will see */
-      question:
-        'Seems like you like animals a lot! Are you starting a zoo? ' +
-        'What made you place so many animals?',
-      /* test(userStats) → true/false */
-      test: ({ total, byCat }) =>
-        total >= 10 &&                                // 10 + placements
-        (byCat.Animals || 0) / total >= 0.5           // ≥ 50 % animals
-    },
-  
-    // { id:'anotherRule', question:'…', test:stats=>… },
-
-    {
-    id       : 'repeatWord-5',
-    dynamic  : true,      // question depends on which word
-    test     : ({ perWord }) => {
-      // look for any word that appears ≥ 5 times & whose category ≠ Elementals
-      for (const [word, { count, cat }] of Object.entries(perWord)) {
-        if (count >= 5 && cat !== 'Elementals') return { word };
-      }
-      return null;        // no match ⇒ rule does not fire
-    },
-    question : ({ word }) =>
-      `You have placed “${word}” quite a few times. ` +
-      `What’s special about it for you?`
-  }
-  ];
+// autoRules.js  (server)
+/* one ultra-simple rule:
+   – fires exactly once per user, as soon as they place a word === "dolphin" (case-insensitive)
+*/
+module.exports = [{
+    id       : 'ask-dolphin',                 // must be unique
+    question : "That's a dolphin?",           // text sent to the user
+    /** test(stat) → truthy  triggers the rule
+        we just look at last placement (passed in param)          */
+    test({ lastPlacement }) {
+      return lastPlacement.word &&
+             lastPlacement.word.toLowerCase() === 'dolphin';
+    }
+  }];
   
