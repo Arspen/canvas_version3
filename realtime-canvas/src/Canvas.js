@@ -49,7 +49,7 @@ export default function Canvas({ userId }) {
 
       placements.forEach(p => {
         if (p.emoji && imgCache.current[p.emoji]) {
-          ctx.drawImage(imgCache.current[p.emoji], p.x - 20, p.y-14, 40, 40);
+          ctx.drawImage(imgCache.current[p.emoji], p.x - 20, p.y-20, 40, 40);
         } else {
           ctx.font = '32px Arial';
           ctx.textAlign = 'center';
@@ -189,7 +189,7 @@ export default function Canvas({ userId }) {
         : { width: window.innerWidth, height: window.innerHeight };
   
     const x = scrollX + rect.width  / 2;
-    const y = scrollY + rect.height / 2 + 14;
+    const y = scrollY + rect.height / 2 + 16;
   
     const emoji = getEmojiForWord(word);
   
