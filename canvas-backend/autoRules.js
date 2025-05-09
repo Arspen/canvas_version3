@@ -51,7 +51,7 @@ module.exports = [{
         total,
         categoryCounts
       }) => {
-        if (total < 50) return false;
+        if (total < 10) return false;
   
         let dominantCategory = null;
         let maxCount = 0;
