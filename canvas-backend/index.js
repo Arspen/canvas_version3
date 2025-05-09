@@ -49,7 +49,7 @@ const querySchema = new mongoose.Schema({
   target: {
     type: String,
     default: 'all'
-  }, // 'P3' … or 'all'
+  },
   question: String,
   answered: {
     type: Boolean,
@@ -61,12 +61,12 @@ const querySchema = new mongoose.Schema({
     default: Date.now
   },
   answeredAt: Date,
-  /* --- new flags so the dashboard can distinguish -------- */
   isAuto: {
     type: Boolean,
     default: false
   },
   ruleId: String,
+  queryUserId: String,
 });
 const Query = mongoose.model('Query', querySchema);
 
@@ -84,10 +84,10 @@ io.on('connection', (socket) => {
   /* save first – then broadcast the *saved* doc */
   socket.on('placeEmoji', async (raw) => {
     const doc = await new Placement(raw).save();
-    io.emit('placeEmoji', doc); // ← with _id
+    io.emit('placeEmoji', doc);
 
     /* ── NEW: evaluate automatic rules for this user ── */
-    runAutoRules(doc.userId, doc).catch(console.error); // Pass the new doc
+    runAutoRules(doc.userId, doc).catch(console.error);
   });
 
   socket.on('requestInitialPlacements', async () => {
@@ -182,37 +182,191 @@ function labelForEmoji(emoji) {
 }
 
 /* run every rule for the given user */
-async function runAutoRules(userId, lastPlacement) { // <-- ADD lastPlacement
-  /* open auto-queries so we don’t repeat ---------------- */
-  const open = new Set(
-    (await Query.find({
-      target: userId,
-      isAuto: true,
-      answered: false
-    }))
-    .map(q => q.ruleId)
+async function runAutoRules(userId, lastPlacement) {
+  /* 1️⃣  aggregate per-word counts -------------------------------- */
+  const wordCounts = await Placement.aggregate([{
+      $match: {
+        userId,
+        deleted: false
+      }
+    },
+    {
+      $group: {
+        _id: '$word',
+        count: {
+          $sum: 1
+        },
+        emoji: {
+          $first: '$emoji'
+        }
+      }
+    },
+    {
+      $project: {
+        _id: 0,
+        word: '$_id',
+        count: 1
+      }
+    }
+  ]).then(res =>
+    res.reduce((acc, cur) => {
+      acc[cur.word] = cur.count;
+      return acc;
+    }, {})
   );
 
-  /* evaluate every rule -------------------------------- */
+  /* 2️⃣  aggregate per-category counts -------------------------------- */
+  const categoryCounts = await Placement.aggregate([{
+      $match: {
+        userId,
+        deleted: false
+      }
+    },
+    {
+      $group: {
+        _id: {
+          $function: {
+            body: function(emoji) {
+              const labelMap = require('./labelMap.json'); // Import labelMap here
+              const entry = Object.values(labelMap).find(e => e.emoji === emoji);
+              return entry ? entry.category : 'Unknown';
+            },
+            args: ['$emoji']
+          }
+        },
+        count: {
+          $sum: 1
+        }
+      }
+    },
+    {
+      $project: {
+        _id: 0,
+        category: '$_id',
+        count: 1
+      }
+    }
+  ]).then(res =>
+    res.reduce((acc, cur) => {
+      acc[cur.category] = cur.count;
+      return acc;
+    }, {})
+  );
+
+  /* 3️⃣  calculate total placements -------------------------------- */
+  const total = await Placement.countDocuments({
+    userId,
+    deleted: false
+  });
+
+  /* 4️⃣  evaluate every rule --------------------------------------- */
   for (const rule of autoRules) {
-    if (open.has(rule.id)) continue; // already asked
+    let shouldFire = false;
 
-    const shouldFire = !!rule.test({
-      lastPlacement
-    }); // Pass lastPlacement
-    if (!shouldFire) continue;
+    // Check if the rule has already been triggered for this user
+    const existingQuery = await Query.findOne({
+      ruleId: rule.id,
+      queryUserId: userId,
+    });
 
-    const text = rule.question; // The question is static in this case
-    console.log(`[autoRule] firing ${rule.id} for ${userId}`);
-    const qDoc = await new Query({
-      target: userId,
-      question: text,
-      isAuto: true,
-      ruleId: rule.id
-    }).save();
+    if (!existingQuery) {
+      // Prepare parameters for the rule's test
+      let params = {
+        lastPlacement,
+        wordCounts,
+        categoryCounts,
+        total,
+        // heatmapDensity: 0, // Placeholder - you'll need to calculate this
+      };
 
-    io.emit('newQuery', qDoc); // push to user & dashboard
+      if (rule.id === 'hotspot-activity') {
+        // Calculate heatmapDensity here (example - replace with your logic)
+        params.heatmapDensity = await getHeatmapDensity(userId);
+      }
+      shouldFire = !!rule.test(params);
+    }
+
+    if (shouldFire) {
+      // Personalize the question (if needed)
+      let text = rule.question;
+      if (rule.dynamic) {
+        for (const key in rule.test(params)) {
+          text = text.replace(`{{${key}}}`, params[key]);
+        }
+      }
+
+      console.log(`[autoRule] firing ${rule.id} for ${userId}`);
+      const qDoc = await new Query({
+        target: userId,
+        question: text,
+        isAuto: true,
+        ruleId: rule.id,
+        queryUserId: userId, // Store the userId
+      }).save();
+
+      io.emit('newQuery', qDoc); // push to user & dashboard
+    }
   }
+}
+
+async function getHeatmapDensity(userId) {
+  const heatmapData = await Placement.aggregate([
+    {
+      $match: {
+        userId: userId,
+        deleted: false
+      }
+    },
+    {
+      $project: {
+        cellX: {
+          $floor: {
+            $divide: ['$x', 40]
+          }
+        },
+        cellY: {
+          $floor: {
+            $divide: ['$y', 40]
+          }
+        },
+        _id: 0,
+        x: '$x',
+        y: '$y'
+      }
+    },
+    {
+      $group: {
+        _id: {
+          x: '$cellX',
+          y: '$cellY'
+        },
+        count: {
+          $sum: 1
+        },
+        points: {
+          $push: {
+            x: '$x',
+            y: '$y'
+          }
+        }
+      }
+    },
+    {
+      $project: {
+        _id: 0,
+        x: '$_id.x',
+        y: '$_id.y',
+        density: '$count'
+      }
+    }
+  ]);
+  // Calculate a combined density (example: average density)
+  let totalDensity = 0;
+  heatmapData.forEach(cell => {
+    totalDensity += cell.density;
+  });
+  const averageDensity = heatmapData.length > 0 ? totalDensity / heatmapData.length : 0;
+  return averageDensity;
 }
 /* =================================================================== */
 /* =======================  DASHBOARD ROUTES  ======================== */
