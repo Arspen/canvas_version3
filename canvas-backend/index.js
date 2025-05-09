@@ -162,7 +162,7 @@ app.get('/api/pending-query', async (req,res)=>{
   const doc = await mongoose.connection
                .collection('queries')
                .findOne({ target: { $in: [uid,'all'] }, answered:false },
-                        { sort:{ createdAt:-1 } });
+                        { sort:{ askedAtAt:-1 } });
   res.json(doc || {});          // {} if nothing pending
 });
 
@@ -174,10 +174,11 @@ app.post('/api/query', async (req, res) => {
   const { target, question } = req.body;
   if (!question) return res.status(400).json({ error: 'question missing' });
 
-  const doc = { target: target || 'all', question, createdAt: new Date() };
-  const col = mongoose.connection.collection('queries');
-  await col.insertOne(doc);
-
+  //const doc = { target: target || 'all', question, askedAt: new Date() };
+  //const col = mongoose.connection.collection('queries');
+  //await col.insertOne(doc);
+  const doc = await new Query({ target: target || 'all', question }).save();
+  
   io.emit('newQuery', doc);          // push to everyone; client filters
   res.json({ ok: true });
 });
@@ -217,22 +218,6 @@ app.get('/api/heatmap', async (req, res) => {
     console.error(e); res.status(500).json({ error:e.message });
   }
 });
-
-/* 4) POST /api/query   { target:"P4"| "all", question:"?" }  */
-/*
-app.post('/api/query', async (req, res) => {
-  const { target='all', question } = req.body;
-  if(!question) return res.status(400).json({ error:'question missing' });
-
-  const doc = { target, question, createdAt:new Date() };
-  await mongoose.connection.collection('queries').insertOne(doc);
-
-  io.emit('newQuery', doc);                 // frontend filters by target
-  res.json({ ok:true });
-});
-
-*/
-
 
 
 /* --------- the rest of your routes stay unchanged -------- */
