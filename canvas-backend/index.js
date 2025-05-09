@@ -309,7 +309,9 @@ async function runAutoRules(userId, lastPlacement) {
           if (ruleParams) {
             for (const key in ruleParams) {
               if (params[key] !== undefined) {
-                text = text.replace(`{{${key}}}`, params[key]);
+                // Use a global replace to handle multiple occurrences
+                const regex = new RegExp(`{{${key}}}`, 'g');
+                text = text.replace(regex, params[key]);
               } else {
                 console.warn(`[autoRules] Warning: Parameter '${key}' is undefined for rule '${rule.id}'`);
               }
