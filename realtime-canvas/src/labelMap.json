@@ -859,6 +859,16 @@
   "category": "Animals"
 },
 
+"Chick": {
+  "synonyms": [
+    "chick", "chicks", "baby bird", "baby birds",
+    "hatchling", "hatchlings", "young bird", "young birds",
+    "little chick", "little chicks", "fluffy chick", "fluffy chicks",
+    "newborn bird", "newborn birds"
+  ],
+  "emoji": "Chick.png",
+  "category": "Animals"
+},
 
 "deep_water": {
   "synonyms": [
@@ -1031,6 +1041,18 @@
   "category": "Elemental"
 },
 
+"Lava": {
+  "synonyms": [
+    "lava", "lavas", "magma", "magmas",
+    "molten rock", "molten rocks", "volcanic lava", "volcanic lavas",
+    "hot lava", "hot lavas", "liquid fire", "liquid fires",
+    "erupted lava", "erupted lavas"
+  ],
+  "emoji": "Lava.png",
+  "category": "Elemental"
+},
+
+
 "human_horseriding": {
   "synonyms": [
     "horse riding", "equestrian", "rider", "mounted human", "man on horse", "woman on horse",
@@ -1043,7 +1065,7 @@
 "human_surfing": {
   "synonyms": [
     "surfing", "wave rider", "surfer", "board rider",
-    "ocean sport", "beach activity", "wave sport"
+    "ocean sport", "beach activity", "wave sport" 
   ],
   "emoji": "Human_Surfing.png",
   "category": "Humanoid"
@@ -1052,7 +1074,7 @@
 "human_tricks": {
   "synonyms": [
     "tricks", "stunts", "acrobat", "performer", "human", "humans", "man", "men", "woman", "women",
-    "human acrobatics", "gymnast", "trickster", "body movement"
+    "human acrobatics", "gymnast", "trickster", "body movement", "people", "person"
   ],
   "emoji": "Human_Tricks.png",
   "category": "Humanoid"
@@ -1061,7 +1083,7 @@
 "relationship": {
   "synonyms": [
     "relationship", "couple", "love", "romance", 
-    "partners", "bond", "affection", "connection"
+    "partners", "bond", "affection", "connection", "people", "person"
   ],
   "emoji": "Relationship.png",
   "category": "Humanoid"
@@ -1070,7 +1092,7 @@
 "woman_dance": {
   "synonyms": [
     "woman dance", "female dancer", "lady dancing", "dancing woman", "human", "humans", "man", "men", "woman", "women",
-    "ballerina", "performer", "female performer", "dance move"
+    "ballerina", "performer", "female performer", "dance move", "people", "person"
   ],
   "emoji": "Woman_Dance.png",
   "category": "Humanoid"
@@ -1079,7 +1101,7 @@
 "human_dance": {
   "synonyms": [
     "dance", "dancing", "performer", "movement", "human dancing", "human",
-    "choreography", "human dancing", "groove", "body motion"
+    "choreography", "human dancing", "groove", "body motion", "people", "person"
   ],
   "emoji": "Human_Dance.png",
   "category": "Humanoid"
@@ -1124,7 +1146,7 @@
 "family": {
   "synonyms": [
     "family", "parents", "siblings", "relatives", 
-    "household", "kin", "loved ones", "family members"
+    "household", "kin", "loved ones", "family members", "people", "person"
   ],
   "emoji": "Family.png",
   "category": "Humanoid"
@@ -1133,7 +1155,7 @@
 "woman": {
   "synonyms": [
     "woman", "female", "lady", "adult female", "human", "humans", "man", "men", "woman", "women",
-    "female human", "girl", "feminine", "woman figure"
+    "female human", "girl", "feminine", "woman figure", "people", "person"
   ],
   "emoji": "Woman.png",
   "category": "Humanoid"
@@ -1142,7 +1164,7 @@
 "man": {
   "synonyms": [
     "man", "male", "gentleman", "adult male", "human", "humans", "man", "men", "woman", "women",
-    "male human", "guy", "masculine", "man figure"
+    "male human", "guy", "masculine", "man figure", "people", "person"
   ],
   "emoji": "Man.png",
   "category": "Humanoid"
@@ -1151,7 +1173,7 @@
 "human_acrobatics": {
   "synonyms": [
     "acrobatics", "stunts", "gymnastics", "performer", "human", "humans", "man", "men", "woman", "women",
-    "body movement", "flips", "balance act", "human tricks"
+    "body movement", "flips", "balance act", "human tricks", "people", "person"
   ],
   "emoji": "Human_Acrobatics.png",
   "category": "Humanoid"
@@ -1178,7 +1200,7 @@
 "human_left": {
   "synonyms": [
     "left side", "turned left", "facing left", "profile left", "human", "humans", "man", "men", "woman", "women",
-    "side view", "left-facing human"
+    "side view", "left-facing human", "people", "person"
   ],
   "emoji": "Human_Left.png",
   "category": "Humanoid"
@@ -1187,7 +1209,7 @@
 "human_running": {
   "synonyms": [
     "running", "jogging", "sprinting", "runner", "human", "man", "woman", "human running",
-    "human in motion", "exercise", "fast movement", "track activity"
+    "human in motion", "exercise", "fast movement", "track activity", "people", "person"
   ],
   "emoji": "Human_Running.png",
   "category": "Humanoid"
@@ -1214,7 +1236,7 @@
 "human_right": {
   "synonyms": [
     "right side", "turned right", "facing right", "profile right", "human", "man", "woman",
-    "side view", "right-facing human"
+    "side view", "right-facing human", "people"
   ],
   "emoji": "Human_Right.png",
   "category": "Humanoid"
@@ -1232,7 +1254,7 @@
 "human_sit_left": {
   "synonyms": [
     "sitting left", "side view", "seated human", "left-facing", "human", "man", "woman",
-    "profile view", "human seated"
+    "profile view", "human seated", "people", "person"
   ],
   "emoji": "Human_Sit_Left.png",
   "category": "Humanoid"
@@ -1241,7 +1263,7 @@
 "human_sit_right": {
   "synonyms": [
     "sitting right", "side view", "seated human", "right-facing", "human", "man", "woman",
-    "profile view", "human seated"
+    "profile view", "human seated", "people", "person"
   ],
   "emoji": "Human_Sit_Right.png",
   "category": "Humanoid"
@@ -1250,7 +1272,7 @@
 "human_meditation": {
   "synonyms": [
     "meditation", "mindfulness", "yoga pose", "cross-legged", "human meditating",
-    "relaxation", "zen", "calm human", "peaceful state"
+    "relaxation", "zen", "calm human", "peaceful state", "people", "person"
   ],
   "emoji": "Human_Meditation.png",
   "category": "Humanoid"
@@ -1286,7 +1308,7 @@
 "ogre": {
   "synonyms": [
     "ogre", "monster", "mythical creature", "giant beast",
-    "fantasy being", "troll", "fiend", "villainous creature"
+    "fantasy being", "troll", "fiend", "villainous creature", "monsters", "monster" 
   ],
   "emoji": "Ogre.png",
   "category": "Humanoid"
@@ -1403,7 +1425,7 @@
 "king": {
   "synonyms": [
     "king", "monarch", "ruler", "sovereign",
-    "royalty", "crowned head", "royal leader", "male ruler"
+    "royalty", "crowned head", "royal leader", "male ruler", "Prince"
   ],
   "emoji": "King.png",
   "category": "Humanoid"
@@ -1507,6 +1529,45 @@
   "emoji": "Mechanic.png",
   "category": "Humanoid"
 }, 
+
+"zombie": {
+  "synonyms": [
+    "zombie", "undead", "walker", "ghoul",
+    "reanimated corpse", "flesh eater", "brain eater", "living dead", "monsters", "monster"
+  ],
+  "emoji": "Zombie.png",
+  "category": "Humanoid"
+},
+
+"Santa": {
+  "synonyms": [
+    "Santa", "Santa Claus", "Father Christmas", "Kris Kringle",
+    "Saint Nick", "jolly man", "Christmas figure", "gift bringer"
+  ],
+  "emoji": "Santa.png",
+  "category": "Humanoid"
+},
+
+"Scientist": {
+  "synonyms": [
+    "scientist", "researcher", "lab worker", "chemist",
+    "physicist", "biologist", "scientific expert", "academic researcher"
+  ],
+  "emoji": "Scientist.png",
+  "category": "Humanoid"
+},
+
+"Ninja": {
+  "synonyms": [
+    "ninja", "ninjas", "assassin", "assassins",
+    "warrior", "warriors", "shinobi", "shinobis",
+    "stealth fighter", "stealth fighters", "masked warrior", "masked warriors",
+    "covert agent", "covert agents", "silent fighter", "silent fighters"
+  ],
+  "emoji": "Ninja.png",
+  "category": "Humanoid"
+},
+
 
 "beach": {
   "synonyms": [
@@ -1697,7 +1758,105 @@
   "category": "Nature"
 },
 
+"Big_Leaf": {
+  "synonyms": [
+    "leaf", "leaves", "bigleaf", "bigleaves",
+    "broadleaf", "broadleaves", "foliage", "greenery",
+    "plant", "plants", "frond", "fronds",
+    "blade", "blades", "big leaf", "big leaves",
+    "large leaf", "large leaves", "giant leaf", "giant leaves",
+    "broad leaf", "broad leaves", "tropical leaf", "tropical leaves"
+  ],
+  "emoji": "Big_Leaf.png",
+  "category": "Nature"
+},
 
+"Bush": {
+  "synonyms": [
+    "bush", "bushes", "shrub", "shrubs",
+    "hedge", "hedges", "thicket", "thickets",
+    "green bush", "green bushes", "small bush", "small bushes",
+    "dense bush", "dense bushes", "garden bush", "garden bushes"
+  ],
+  "emoji": "Bush.png",
+  "category": "Nature"
+},
+
+"Cave": {
+  "synonyms": [
+    "cave", "caves", "cavern", "caverns",
+    "grotto", "grottoes", "hollow", "hollows",
+    "rock cave", "rock caves", "dark cave", "dark caves",
+    "underground cave", "underground caves", "natural cave", "natural caves"
+  ],
+  "emoji": "Cave.png",
+  "category": "Nature"
+},
+
+"Christmas_Tree": {
+  "synonyms": [
+    "christmas tree", "christmas trees", "xmas tree", "xmas trees",
+    "holiday tree", "holiday trees", "festive tree", "festive trees",
+    "decorated tree", "decorated trees", "evergreen tree", "evergreen trees",
+    "pine tree", "pine trees", "yuletide tree", "yuletide trees"
+  ],
+  "emoji": "Christmas_Tree.png",
+  "category": "Nature"
+},
+
+"Leaf": {
+  "synonyms": [
+    "leaf", "leaves", "foliage", "greenery",
+    "blade", "blades", "tree leaf", "tree leaves",
+    "plant leaf", "plant leaves", "green leaf", "green leaves",
+    "autumn leaf", "autumn leaves", "fallen leaf", "fallen leaves"
+  ],
+  "emoji": "Leaf.png",
+  "category": "Nature"
+},
+
+"Moving_Leaf": {
+  "synonyms": [
+    "moving leaf", "moving leaves", "fluttering leaf", "fluttering leaves",
+    "dancing leaf", "dancing leaves", "falling leaf", "falling leaves",
+    "swaying leaf", "swaying leaves", "blown leaf", "blown leaves",
+    "leaf in motion", "leaves in motion", "wind-blown leaf", "wind-blown leaves"
+  ],
+  "emoji": "Moving_Leaf.png",
+  "category": "Nature"
+},
+
+"High_Mountain": {
+  "synonyms": [
+    "high mountain", "high mountains", "tall mountain", "tall mountains",
+    "lofty peak", "lofty peaks", "towering mountain", "towering mountains",
+    "elevated mountain", "elevated mountains", "summit", "summits",
+    "mountain peak", "mountain peaks", "alpine mountain", "alpine mountains", "mountain"
+  ],
+  "emoji": "High_Mountain.png",
+  "category": "Nature"
+},
+
+"Mountain_NoSnow": {
+  "synonyms": [
+    "mountain without snow", "mountains without snow", "bare mountain", "bare mountains",
+    "dry mountain", "dry mountains", "rocky mountain", "rocky mountains",
+    "warm mountain", "warm mountains", "snowless mountain", "snowless mountains",
+    "naked peak", "naked peaks", "non-snowy mountain", "non-snowy mountains", "mountain"
+  ],
+  "emoji": "Mountain_NoSnow.png",
+  "category": "Nature"
+},
+
+"Poop": {
+  "synonyms": [
+    "poop", "poops", "feces", "stool",
+    "excrement", "waste", "dung", "droppings",
+    "number two", "bowel movement", "turds", "crap"
+  ],
+  "emoji": "Poop.png",
+  "category": "Nature"
+},
 
 "beer": {
   "synonyms": [
@@ -1705,7 +1864,7 @@
     "cold drink", "pint", "draft", "alcoholic beverage"
   ],
   "emoji": "Beer.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "bike": {
@@ -1762,13 +1921,57 @@
   "category": "Objects"
 },
 
+"Technology": {
+  "synonyms": [
+    "technology", "technologies", "tech", "innovation",
+    "engineering", "electronics", "digital tools", "modern tools",
+    "high-tech", "devices", "machines", "systems",
+    "advanced tech", "emerging tech", "cutting-edge technology", "smart technology"
+  ],
+  "emoji": "Technology.png",
+  "category": "Objects"
+},
+
+"Fireworks": {
+  "synonyms": [
+    "firework", "fireworks", "pyrotechnic", "pyrotechnics",
+    "sparkler", "sparklers", "explosive display", "explosive displays",
+    "light show", "light shows", "sky rocket", "sky rockets",
+    "aerial burst", "aerial bursts", "colorful explosion", "colorful explosions"
+  ],
+  "emoji": "Fireworks.png",
+  "category": "Objects"
+},
+
+"Robot": {
+  "synonyms": [
+    "robot", "robots", "android", "androids",
+    "machine", "machines", "automaton", "automatons",
+    "cyborg", "cyborgs", "mechanical being", "mechanical beings",
+    "intelligent machine", "intelligent machines", "artificial being", "artificial beings"
+  ],
+  "emoji": "Robot.png",
+  "category": "Objects"
+},
+
+"Wall": {
+  "synonyms": [
+    "wall", "walls", "barrier", "barriers",
+    "partition", "partitions", "divider", "dividers",
+    "stone wall", "stone walls", "brick wall", "brick walls",
+    "solid wall", "solid walls", "exterior wall", "exterior walls"
+  ],
+  "emoji": "Wall.png",
+  "category": "Objects"
+},
+
 "cake": {
   "synonyms": [
     "cake", "cakes", "dessert", "birthday cake", "sweet treat", "food",
     "pastry", "baked good", "frosted cake", "slice of cake"
   ],
   "emoji": "Cake.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "camera": {
@@ -1813,7 +2016,7 @@
     "cappuccino", "morning drink", "caffeine", "coffee cup"
   ],
   "emoji": "Coffee.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "coffee_machine": {
@@ -1840,7 +2043,7 @@
     "coffee cup", "ceramic cup", "beverage holder", "glass"
   ],
   "emoji": "Cup.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "direction_board": {
@@ -1858,7 +2061,7 @@
     "juice", "soda", "thirst quencher", "liquid"
   ],
   "emoji": "Drink.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "film_camera": {
@@ -1876,7 +2079,7 @@
     "sweet dish", "baked custard", "creamy dessert", "pudding"
   ],
   "emoji": "Flan.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "game": {
@@ -1948,7 +2151,7 @@
     "hot beverage", "coffee cup", "creamy coffee", "barista drink"
   ],
   "emoji": "Latte.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "mail_box": {
@@ -2020,15 +2223,6 @@
     "sun blocker", "patio umbrella", "canopy", "outdoor shade"
   ],
   "emoji": "Parasol.png",
-  "category": "Objects"
-},
-
-"piñata": {
-  "synonyms": [
-    "piñata", "party decoration", "candy container", "fiesta item",
-    "paper figure", "birthday fun", "hanging decoration", "breakable toy"
-  ],
-  "emoji": "Pinata.png",
   "category": "Objects"
 },
 
@@ -2146,7 +2340,7 @@
     "green tea", "black tea", "chai", "morning beverage"
   ],
   "emoji": "Tea.png",
-  "category": "Food&Drinks"
+  "category": "Food_Drinks"
 },
 
 "tractor": {
@@ -2214,7 +2408,7 @@
 
 "bed": {
   "synonyms": [
-    "bed", "sleeping place", "mattress", "bunk",
+    "bed", "beds", "sleeping place", "mattress", "bunk", "sleep",
     "resting place", "cot", "bed frame", "pillow and blanket"
   ],
   "emoji": "Bed.png",
@@ -2563,6 +2757,37 @@
   "category": "Structures"
 },
 
+"road": {
+  "synonyms": [
+    "road", "street", "path", "highway",
+    "lane", "route", "pavement", "roadway"
+  ],
+  "emoji": "Road.png",
+  "category": "Structures"
+},
+
+"Farm": {
+  "synonyms": [
+    "farm", "farms", "homestead", "homesteads",
+    "ranch", "ranches", "plantation", "plantations",
+    "farmland", "cropland", "agricultural land", "agricultural lands",
+    "farming area", "farming areas", "farmstead", "farmsteads"
+  ],
+  "emoji": "Farm.png",
+  "category": "Structures"
+},
+
+"Fence": {
+  "synonyms": [
+    "fence", "fences", "barrier", "barriers",
+    "enclosure", "enclosures", "picket", "pickets",
+    "wooden fence", "wooden fences", "wire fence", "wire fences",
+    "garden fence", "garden fences", "boundary fence", "boundary fences"
+  ],
+  "emoji": "Fence.png",
+  "category": "Objects"
+},
+
 "apple": {
   "synonyms": [
     "apple", "fruit", "red apple", "green apple",
@@ -2601,7 +2826,7 @@
 
 "bread": {
   "synonyms": [
-    "bread", "loaf", "slice", "toast",
+    "bread", "loaf", "slice", "toast", "breakfast",
     "baked good", "sandwich base", "bread roll", "yeast bread"
   ],
   "emoji": "Bread.png",
@@ -2655,7 +2880,7 @@
 
 "chocolate": {
   "synonyms": [
-    "chocolate", "choco", "candy bar", "cocoa",
+    "chocolate", "choco", "candy bar", "cocoa", 
     "sweet treat", "dark chocolate", "milk chocolate", "dessert"
   ],
   "emoji": "Chocolate.png",
@@ -2664,7 +2889,7 @@
 
 "cookie": {
   "synonyms": [
-    "cookie", "biscuit", "chocolate chip", "baked treat",
+    "cookie", "biscuit", "chocolate chip", "baked treat", "breakfast",
     "sweet snack", "dessert", "soft cookie", "crunchy cookie"
   ],
   "emoji": "Cookie.png",
@@ -2673,7 +2898,7 @@
 
 "croissant": {
   "synonyms": [
-    "croissant", "pastry", "buttery roll", "baked good",
+    "croissant", "pastry", "buttery roll", "baked good", "breakfast",
     "french pastry", "breakfast roll", "crescent roll", "flaky bread"
   ],
   "emoji": "Croissant.png",
@@ -2923,6 +3148,18 @@
   "category": "Food_Drinks"
 },
 
+"Egg": {
+  "synonyms": [
+    "egg", "eggs", "ova", "ovum",
+    "hen egg", "hen eggs", "chicken egg", "chicken eggs",
+    "bird egg", "bird eggs", "fresh egg", "fresh eggs",
+    "raw egg", "raw eggs", "whole egg", "whole eggs",
+    "breakfast egg", "breakfast eggs"
+  ],
+  "emoji": "Egg.png",
+  "category": "Food_Drinks"
+},
+
 "clap": {
   "synonyms": [
     "clap", "applause", "cheer", "clapping hands",
@@ -2970,8 +3207,8 @@
 
 "perfect": {
   "synonyms": [
-    "perfect", "flawless", "excellent", "just right",
-    "ideal", "spot on", "exactly", "couldn’t be better"
+    "perfect", "flawless", "excellent", "just right", "ok",
+    "ideal", "spot on", "exactly", "could not be better"
   ],
   "emoji": "Perfect.png",
   "category": "Communication"
@@ -3056,7 +3293,19 @@
   ],
   "emoji": "Love.png",
   "category": "Communication"
+},
+
+"Haha": {
+  "synonyms": [
+    "haha", "lol", "lmao", "rofl",
+    "laugh", "laughter", "giggle", "snicker",
+    "funny", "amused", "chuckle", "heh",
+    "laughing out loud", "burst of laughter", "fit of giggles", "laughing hard"
+  ],
+  "emoji": "Haha.png",
+  "category": "Communication"
 }
+
 
 
 
